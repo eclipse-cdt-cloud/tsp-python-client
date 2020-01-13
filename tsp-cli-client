@@ -1,0 +1,134 @@
+#!/usr/bin/python3
+# -*- coding: UTF-8 -*-
+#
+# The MIT License (MIT)
+#
+# Copyright (C) 2020 - Ericsson
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+import argparse
+import sys
+from tsp.tsp_client import TspClient
+from requests.exceptions import ConnectionError
+
+#api_token = 'your_token_goes_here'
+
+headers={'content-type':'application/json', 'Accept':'application/json'}
+
+
+description="""CLI client to sent Trace Server Protocol commands to a Trace Server."""
+
+if __name__=="__main__":
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument("--ip", dest="ip_address", help="IP address  of trace server", metavar="IP", default="localhost")
+    parser.add_argument("--port", dest="port", help="port of trace server", metavar="PORT", default="8080")
+    parser.add_argument("--open-trace", dest="trace", help="Path to trace to open", metavar="TRACE_PATH")
+    parser.add_argument("--name", dest="name", metavar="NAME", help="trace name")
+    parser.add_argument("--list-traces", dest="list_traces",  action='store_true',  help="List all open traces on the server")
+    parser.add_argument("--list-trace", dest="list_trace", help="Get details on the given trace", metavar="UUID")
+    parser.add_argument("--list-outputs", dest="list_outputs", help="Gets details on the given trace", metavar="UUID")
+    parser.add_argument("--get-tree", dest="get_tree", help="Gets the tree of an output", metavar="OUTPUT_ID")
+    parser.add_argument("--uuid", dest="uuid", help="The UUID of a trace")
+
+    options = parser.parse_args()
+    
+    api_url_base = 'http://{0}:{1}/tsp/api/'.format(options.ip_address, options.port)
+    tsp_client = TspClient(api_url_base)
+    
+    try:
+        if (options.trace):
+            if options.name is not None:
+                response = tsp_client.open_trace(options.name, options.trace)
+                if response.status_code == 200 or response.status_code == 409: 
+                    res = response.model
+                    print('  {0}: {1} ({2})'.format(res.name, res.path, res.UUID))
+                    sys.exit(0)
+                else:
+                    sys.exit(1)
+     
+        if (options.list_trace):
+            response = tsp_client.fetch_trace(options.list_trace)
+            if response.status_code == 200: 
+                res = response.model
+                print('  {0}: {1} ({2})'.format(res.name, res.path, res.UUID))
+                sys.exit(0)
+            else:
+                sys.exit(1)
+    
+        if (options.list_traces):
+            response = tsp_client.fetch_traces()
+            if response.status_code == 200:
+                if not response.model.traces:
+                    print("No traces open on the server")
+            
+                for t in response.model.traces:
+                    print('  {0}: {1} ({2})'.format(t.name, t.path, t.UUID))
+                sys.exit(0)
+            else:
+                sys.exit(1)
+        
+        if (options.list_outputs):
+            response = tsp_client.experiment_outputs(options.list_outputs)
+            if response.status_code == 200:
+                output_descriptors = response.model
+     
+                if not output_descriptors.descriptors:
+                    print('No output descriptors for trace {0} ({1}))'.format(t.name, t.UUID))
+     
+                for o in output_descriptors.descriptors:
+                    print('  {0}: {1} ({2})'.format(o.name, o.description, o.id))
+                sys.exit(0)
+            else:
+                sys.exit(1)
+     
+        if (options.get_tree):
+            if options.uuid is not None:
+                response = tsp_client.fetch_timegraph_tree(options.uuid, options.get_tree)
+                if response.status_code == 200:
+                    tree = response.model.model
+     
+                    entries = tree.entries
+     
+                    if (options.get_tree == "org.eclipse.tracecompass.internal.analysis.profiling.core.callgraph.callgraphanalysis.statistics"):
+                        print("  Label\t\tMinimum\t\tMaximum\t\tMean\t\tstddev\t\ttotal")
+                        for e in entries:
+                            labels = e.labels
+                            label = labels[0]
+                            others = e.others
+                            print('  {0}\t{1}\t{2}\t{3}\t{4}\t{5}'.format(label,others.get("min"), others.get("max"), others.get("mean"), others.get("stdDev"), others.get("total")))
+                    else:
+                        for e in entries:
+                            labels = e.labels
+                            label = labels[0]
+                            others = e.others
+                            print('  {0}'.format(label))
+                            for k in others:
+                                print ('({0}, {1}'.format(k, others.get(k)))
+                    sys.exit(0)
+                else:
+                    sys.exit(1)
+            else:
+                print("Trace UUID is missing")
+                sys.exit(1)
+
+    except ConnectionError as e:
+        print('Unexpected error: {0}'.format(e))
+        sys.exit(1) 
+sys.exit(0)
+
