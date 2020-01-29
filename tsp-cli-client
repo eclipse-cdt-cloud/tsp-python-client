@@ -26,8 +26,13 @@ import argparse
 import sys
 from tsp.tsp_client import TspClient
 from requests.exceptions import ConnectionError
+from termcolor import colored
 
 #api_token = 'your_token_goes_here'
+
+
+def printUuid(elem):
+    return colored(elem.UUID, 'yellow')
 
 headers={'content-type':'application/json', 'Accept':'application/json'}
 
@@ -57,7 +62,7 @@ if __name__=="__main__":
                 response = tsp_client.open_trace(options.name, options.trace)
                 if response.status_code == 200 or response.status_code == 409: 
                     res = response.model
-                    print('  {0}: {1} ({2})'.format(res.name, res.path, res.UUID))
+                    print('  {0}: {1} ({2})'.format(res.name, res.path, printUuid(res)))
                     sys.exit(0)
                 else:
                     sys.exit(1)
@@ -66,7 +71,7 @@ if __name__=="__main__":
             response = tsp_client.fetch_trace(options.list_trace)
             if response.status_code == 200: 
                 res = response.model
-                print('  {0}: {1} ({2})'.format(res.name, res.path, res.UUID))
+                print('  {0}: {1} ({2})'.format(res.name, res.path, printUuid(res)))
                 sys.exit(0)
             else:
                 sys.exit(1)
@@ -78,7 +83,7 @@ if __name__=="__main__":
                     print("No traces open on the server")
             
                 for t in response.model.traces:
-                    print('  {0}: {1} ({2})'.format(t.name, t.path, t.UUID))
+                    print('  {0}: {1} ({2})'.format(t.name, t.path, printUuid(t)))
                 sys.exit(0)
             else:
                 sys.exit(1)
@@ -89,7 +94,7 @@ if __name__=="__main__":
                 output_descriptors = response.model
      
                 if not output_descriptors.descriptors:
-                    print('No output descriptors for trace {0} ({1}))'.format(t.name, t.UUID))
+                    print('No output descriptors for trace {0} ({1}))'.format(t.name, printUuid(t)))
      
                 for o in output_descriptors.descriptors:
                     print('  {0}: {1} ({2})'.format(o.name, o.description, o.id))
@@ -126,7 +131,6 @@ if __name__=="__main__":
             else:
                 print("Trace UUID is missing")
                 sys.exit(1)
-
     except ConnectionError as e:
         print('Unexpected error: {0}'.format(e))
         sys.exit(1) 
