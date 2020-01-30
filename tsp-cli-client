@@ -27,13 +27,28 @@ import sys
 from tsp.tsp_client import TspClient
 from requests.exceptions import ConnectionError
 from termcolor import colored
+from datetime import timedelta
 
 #api_token = 'your_token_goes_here'
-
+NS_PER_SEC = 1000000000
 
 def printUuid(elem):
     return colored(elem.UUID, 'yellow')
 
+def printTime(elem):
+    try:
+        time = int(int(elem) / NS_PER_SEC)
+        ns = int(elem) % NS_PER_SEC
+        if (time != 0):
+            return '{0} s'.format(timedelta(seconds = time, microseconds = ns/1000))
+        if ns > 1000000:
+            return '{0} ms'.format(ns / 1000000)
+        if ns > 1000:
+            return '{0} µs'.format(ns / 1000)
+        return '{0} ns'.format(ns)
+    except ValueError as e:
+        return elem
+    
 headers={'content-type':'application/json', 'Accept':'application/json'}
 
 
@@ -111,12 +126,12 @@ if __name__=="__main__":
                     entries = tree.entries
      
                     if (options.get_tree == "org.eclipse.tracecompass.internal.analysis.profiling.core.callgraph.callgraphanalysis.statistics"):
-                        print("  Label\t\tMinimum\t\tMaximum\t\tMean\t\tstddev\t\ttotal")
+                        print("  Label\t\tMinimum\t\tMaximum\t\tMean\t\tstddev\t\ttotal\tcount")
                         for e in entries:
                             labels = e.labels
                             label = labels[0]
                             others = e.others
-                            print('  {0}\t{1}\t{2}\t{3}\t{4}\t{5}'.format(label,others.get("min"), others.get("max"), others.get("mean"), others.get("stdDev"), others.get("total")))
+                            print('  {0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}'.format(label, printTime(others.get("min")), printTime(others.get("max")), printTime(others.get("mean")), printTime(others.get("stdDev")), printTime(others.get("total")), others.get("nbElements")))
                     else:
                         for e in entries:
                             labels = e.labels
