@@ -67,6 +67,11 @@ if __name__=="__main__":
     parser.add_argument("--uuid", dest="uuid", help="The UUID of a trace")
 
     options = parser.parse_args()
+
+    # Check for arguments
+    if len(sys.argv) == 1:
+        parser.print_help()
+        sys.exit(1)
     
     api_url_base = 'http://{0}:{1}/tsp/api/'.format(options.ip_address, options.port)
     tsp_client = TspClient(api_url_base)
