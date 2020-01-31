@@ -48,7 +48,7 @@ def printTime(elem):
         return '{0} ns'.format(ns)
     except ValueError as e:
         return elem
-    
+
 headers={'content-type':'application/json', 'Accept':'application/json'}
 
 
@@ -131,12 +131,12 @@ if __name__=="__main__":
                     entries = tree.entries
      
                     if (options.get_tree == "org.eclipse.tracecompass.internal.analysis.profiling.core.callgraph.callgraphanalysis.statistics"):
-                        print("  Label\t\tMinimum\t\tMaximum\t\tMean\t\tstddev\t\ttotal\tcount")
+                        print('  {:>60}\t{:>14}\t{:>14}\t{:>14}\t{:>14}\t{:>14}\t{:>14}'.format("Label", "Minimum", "Maximum", "Mean", "Std Dev", "Total", "Count"))
                         for e in entries:
                             labels = e.labels
                             label = labels[0]
                             others = e.others
-                            print('  {0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}'.format(label, printTime(others.get("min")), printTime(others.get("max")), printTime(others.get("mean")), printTime(others.get("stdDev")), printTime(others.get("total")), others.get("nbElements")))
+                            print('  {:>60}\t{:>14}\t{:>14}\t{:>14}\t{:>14}\t{:>14}\t{:>14}'.format(label, printTime(others.get("min")), printTime(others.get("max")), printTime(others.get("mean")), printTime(others.get("stdDev")), printTime(others.get("total")), others.get("nbElements")))
                     else:
                         for e in entries:
                             labels = e.labels
