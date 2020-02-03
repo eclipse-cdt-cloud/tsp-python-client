@@ -32,10 +32,10 @@ from datetime import timedelta
 #api_token = 'your_token_goes_here'
 NS_PER_SEC = 1000000000
 
-def printUuid(elem):
+def print_uuid(elem):
     return colored(elem.UUID, 'yellow')
 
-def printTime(elem):
+def print_time(elem):
     try:
         time = int(int(elem) / NS_PER_SEC)
         ns = int(elem) % NS_PER_SEC
@@ -82,7 +82,7 @@ if __name__=="__main__":
                 response = tsp_client.open_trace(options.name, options.trace)
                 if response.status_code == 200 or response.status_code == 409: 
                     res = response.model
-                    print('  {0}: {1} ({2})'.format(res.name, res.path, printUuid(res)))
+                    print('  {0}: {1} ({2})'.format(res.name, res.path, print_uuid(res)))
                     sys.exit(0)
                 else:
                     sys.exit(1)
@@ -91,7 +91,7 @@ if __name__=="__main__":
             response = tsp_client.fetch_trace(options.list_trace)
             if response.status_code == 200: 
                 res = response.model
-                print('  {0}: {1} ({2})'.format(res.name, res.path, printUuid(res)))
+                print('  {0}: {1} ({2})'.format(res.name, res.path, print_uuid(res)))
                 sys.exit(0)
             else:
                 sys.exit(1)
@@ -103,7 +103,7 @@ if __name__=="__main__":
                     print("No traces open on the server")
             
                 for t in response.model.traces:
-                    print('  {0}: {1} ({2})'.format(t.name, t.path, printUuid(t)))
+                    print('  {0}: {1} ({2})'.format(t.name, t.path, print_uuid(t)))
                 sys.exit(0)
             else:
                 sys.exit(1)
@@ -114,7 +114,7 @@ if __name__=="__main__":
                 output_descriptors = response.model
      
                 if not output_descriptors.descriptors:
-                    print('No output descriptors for trace {0} ({1}))'.format(t.name, printUuid(t)))
+                    print('No output descriptors for trace {0} ({1}))'.format(t.name, print_uuid(t)))
      
                 for o in output_descriptors.descriptors:
                     print('  {0}: {1} ({2})'.format(o.name, o.description, o.id))
@@ -136,7 +136,7 @@ if __name__=="__main__":
                             labels = e.labels
                             label = labels[0]
                             others = e.others
-                            print('  {:>60}\t{:>14}\t{:>14}\t{:>14}\t{:>14}\t{:>14}\t{:>14}'.format(label, printTime(others.get("min")), printTime(others.get("max")), printTime(others.get("mean")), printTime(others.get("stdDev")), printTime(others.get("total")), others.get("nbElements")))
+                            print('  {:>60}\t{:>14}\t{:>14}\t{:>14}\t{:>14}\t{:>14}\t{:>14}'.format(label, print_time(others.get("min")), print_time(others.get("max")), print_time(others.get("mean")), print_time(others.get("stdDev")), print_time(others.get("total")), others.get("nbElements")))
                     else:
                         for e in entries:
                             labels = e.labels
