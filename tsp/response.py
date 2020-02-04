@@ -21,8 +21,10 @@
 # SOFTWARE.
 
 from enum import Enum
+
+from tsp.model_type import ModelType
 from tsp.output_descriptor import OutputDescriptor
-from tsp.entry import EntryModel
+from tsp.entry_model import EntryModel
 
 MODEL_KEY = "model"
 OUTPUT_DESCRIPTOR_KEY = "output"
@@ -49,11 +51,6 @@ class ResponseStatus(Enum):
     '''
     CANCELLED = "CANCELLED"
 
-class ModelType(Enum):
-    TREE = "tree"
-    STATES = "states"
-    XY = "xy"
-
 class GenericResponse(object):
     '''
     Output element style object for one style key. It supports style
@@ -73,8 +70,11 @@ class GenericResponse(object):
         '''
         self.model = params.get(MODEL_KEY)
         if MODEL_KEY in params:
-            if self.model_type == ModelType.TREE: 
-                self.model = EntryModel(params.get(MODEL_KEY))
+            if self.model_type == ModelType.TIME_GRAPH_TREE:
+                self.model = EntryModel(params.get(MODEL_KEY), self.model_type)
+            elif self.model_type == ModelType.XY_TREE:
+                #TODO
+                print("not implemented")
             elif self.model_type == ModelType.STATES:
                 #TODO
                 print("not implemented")
