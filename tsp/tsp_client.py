@@ -160,8 +160,7 @@ class TspClient(object):
         response = requests.post(api_url, json=params, headers=headers)
     
         if response.status_code == 200:
-            return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')), ModelType.TREE), response.status_code, response.text)
+            return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')), ModelType.TIME_GRAPH_TREE), response.status_code, response.text)
         else:    
             print ("failed to get tree: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
-            
