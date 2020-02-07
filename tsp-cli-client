@@ -118,6 +118,12 @@ if __name__=="__main__":
      
                 for o in output_descriptors.descriptors:
                     print('  {0}: {1} ({2})'.format(o.name, o.description, o.id))
+                    # Add function duration statistics here in client because it's not available in the descriptors yet at the server
+                    # TODO remove when available
+                    if (o.id == "org.eclipse.tracecompass.internal.analysis.profiling.callstack.provider.CallStackDataProvider"):
+                        print('  {0}: {1} ({2})'.format("Function Duration Statistics", "Function Duration Statistics", "org.eclipse.tracecompass.internal.analysis.profiling.core.callgraph.callgraphanalysis.statistics"))
+                        
+                    
                 sys.exit(0)
             else:
                 sys.exit(1)
