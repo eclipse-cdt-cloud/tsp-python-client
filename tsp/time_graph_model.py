@@ -27,7 +27,7 @@ START_TIME_KEY = "startTime"
 END_TIME_KEY = "endTime"
 HAS_ROW_MODEL_KEY = "hasRowModel"
 ROWS_KEY = "rows"
-ENTRY_ID_KEY = "entryId"
+ENTRY_ID_KEY = "entryID"
 STATES_KEY = "states"
 DURATION_KEY = "duration"
 LABEL_KEY = "label"
@@ -44,7 +44,7 @@ Entry in a time graph
 
 class TimeGraphEntry(Entry):
     def __init__(self, params):
-        super(TimeGraphEntry, self).__init__(params)
+        super(TimeGraphEntry, self).__init__(params, False)
         '''
         Type of the entry
         '''
@@ -74,7 +74,7 @@ class TimeGraphEntry(Entry):
             del params[HAS_ROW_MODEL_KEY]
 
         '''
-        Store other key/value pairs that are not defined in the TSP in 
+        Store other key/value pairs that are not defined in the TSP in
         a dictionary
         '''
         self.others = {}
@@ -85,10 +85,10 @@ class TimeGraphEntry(Entry):
 '''
 Time Graph model that will be returned by the server
 '''
-            
-            
+
+
 class TimeGraphModel(object):
-    
+
     def __init__(self, params):
         self.rows = []
         if ROWS_KEY in params:
@@ -184,7 +184,7 @@ class TimeGraphState(object):
         if STYLE_KEY in params:
             self.style = params.get(STYLE_KEY)
             del params[STYLE_KEY]
-        
+
         '''
         Store other key/value pairs that are not defined in the TSP in
         a dictionary
@@ -241,7 +241,7 @@ class TimeGraphArrow(object):
         '''
         if STYLE_KEY in params:
             self.style = params.get(STYLE_KEY)
-            del params[STYLE_KEY] 
+            del params[STYLE_KEY]
 
         '''
         Store other key/value pairs that are not defined in the TSP in
