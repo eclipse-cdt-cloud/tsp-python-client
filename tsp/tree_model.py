@@ -60,11 +60,13 @@ class TreeModel(object):
 
 
 class TreeItem(object):
+
     def __init__(self, entry=None):
         self._entry = entry
         self._parent = None
         self._children = []
         self._trace = None
+        self._indent = 2
 
     def set_parent(self, parent):
         self._parent = parent
@@ -88,17 +90,19 @@ class TreeItem(object):
         return self._children
 
     def print(self, depth=0):
-        for x in range(depth):
-            print("", end=" ")
+        if(depth > 0):
+            print("  ", end="")
+        for x in range((int)(depth / self._indent) - 1):
+            print("| ", end="")
         if self._entry is not None:
             other = ""
             others = self._entry.others
             prefix = ""
             if depth > 0:
-                prefix = "|- "
+                prefix = "|____"
             # TODO print TimeGraphEntry specific fields
             for k in others:
                 other = ('{0} ({1}, {2})'.format(other, k, others.get(k)))
             print("{0}{1} ({1}, {2}) {3} {4}".format(prefix, self._entry.labels[0], self._entry.id, self._entry.parent_id, other))
         for child in self.get_children():
-            child.print(depth + 4)
+            child.print(depth + self._indent)
