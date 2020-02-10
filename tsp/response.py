@@ -25,11 +25,13 @@ from enum import Enum
 from tsp.model_type import ModelType
 from tsp.output_descriptor import OutputDescriptor
 from tsp.entry_model import EntryModel
+from tsp.time_graph_model import TimeGraphModel
 
 MODEL_KEY = "model"
 OUTPUT_DESCRIPTOR_KEY = "output"
 RESPONSE_STATUS_KEY = "status"
 STATUS_MESSAGE_KEY = "statusMessage"
+
 
 class ResponseStatus(Enum):
     '''
@@ -51,6 +53,7 @@ class ResponseStatus(Enum):
     '''
     CANCELLED = "CANCELLED"
 
+
 class GenericResponse(object):
     '''
     Output element style object for one style key. It supports style
@@ -60,7 +63,7 @@ class GenericResponse(object):
     '''
 
     def __init__(self, params, model_type):
-        self.model_type = model_type 
+        self.model_type = model_type
 
         '''
         Constructor
@@ -73,23 +76,23 @@ class GenericResponse(object):
             if self.model_type == ModelType.TIME_GRAPH_TREE:
                 self.model = EntryModel(params.get(MODEL_KEY), self.model_type)
             elif self.model_type == ModelType.XY_TREE:
-                #TODO
+                # TODO
                 print("not implemented")
             elif self.model_type == ModelType.STATES:
-                #TODO
+                # TODO
                 print("not implemented")
             elif self.model_type == ModelType.XY:
-                #TODO
+                # TODO
                 print("not implemented")
 
         '''
         Output descriptor
-        ''' 
+        '''
         if OUTPUT_DESCRIPTOR_KEY in params:
             self.output = OutputDescriptor(params.get(OUTPUT_DESCRIPTOR_KEY))
         else:
             self.output = None
- 
+
         '''
         Response status as described by ResponseStatus
         '''

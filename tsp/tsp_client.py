@@ -28,13 +28,17 @@ from tsp.tsp_client_response import TspClientResponse
 from tsp.output_descriptor_set import OutputDescriptorSet
 from tsp.response import GenericResponse, ModelType
 
-headers={'content-type':'application/json', 'Accept':'application/json'}
+headers = {'content-type': 'application/json', 'Accept': 'application/json'}
+
+PARAMETERS_KEY = 'parameters'
+REQUESTED_TIME_KEY = 'requested_times'
+
 
 class TspClient(object):
     '''
     Trace Server Protocol tsp_cli_client
     '''
-    
+
     def __init__(self, base_url):
         '''
         Constructor
@@ -46,15 +50,15 @@ class TspClient(object):
     :return: :class:`TspClientResponse <TraceSet>` object
     :rtype: TspClientResponse
      '''
-    def fetch_traces(self): 
+    def fetch_traces(self):
         api_url = '{0}traces'.format(self.base_url)
         response = requests.get(api_url, headers=headers)
         if response.status_code == 200:
             return TspClientResponse(TraceSet(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
         else:
-            print ("get traces failed: {0}".format(response.status_code))
+            print("get traces failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
-    
+
     '''
     Fetch a specific trace information
     :param uuid: Trace UUID to fetch
@@ -67,9 +71,9 @@ class TspClient(object):
         if response.status_code == 200:
             return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
         else:
-            print ("get trace failed: {0}".format(response.status_code))
+            print("get trace failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
-    
+
     '''
     Open a trace on the server
      parameters: Query object
@@ -78,25 +82,25 @@ class TspClient(object):
     '''
     def open_trace(self, name, path):
         api_url = '{0}traces'.format(self.base_url)
-        
+
         my_parameters = {'name': name, 'uri': path}
         parameters = {'parameters': my_parameters}
-        
+
         response = requests.post(api_url, json=parameters, headers=headers)
-        
+
         if response.status_code == 200:
             return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
         elif response.status_code == 409:
             fetch_response = self.fetch_traces()
             if fetch_response.status_code == 200:
-                #TODO don't just blindly use the first one
+                # TODO don't just blindly use the first one
                 return TspClientResponse(fetch_response.model.traces[0], response.status_code, response.text)
             else:
                 return TspClientResponse(None, fetch_response.status_code, fetch_response.status_text)
         else:
-            print ("post trace failed: {0}".format(response.status_code))
+            print("post trace failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
-     
+
     '''
     Delete a trace on the server
     :param uuid: Trace UUID to delete
@@ -107,21 +111,20 @@ class TspClient(object):
      '''
     def delete_trace(self, uuid, delete_trace, remove_cache=False):
         api_url = '{0}traces/{1}'.format(self.base_url, uuid)
-        parameters = {};
-        if delete_trace: 
+        parameters = {}
+        if delete_trace:
             parameters.append('deleteTrace', "true")
-        
-        if remove_cache: {
+
+        if remove_cache:
             parameters.append('removeCache', "true")
-        }
+
         response = requests.delete(api_url, json=parameters, headers=headers)
         if response.status_code == 200:
             return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
         else:
-            print ("delete trace failed: {0}".format(response.status_code))
+            print("delete trace failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
-        
-        
+
     '''
     List all the outputs associated to this experiment
     :param exp_uuid: Experiment UUID
@@ -132,11 +135,11 @@ class TspClient(object):
         api_url = '{0}experiments/{1}/outputs/'.format(self.base_url, exp_uuid)
 
         response = requests.get(api_url, headers=headers)
-    
+
         if response.status_code == 200:
             return TspClientResponse(OutputDescriptorSet(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
         else:
-            print ("get output descriptors failed: {0}".format(response.status_code))
+            print("get output descriptors failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
     '''
@@ -147,20 +150,19 @@ class TspClient(object):
     :returns: :class:  `TspClientResponse <GenericResponse>` object Time graph entry response with entries and headers
     :rtype: TspClientResponse
      '''
-    def fetch_timegraph_tree(self, exp_uuid, output_id, parameters = None):
+    def fetch_timegraph_tree(self, exp_uuid, output_id, parameters=None):
         api_url = '{0}experiments/{1}/outputs/timeGraph/{2}/tree'.format(self.base_url, exp_uuid, output_id)
-        
-        if (parameters == None): 
-            requested_times= [0, 1]
-            my_parameters = {'requested_times': requested_times}
-            params = {'parameters': my_parameters}
-        else:
-            params = parameters    
-    
+
+        params = parameters
+        if (parameters is None):
+            requested_times = [0, 1]
+            my_parameters = {REQUESTED_TIME_KEY: requested_times}
+            params = {PARAMETERS_KEY: my_parameters}
+
         response = requests.post(api_url, json=params, headers=headers)
-    
+
         if response.status_code == 200:
             return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')), ModelType.TIME_GRAPH_TREE), response.status_code, response.text)
-        else:    
-            print ("failed to get tree: {0}".format(response.status_code))
+        else:
+            print("failed to get tree: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
