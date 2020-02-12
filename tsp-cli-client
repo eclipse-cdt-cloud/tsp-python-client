@@ -72,7 +72,7 @@ if __name__=="__main__":
     if len(sys.argv) == 1:
         parser.print_help()
         sys.exit(1)
-    
+
     api_url_base = 'http://{0}:{1}/tsp/api/'.format(options.ip_address, options.port)
     tsp_client = TspClient(api_url_base)
     
@@ -86,7 +86,10 @@ if __name__=="__main__":
                     sys.exit(0)
                 else:
                     sys.exit(1)
-     
+            else:
+                print("Provide a name for the trace using option --name")
+                sys.exit(1)
+
         if (options.list_trace):
             response = tsp_client.fetch_trace(options.list_trace)
             if response.status_code == 200: 
@@ -95,7 +98,7 @@ if __name__=="__main__":
                 sys.exit(0)
             else:
                 sys.exit(1)
-    
+
         if (options.list_traces):
             response = tsp_client.fetch_traces()
             if response.status_code == 200:
@@ -107,15 +110,15 @@ if __name__=="__main__":
                 sys.exit(0)
             else:
                 sys.exit(1)
-        
+
         if (options.list_outputs):
             response = tsp_client.experiment_outputs(options.list_outputs)
             if response.status_code == 200:
                 output_descriptors = response.model
-     
+
                 if not output_descriptors.descriptors:
                     print('No output descriptors for trace {0} ({1}))'.format(t.name, print_uuid(t)))
-     
+
                 for o in output_descriptors.descriptors:
                     print('  {0}: {1} ({2})'.format(o.name, o.description, o.id))
                     # Add function duration statistics here in client because it's not available in the descriptors yet at the server
@@ -127,15 +130,15 @@ if __name__=="__main__":
                 sys.exit(0)
             else:
                 sys.exit(1)
-     
+
         if (options.get_tree):
             if options.uuid is not None:
                 response = tsp_client.fetch_timegraph_tree(options.uuid, options.get_tree)
                 if response.status_code == 200:
                     tree = response.model.model
-     
+
                     entries = tree.entries
-     
+
                     if (options.get_tree == "org.eclipse.tracecompass.internal.analysis.profiling.core.callgraph.callgraphanalysis.statistics"):
                         print('  {:>60}\t{:>14}\t{:>14}\t{:>14}\t{:>14}\t{:>14}\t{:>14}'.format("Label", "Minimum", "Maximum", "Mean", "Std Dev", "Total", "Count"))
                         for e in entries:
