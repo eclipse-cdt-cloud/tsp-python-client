@@ -68,6 +68,9 @@ if __name__=="__main__":
     parser.add_argument("--list-outputs", dest="list_outputs", help="Gets details on the given trace", metavar="UUID")
     parser.add_argument("--get-tree", dest="get_tree", help="Gets the tree of an output", metavar="OUTPUT_ID")
     parser.add_argument("--uuid", dest="uuid", help="The UUID of a trace")
+    parser.add_argument("--list-extensions", dest="extensions", action='store_true', help="Get the extensions loaded")
+    parser.add_argument("--load-extension", dest="load_extensions", help="Load an extension", metavar="EXTENSION_PATH")
+    parser.add_argument("--delete-extension", dest="delete_extensions", help="Delete an extension", metavar="EXTENSION_NAME")
 
     options = parser.parse_args()
 
@@ -156,6 +159,35 @@ if __name__=="__main__":
                     sys.exit(1)
             else:
                 print("Trace UUID is missing")
+                sys.exit(1)
+        
+        if (options.extensions):
+            response = tsp_client.fetch_extensions()
+            if response.status_code == 200:
+                extension_set = response.model
+
+                if not extension_set:
+                    print('No extensions loaded')
+
+                for e in extension_set.extension_set:
+                    print('  {0}'.format(e.extension))
+
+                sys.exit(0)
+            else:
+                sys.exit(1)
+
+        if (options.load_extensions):
+            response = tsp_client.post_extensions(options.load_extensions)
+            if response.status_code == 200:
+                sys.exit(0)
+            else:
+                sys.exit(1)
+
+        if (options.delete_extensions):
+            response = tsp_client.delete_extensions(options.delete_extensions)
+            if response.status_code == 200:
+                sys.exit(0)
+            else:
                 sys.exit(1)
     except ConnectionError as e:
         print('Unexpected error: {0}'.format(e))

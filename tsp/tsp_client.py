@@ -27,8 +27,10 @@ import json
 from tsp.tsp_client_response import TspClientResponse
 from tsp.output_descriptor_set import OutputDescriptorSet
 from tsp.response import GenericResponse, ModelType
+from tsp.extension_set import ExtensionSet
 
 headers = {'content-type': 'application/json', 'Accept': 'application/json'}
+headers_form = {'content-type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'}
 
 PARAMETERS_KEY = 'parameters'
 REQUESTED_TIME_KEY = 'requested_times'
@@ -165,4 +167,47 @@ class TspClient(object):
             return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')), ModelType.TIME_GRAPH_TREE), response.status_code, response.text)
         else:
             print("failed to get tree: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    '''
+    Fetch Extensions (loaded files)
+     '''
+    def fetch_extensions(self):
+        api_url = '{0}xml'.format(self.base_url)
+
+        response = requests.get(api_url, headers=headers)
+
+        if response.status_code == 200:
+            return TspClientResponse(ExtensionSet(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+        else:
+            print("failed to get extensions: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    '''
+    Load an extension
+     '''
+    def post_extensions(self, mypath):
+        api_url = '{0}xml'.format(self.base_url)
+
+        payload = dict(path=mypath)
+        response = requests.post(api_url, data=payload, headers=headers_form)
+
+        if response.status_code == 200:
+            return TspClientResponse("Loaded", response.status_code, response.text)
+        else:
+            print("post extension failed: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    '''
+    Delete an extension
+     '''
+    def delete_extensions(self, name):
+        api_url = '{0}xml/{1}'.format(self.base_url, name)
+
+        response = requests.delete(api_url, headers=headers_form)
+
+        if response.status_code == 200:
+            return TspClientResponse("Deleted", response.status_code, response.text)
+        else:
+            print("post extension failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
