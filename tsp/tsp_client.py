@@ -28,6 +28,8 @@ from tsp.tsp_client_response import TspClientResponse
 from tsp.output_descriptor_set import OutputDescriptorSet
 from tsp.response import GenericResponse, ModelType
 from tsp.extension_set import ExtensionSet
+from tsp.experiment_set import ExperimentSet
+from tsp.experiment import Experiment
 
 headers = {'content-type': 'application/json', 'Accept': 'application/json'}
 headers_form = {'content-type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'}
@@ -125,6 +127,76 @@ class TspClient(object):
             return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
         else:
             print("delete trace failed: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    '''
+    Fetch all available experiments on the server
+    :return: :class:`TspClientResponse <ExperimentSet>` object
+    :rtype: TspClientResponse
+    '''
+    def fetch_experiments(self):
+        api_url = '{0}experiments'.format(self.base_url)
+        response = requests.get(api_url, headers=headers)
+        if response.status_code == 200:
+            return TspClientResponse(ExperimentSet(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+        else:
+            print("get experiments failed: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    '''
+    Fetch a specific experiment information
+    :param uuid: Trace UUID to fetch
+    :return: :class:`TspClientResponse <Experiment>` object
+    :rtype: TspClientResponse
+    '''
+    def fetch_experiment(self, uuid):
+        api_url = '{0}experiments/{1}'.format(self.base_url, uuid)
+        response = requests.get(api_url, headers=headers)
+        if response.status_code == 200:
+            return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+        else:
+            print("get trace failed: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    '''
+    Delete a specific experiment
+    :param uuid: Trace UUID to fetch
+    :return: :class:`TspClientResponse <Trace>` object
+    :rtype: TspClientResponse
+    '''
+    def delete_experiment(self, uuid):
+        api_url = '{0}experiments/{1}'.format(self.base_url, uuid)
+        response = requests.delete(api_url, headers=headers)
+        if response.status_code == 200:
+            return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+        else:
+            print("delete experiment failed: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    '''
+     * Create an experiment on the server
+     * :param parameters: Query object
+     * :rtype: The created experiment
+    '''
+    def open_experiment(self, name, traces):
+        api_url = '{0}experiments'.format(self.base_url)
+
+        my_parameters = {'name': name, 'traces': traces}
+        parameters = {'parameters': my_parameters}
+
+        response = requests.post(api_url, json=parameters, headers=headers)
+
+        if response.status_code == 200:
+            return TspClientResponse(Experiment(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+        elif response.status_code == 409:
+            fetch_response = self.fetch_experiments()
+            if fetch_response.status_code == 200:
+                # TODO don't just blindly use the first one
+                return TspClientResponse(fetch_response.model.experiments[0], response.status_code, response.text)
+            else:
+                return TspClientResponse(None, fetch_response.status_code, fetch_response.status_text)
+        else:
+            print("post experiment failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
     '''
