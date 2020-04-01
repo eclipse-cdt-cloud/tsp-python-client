@@ -36,8 +36,18 @@ NS_PER_SEC = 1000000000
 def print_uuid(elem):
     return colored(elem.UUID, 'yellow')
 
+def print_experiment(elem):
+    print('Experiment:');
+    print('----------');
+    print('  {0}: ({1}) start={2} end={3} nbEvents={4} indexing={5}'.format(
+        elem.name, print_uuid(elem), elem.start, elem.end, elem.number_of_events, elem.indexin_status))
+    print('Trace(s):');
+    print('------');
+    for trace in elem.traces.traces:
+        print_trace(trace)
+
 def print_trace(elem): 
-    print('  {0}: {1} ({2}) start={3} end={4} nbEvents={5} indexing={6}'.format(
+    print('    {0}: {1} ({2}) start={3} end={4} nbEvents={5} indexing={6}'.format(
         elem.name, elem.path, print_uuid(elem), elem.start, elem.end, elem.number_of_events, elem.indexin_status))
 
 def print_time(elem):
@@ -63,11 +73,16 @@ if __name__=="__main__":
     parser.add_argument("--port", dest="port", help="port of trace server", metavar="PORT", default="8080")
     parser.add_argument("--open-trace", dest="trace", help="Path to trace to open", metavar="TRACE_PATH")
     parser.add_argument("--name", dest="name", metavar="NAME", help="trace name")
-    parser.add_argument("--list-traces", dest="list_traces",  action='store_true',  help="List all open traces on the server")
     parser.add_argument("--list-trace", dest="list_trace", help="Get details on the given trace", metavar="UUID")
+    parser.add_argument("--list-traces", dest="list_traces",  action='store_true',  help="List all open traces on the server")
+    parser.add_argument("--open-experiment", dest="experiment", help="Open experiment on the server", metavar="EXP_NAME")
+    parser.add_argument("--list-experiment", dest="list_experiment", help="Get details on the given experiment", metavar="UUID")
+    parser.add_argument("--list-experiments", dest="list_experiments",  action='store_true',  help="List all open experiments on the server")
+    parser.add_argument("--delete-experiment", dest="delete_experiment", help="Delete an experiment on the server", metavar="UUID")
     parser.add_argument("--list-outputs", dest="list_outputs", help="Gets details on the given trace", metavar="UUID")
     parser.add_argument("--get-tree", dest="get_tree", help="Gets the tree of an output", metavar="OUTPUT_ID")
     parser.add_argument("--uuid", dest="uuid", help="The UUID of a trace")
+    parser.add_argument("--uuids", dest="uuids", help="The list of UUIDs", nargs="*")
     parser.add_argument("--list-extensions", dest="extensions", action='store_true', help="Get the extensions loaded")
     parser.add_argument("--load-extension", dest="load_extensions", help="Load an extension", metavar="EXTENSION_PATH")
     parser.add_argument("--delete-extension", dest="delete_extensions", help="Delete an extension", metavar="EXTENSION_NAME")
@@ -113,6 +128,48 @@ if __name__=="__main__":
 
                 for t in response.model.traces:
                     print_trace(t)
+                sys.exit(0)
+            else:
+                sys.exit(1)
+
+        if (options.experiment):
+            if options.uuids is not None:
+                response = tsp_client.open_experiment(options.experiment, options.uuids)
+                if response.status_code == 200 or response.status_code == 409: 
+                    res = response.model
+                    print_experiment(res)
+                    sys.exit(0)
+                else:
+                    sys.exit(1)
+            else:
+                print("Provide a name for the trace using option --name")
+                sys.exit(1)
+
+        if (options.list_experiment):
+            response = tsp_client.fetch_experiment(options.list_trace)
+            if response.status_code == 200: 
+                res = response.model
+                print_experiment(res)
+                sys.exit(0)
+            else:
+                sys.exit(1)
+
+        if (options.list_experiments):
+            response = tsp_client.fetch_experiments()
+            if response.status_code == 200:
+                if not response.model.experiments:
+                    print("No experiments open on the server")
+
+                for exp in response.model.experiments:
+                    print_experiment(exp)
+                sys.exit(0)
+            else:
+                sys.exit(1)
+
+        if (options.delete_experiment):
+            response = tsp_client.delete_experiment(options.delete_experiment)
+            if response.status_code == 200: 
+                print("Successfully deleted experiment");
                 sys.exit(0)
             else:
                 sys.exit(1)
