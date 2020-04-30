@@ -40,17 +40,7 @@ class EntryHeader(object):
         '''
         Displayed name
         '''
-        self.name = ""
-        if NAME_KEY in params:
-            self.name = params.get(NAME_KEY)
-            del params[NAME_KEY]
-
-        '''
-        Store other key/value pairs that are not defined in the TSP in a dictionary
-        '''
-        self.others = {}
-        if params:
-            self.others = copy.deepcopy(params)
+        self.name = params
 
 
 class Entry(object):

@@ -40,7 +40,7 @@ class EntryModel(object):
         self.headers = []
         if HEADER_KEY in params:
             for header in params.get(HEADER_KEY):
-                self.headers = EntryHeader(header)
+                self.headers.append(EntryHeader(header))
             del params[HEADER_KEY]
 
         '''
@@ -52,7 +52,7 @@ class EntryModel(object):
             for entry in entries:
                 if model_type == ModelType.TIME_GRAPH_TREE:
                     self.entries.append(TimeGraphEntry(entry))
-                else:       
+                else:
                     self.entries.append(Entry(entry))
             del params[ENTRIES_KEY]
 

@@ -30,6 +30,7 @@ from tsp.response import GenericResponse, ModelType
 from tsp.extension_set import ExtensionSet
 from tsp.experiment_set import ExperimentSet
 from tsp.experiment import Experiment
+from tsp.output_descriptor import OutputDescriptor
 
 headers = {'content-type': 'application/json', 'Accept': 'application/json'}
 headers_form = {'content-type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'}
@@ -191,7 +192,7 @@ class TspClient(object):
     :return: :class:  `TspClientResponse <OutputDescriptorSet>` object
     :rtype: TspClientResponse
      '''
-    def experiment_outputs(self, exp_uuid):
+    def fetch_experiment_outputs(self, exp_uuid):
         api_url = '{0}experiments/{1}/outputs/'.format(self.base_url, exp_uuid)
 
         response = requests.get(api_url, headers=headers)
@@ -200,6 +201,25 @@ class TspClient(object):
             return TspClientResponse(OutputDescriptorSet(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
         else:
             print("get output descriptors failed: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    '''
+    Fetch given output descriptor
+    :param exp_uuid: Experiment UUID
+    :param output_id: Output ID
+    :param parameters: Query object
+    :returns: :class:  `TspClientResponse <OutputDescriptor>` object OutputDescriptor
+    :rtype: TspClientResponse
+     '''
+    def fetch_experiment_output(self, exp_uuid, output_id):
+        api_url = '{0}experiments/{1}/outputs/{2}'.format(self.base_url, exp_uuid, output_id)
+
+        response = requests.get(api_url, headers=headers)
+
+        if response.status_code == 200:
+            return TspClientResponse(OutputDescriptor(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+        else:
+            print("failed to get tree: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
     '''
