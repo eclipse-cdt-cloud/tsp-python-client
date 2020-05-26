@@ -94,13 +94,6 @@ class TspClient(object):
 
         if response.status_code == 200:
             return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
-        elif response.status_code == 409:
-            fetch_response = self.fetch_traces()
-            if fetch_response.status_code == 200:
-                # TODO don't just blindly use the first one
-                return TspClientResponse(fetch_response.model.traces[0], response.status_code, response.text)
-            else:
-                return TspClientResponse(None, fetch_response.status_code, fetch_response.status_text)
         else:
             print("post trace failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
@@ -188,13 +181,6 @@ class TspClient(object):
 
         if response.status_code == 200:
             return TspClientResponse(Experiment(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
-        elif response.status_code == 409:
-            fetch_response = self.fetch_experiments()
-            if fetch_response.status_code == 200:
-                # TODO don't just blindly use the first one
-                return TspClientResponse(fetch_response.model.experiments[0], response.status_code, response.text)
-            else:
-                return TspClientResponse(None, fetch_response.status_code, fetch_response.status_text)
         else:
             print("post experiment failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)

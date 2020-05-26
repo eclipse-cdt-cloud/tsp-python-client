@@ -101,7 +101,7 @@ if __name__=="__main__":
         if (options.trace):
             if options.name is not None:
                 response = tsp_client.open_trace(options.name, options.trace)
-                if response.status_code == 200 or response.status_code == 409: 
+                if response.status_code == 200: 
                     res = response.model
                     print_trace(res)
                     sys.exit(0)
@@ -135,7 +135,7 @@ if __name__=="__main__":
         if (options.experiment):
             if options.uuids is not None:
                 response = tsp_client.open_experiment(options.experiment, options.uuids)
-                if response.status_code == 200 or response.status_code == 409: 
+                if response.status_code == 200: 
                     res = response.model
                     print_experiment(res)
                     sys.exit(0)
