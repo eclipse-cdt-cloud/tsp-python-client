@@ -227,23 +227,8 @@ if __name__=="__main__":
                     entries = tree.entries
 
                     if (output_descriptor.type == "DATA_TREE"):
-                        i = 0
-                        for h in tree.headers:
-                            if (i == 0):
-                                print('  {:>60}'.format(h.name), end="")
-                            else:
-                                print('  {:>14}'.format(h.name), end="")
-                            i = i + 1
-                        print('')
-                        for e in entries:
-                            i = 0
-                            for l in e.labels:
-                                if (i == 0):
-                                    print('  {:>60}'.format(l), end="")
-                                else:
-                                    print('  {:>14}'.format(print_time(l)), end="")
-                                i = i + 1
-                            print('')
+                        treeModel = TreeModel(tree.entries, tree.descriptors)
+                        treeModel.print()
                     else:
                         treeModel = TreeModel(tree.entries)
                         treeModel.print()

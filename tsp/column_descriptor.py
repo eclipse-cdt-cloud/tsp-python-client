@@ -20,64 +20,30 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from tsp.trace import NAME_KEY
-from tsp.output_element_style import OutputElementStyle
 import copy
 
-ID_KEY = "id"
-PARENT_ID_KEY = "parentId"
-LABELS_KEY = "labels"
-STYLE_KEY = "style"
-HEADER_NAME_KEY = "name"
-UNKNOWN_ID = -1
+TEXT_KEY = "text"
+TOOLTIP_KEY = "tooltip"
 
 
-class EntryHeader(object):
-    '''
-    Entry Header
-    '''
-    def __init__(self, params):
-        '''
-        Displayed name
-        '''
-        self.name = params
-
-
-class Entry(object):
+class ColumnDescriptor(object):
     '''
     Basic entry
     '''
     def __init__(self, params, copy_others=True):
         '''
-        Unique Id for the entry
+        Text of header for the entry
         '''
-        self.id = UNKNOWN_ID
-        if ID_KEY in params:
-            self.id = params.get(ID_KEY)
-            del params[ID_KEY]
-        '''
-        Parent entry Id, or -1 if the entry does not have a parent
-        '''
-        self.parent_id = UNKNOWN_ID
-        if PARENT_ID_KEY in params:
-            self.parent_id = params.get(PARENT_ID_KEY)
-            del params[PARENT_ID_KEY]
-        '''
-        Array of string that represent the content of each column
-        '''
-        self.labels = []
-        if LABELS_KEY in params:
-            self.labels = params.get(LABELS_KEY)
-            del params[LABELS_KEY]
+        self.text = ''
+        if TEXT_KEY in params:
+            self.text = params.get(TEXT_KEY)
+            del params[TEXT_KEY]
 
-        '''
-        Style key used to search for a The style map can be obtained by using the style endpoint.
-        '''
-        self.style = None
-        if STYLE_KEY in params:
-            if params.get(STYLE_KEY) is not None:
-                self.style = OutputElementStyle(params.get(STYLE_KEY))
-            del params[STYLE_KEY]
+        '''Label of tooltop of the header'''
+        self.tooltip = ''
+        if TOOLTIP_KEY in params:
+            self.tooltip = params.get(TOOLTIP_KEY)
+            del params[TOOLTIP_KEY]
 
         '''
         Store other key/value pairs that are not defined in the TSP in a dictionary
