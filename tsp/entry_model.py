@@ -24,9 +24,11 @@ import copy
 from tsp.model_type import ModelType
 from tsp.time_graph_model import TimeGraphEntry
 from tsp.entry import EntryHeader, Entry
+from tsp.column_descriptor import ColumnDescriptor
 
 HEADER_KEY = "headers"
 ENTRIES_KEY = "entries"
+DESCRIPTORS_KEY = "columnDescriptors"
 
 
 class EntryModel(object):
@@ -35,13 +37,23 @@ class EntryModel(object):
     '''
     def __init__(self, params, model_type=ModelType.XY_TREE):
         '''
-        Array of entry header
+        Array of entry column
         '''
         self.headers = []
         if HEADER_KEY in params:
-            for header in params.get(HEADER_KEY):
-                self.headers.append(EntryHeader(header))
+            if (params.get(HEADER_KEY) is not None):
+                for column in params.get(HEADER_KEY):
+                    self.headers.append(EntryHeader(column))
             del params[HEADER_KEY]
+
+        '''
+        Array of column descriptors
+        '''
+        self.descriptors = []
+        if DESCRIPTORS_KEY in params:
+            for column in params.get(DESCRIPTORS_KEY):
+                self.descriptors.append(ColumnDescriptor(column))
+            del params[DESCRIPTORS_KEY]
 
         '''
         Array of entry

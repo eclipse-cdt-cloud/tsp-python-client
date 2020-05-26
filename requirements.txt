@@ -1,3 +1,5 @@
 datetime
 requests
 termcolor
+panda
+tabulate
