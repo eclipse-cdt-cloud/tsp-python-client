@@ -18,9 +18,14 @@ To use the **tsp-cli-client** script, type the following command in the root dir
 ./tsp-cli-client -h
 
 usage: tsp-cli-client [-h] [--ip IP] [--port PORT] [--open-trace TRACE_PATH]
-                      [--name NAME] [--list-traces] [--list-trace UUID]
-                      [--list-outputs UUID] [--get-tree OUTPUT_ID]
-                      [--uuid UUID]
+                      [--name NAME] [--list-trace UUID] [--list-traces]
+                      [--open-experiment EXP_NAME] [--list-experiment UUID]
+                      [--list-experiments] [--delete-experiment UUID]
+                      [--list-outputs UUID] [--list-output OUTPUT_ID]
+                      [--get-tree OUTPUT_ID] [--uuid UUID]
+                      [--uuids [UUIDS [UUIDS ...]]] [--list-extensions]
+                      [--load-extension EXTENSION_PATH]
+                      [--delete-extension EXTENSION_NAME]
 
 CLI client to sent Trace Server Protocol commands to a Trace Server.
 
@@ -31,10 +36,27 @@ optional arguments:
   --open-trace TRACE_PATH
                         Path to trace to open
   --name NAME           trace name
-  --list-traces         List all open traces on the server
   --list-trace UUID     Get details on the given trace
+  --list-traces         List all open traces on the server
+  --open-experiment EXP_NAME
+                        Open experiment on the server
+  --list-experiment UUID
+                        Get details on the given experiment
+  --list-experiments    List all open experiments on the server
+  --delete-experiment UUID
+                        Delete an experiment on the server
   --list-outputs UUID   Gets details on the given trace
+  --list-output OUTPUT_ID
+                        Gets details on the given output of a trace
   --get-tree OUTPUT_ID  Gets the tree of an output
   --uuid UUID           The UUID of a trace
+  --uuids [UUIDS [UUIDS ...]]
+                        The list of UUIDs
+  --list-extensions     Get the extensions loaded
+  --load-extension EXTENSION_PATH
+                        Load an extension
+  --delete-extension EXTENSION_NAME
+                        Delete an extension
+
 
 ```
