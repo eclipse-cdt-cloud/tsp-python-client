@@ -1,4 +1,6 @@
 # tsp-typescript-client
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftheia-ide%2Ftsp-python-client.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftheia-ide%2Ftsp-python-client?ref=badge_shield)
+
 Client-side implementation, in Python, of the [Trace Server Protocol (TSP)](https://github.com/theia-ide/trace-server-protocol).
 
 It provides a module that can be included in Python scripts to query a trace server via the Trace Server Protocol (TSP). The script **tsp-cli-client** provides a command-line interface for querying a trace server. 
@@ -60,3 +62,7 @@ optional arguments:
 
 
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftheia-ide%2Ftsp-python-client.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftheia-ide%2Ftsp-python-client?ref=badge_large)
