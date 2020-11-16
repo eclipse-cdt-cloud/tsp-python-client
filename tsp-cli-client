@@ -94,6 +94,7 @@ if __name__=="__main__":
     parser.add_argument("--name", dest="name", metavar="NAME", help="trace name")
     parser.add_argument("--list-trace", dest="list_trace", help="Get details on the given trace", metavar="UUID")
     parser.add_argument("--list-traces", dest="list_traces",  action='store_true',  help="List all open traces on the server")
+    parser.add_argument("--delete-trace", dest="delete_trace", help="Delete a trace on the server", metavar="UUID")
     parser.add_argument("--open-experiment", dest="experiment", help="Open experiment on the server", metavar="EXP_NAME")
     parser.add_argument("--list-experiment", dest="list_experiment", help="Get details on the given experiment", metavar="UUID")
     parser.add_argument("--list-experiments", dest="list_experiments",  action='store_true',  help="List all open experiments on the server")
@@ -148,6 +149,14 @@ if __name__=="__main__":
 
                 for t in response.model.traces:
                     print_trace(t)
+                sys.exit(0)
+            else:
+                sys.exit(1)
+
+        if (options.delete_trace):
+            response = tsp_client.delete_trace(options.delete_trace, False)
+            if response.status_code == 200: 
+                print("Successfully deleted trace");
                 sys.exit(0)
             else:
                 sys.exit(1)
