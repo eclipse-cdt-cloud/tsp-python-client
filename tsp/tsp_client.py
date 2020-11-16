@@ -147,7 +147,7 @@ class TspClient(object):
         api_url = '{0}experiments/{1}'.format(self.base_url, uuid)
         response = requests.get(api_url, headers=headers)
         if response.status_code == 200:
-            return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+            return TspClientResponse(Experiment(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
         else:
             print("get trace failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
@@ -162,7 +162,7 @@ class TspClient(object):
         api_url = '{0}experiments/{1}'.format(self.base_url, uuid)
         response = requests.delete(api_url, headers=headers)
         if response.status_code == 200:
-            return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+            return TspClientResponse(Experiment(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
         else:
             print("delete experiment failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)

@@ -30,6 +30,7 @@ from termcolor import colored
 from datetime import timedelta
 from tsp.tree_model import TreeModel
 from decimal import Decimal
+from os.path import os
 
 #api_token = 'your_token_goes_here'
 NS_PER_SEC = 1000000000
@@ -104,6 +105,8 @@ if __name__=="__main__":
     parser.add_argument("--get-tree", dest="get_tree", help="Gets the tree of an output", metavar="OUTPUT_ID")
     parser.add_argument("--uuid", dest="uuid", help="The UUID of a trace")
     parser.add_argument("--uuids", dest="uuids", help="The list of UUIDs", nargs="*")
+    parser.add_argument("--do-delete-traces", dest="do_delete_traces", action='store_true', help="Also delete traces when deleting experiment")
+    parser.add_argument("--paths", dest="paths", help="List of trace paths to be part of an experiment.", nargs="*")
     parser.add_argument("--list-extensions", dest="extensions", action='store_true', help="Get the extensions loaded")
     parser.add_argument("--load-extension", dest="load_extensions", help="Load an extension", metavar="EXTENSION_PATH")
     parser.add_argument("--delete-extension", dest="delete_extensions", help="Delete an extension", metavar="EXTENSION_NAME")
@@ -156,22 +159,34 @@ if __name__=="__main__":
         if (options.delete_trace):
             response = tsp_client.delete_trace(options.delete_trace, False)
             if response.status_code == 200: 
-                print("Successfully deleted trace");
+                print("Successfully deleted trace")
                 sys.exit(0)
             else:
                 sys.exit(1)
 
+        trace_uuids = []
         if (options.experiment):
-            if options.uuids is not None:
-                response = tsp_client.open_experiment(options.experiment, options.uuids)
-                if response.status_code == 200: 
-                    res = response.model
-                    print_experiment(res)
-                    sys.exit(0)
-                else:
-                    sys.exit(1)
+            if options.paths is not None:
+                for path in options.paths:
+                    name = os.path.basename(os.path.normpath(path))
+                    response = tsp_client.open_trace(name, path)
+                    if response.status_code == 200: 
+                        res = response.model
+                        trace_uuids.append(res.UUID)
+                    else:
+                        sys.exit(1)
+            elif options.uuids is not None:
+                trace_uuids = options.uuids;
             else:
-                print("Provide a name for the trace using option --name")
+                print("Provide a path for the trace using option --paths")
+                sys.exit(1)
+
+            response = tsp_client.open_experiment(options.experiment, trace_uuids)
+            if response.status_code == 200: 
+                res = response.model
+                print_experiment(res)
+                sys.exit(0)
+            else:
                 sys.exit(1)
 
         if (options.list_experiment):
@@ -199,6 +214,14 @@ if __name__=="__main__":
             response = tsp_client.delete_experiment(options.delete_experiment)
             if response.status_code == 200: 
                 print("Successfully deleted experiment");
+                
+                if (options.do_delete_traces):
+                    for trace in response.model.traces.traces:
+                        del_response = tsp_client.delete_trace(trace.UUID, False)
+                        if del_response.status_code == 200: 
+                            print("Successfully deleted trace");
+                        else:
+                            print("Failed deleting trace " + trace.name);
                 sys.exit(0)
             else:
                 sys.exit(1)
