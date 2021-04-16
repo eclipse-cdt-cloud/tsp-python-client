@@ -1,4 +1,4 @@
-# tsp-typescript-client
+# tsp-python-client
 Client-side implementation, in Python, of the [Trace Server Protocol (TSP)](https://github.com/theia-ide/trace-server-protocol).
 
 It provides a module that can be included in Python scripts to query a trace server via the Trace Server Protocol (TSP). The script **tsp-cli-client** provides a command-line interface for querying a trace server. 
