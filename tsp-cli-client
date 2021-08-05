@@ -190,7 +190,7 @@ if __name__=="__main__":
                 sys.exit(1)
 
         if (options.list_experiment):
-            response = tsp_client.fetch_experiment(options.list_trace)
+            response = tsp_client.fetch_experiment(options.list_experiment)
             if response.status_code == 200: 
                 res = response.model
                 print_experiment(res)
