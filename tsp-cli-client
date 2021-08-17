@@ -86,7 +86,7 @@ def get_descriptor(uuid, id):
         return response.model
     return None
 
-description="""CLI client to sent Trace Server Protocol commands to a Trace Server."""
+description="""CLI client to send Trace Server Protocol commands to a Trace Server."""
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description=description)

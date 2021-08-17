@@ -30,7 +30,7 @@ usage: tsp-cli-client [-h] [--ip IP] [--port PORT] [--open-trace TRACE_PATH]
                       [--load-extension EXTENSION_PATH]
                       [--delete-extension EXTENSION_NAME]
 
-CLI client to sent Trace Server Protocol commands to a Trace Server.
+CLI client to send Trace Server Protocol commands to a Trace Server.
 
 optional arguments:
   -h, --help            show this help message and exit
