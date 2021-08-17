@@ -39,12 +39,12 @@ def print_uuid(elem):
     return colored(elem.UUID, 'yellow')
 
 def print_experiment(elem):
-    print('Experiment:');
-    print('----------');
+    print('Experiment:')
+    print('----------')
     print('  {0}: ({1}) start={2} end={3} nbEvents={4} indexing={5}'.format(
         elem.name, print_uuid(elem), elem.start, elem.end, elem.number_of_events, elem.indexin_status))
-    print('Trace(s):');
-    print('------');
+    print('Trace(s):')
+    print('------')
     for trace in elem.traces.traces:
         print_trace(trace)
 
@@ -65,6 +65,7 @@ def print_time(elem):
             return '{0} µs'.format(ns / 1000)
         return '{0} ns'.format(ns)
     except ValueError as e:
+        print(e)
         return elem
 
 def print_output(output):
@@ -176,7 +177,7 @@ if __name__=="__main__":
                     else:
                         sys.exit(1)
             elif options.uuids is not None:
-                trace_uuids = options.uuids;
+                trace_uuids = options.uuids
             else:
                 print("Provide a path for the trace using option --paths")
                 sys.exit(1)
@@ -213,15 +214,15 @@ if __name__=="__main__":
         if (options.delete_experiment):
             response = tsp_client.delete_experiment(options.delete_experiment)
             if response.status_code == 200: 
-                print("Successfully deleted experiment");
+                print("Successfully deleted experiment")
                 
                 if (options.do_delete_traces):
                     for trace in response.model.traces.traces:
                         del_response = tsp_client.delete_trace(trace.UUID, False)
                         if del_response.status_code == 200: 
-                            print("Successfully deleted trace");
+                            print("Successfully deleted trace")
                         else:
-                            print("Failed deleting trace " + trace.name);
+                            print("Failed deleting trace " + trace.name)
                 sys.exit(0)
             else:
                 sys.exit(1)
