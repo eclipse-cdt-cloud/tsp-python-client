@@ -1,5 +1,5 @@
 datetime
-panda
+pandas
 requests
 tabulate
 termcolor

@@ -1,1 +1,3 @@
+# LC_COLLATE=C sort
 /.venv/
+/tsp/__pycache__/
