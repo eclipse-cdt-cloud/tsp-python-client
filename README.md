@@ -25,9 +25,9 @@ usage: tsp-cli-client [-h] [--ip IP] [--port PORT] [--open-trace TRACE_PATH]
                       [--list-experiment UUID] [--list-experiments]
                       [--delete-experiment UUID] [--list-outputs UUID]
                       [--list-output OUTPUT_ID] [--get-tree OUTPUT_ID]
-                      [--uuid UUID] [--uuids [UUIDS [UUIDS ...]]]
-                      [--do-delete-traces] [--paths [PATHS [PATHS ...]]]
-                      [--list-extensions] [--load-extension EXTENSION_PATH]
+                      [--uuid UUID] [--uuids [UUIDS ...]] [--do-delete-traces]
+                      [--paths [PATHS ...]] [--list-extensions]
+                      [--load-extension EXTENSION_PATH]
                       [--delete-extension EXTENSION_NAME]
 
 CLI client to sent Trace Server Protocol commands to a Trace Server.
@@ -54,11 +54,9 @@ optional arguments:
                         Gets details on the given output of a trace
   --get-tree OUTPUT_ID  Gets the tree of an output
   --uuid UUID           The UUID of a trace
-  --uuids [UUIDS [UUIDS ...]]
-                        The list of UUIDs
+  --uuids [UUIDS ...]   The list of UUIDs
   --do-delete-traces    Also delete traces when deleting experiment
-  --paths [PATHS [PATHS ...]]
-                        List of trace paths to be part of an experiment.
+  --paths [PATHS ...]   List of trace paths to be part of an experiment.
   --list-extensions     Get the extensions loaded
   --load-extension EXTENSION_PATH
                         Load an extension
