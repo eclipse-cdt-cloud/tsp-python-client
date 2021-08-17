@@ -64,6 +64,4 @@ optional arguments:
                         Load an extension
   --delete-extension EXTENSION_NAME
                         Delete an extension
-
-
 ```
