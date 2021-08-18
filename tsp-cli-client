@@ -35,8 +35,10 @@ from os.path import os
 #api_token = 'your_token_goes_here'
 NS_PER_SEC = 1000000000
 
+
 def print_uuid(elem):
     return colored(elem.UUID, 'yellow')
+
 
 def print_experiment(elem):
     print('Experiment:')
@@ -48,9 +50,11 @@ def print_experiment(elem):
     for trace in elem.traces.traces:
         print_trace(trace)
 
-def print_trace(elem): 
+
+def print_trace(elem):
     print('    {0}: {1} ({2}) start={3} end={4} nbEvents={5} indexing={6}'.format(
         elem.name, elem.path, print_uuid(elem), elem.start, elem.end, elem.number_of_events, elem.indexin_status))
+
 
 def print_time(elem):
     try:
@@ -58,7 +62,7 @@ def print_time(elem):
         time = int(int(t) / NS_PER_SEC)
         ns = int(t) % NS_PER_SEC
         if (time != 0):
-            return '{0} s'.format(timedelta(seconds = time, microseconds = ns/1000))
+            return '{0} s'.format(timedelta(seconds=time, microseconds=ns/1000))
         if ns > 1000000:
             return '{0} ms'.format(ns / 1000000)
         if ns > 1000:
@@ -68,17 +72,23 @@ def print_time(elem):
         print(e)
         return elem
 
-def print_output(output):
-    print('  {0}: {1} {2} ({3})'.format(output.name, output.description, output.type, output.id))
 
-def print_outputs(descriptors): 
+def print_output(output):
+    print('  {0}: {1} {2} ({3})'.format(output.name,
+          output.description, output.type, output.id))
+
+
+def print_outputs(descriptors):
     if not descriptors:
-        print('No output descriptors for trace {0} ({1}))'.format(t.name, print_uuid(t)))
+        print('No output descriptors for trace {0} ({1}))'.format(
+            t.name, print_uuid(t)))
     for o in output_descriptors.descriptors:
         print_output(o)
         # TODO remove when available
-#        if (o.id == "org.eclipse.tracecompass.internal.analysis.profiling.callstack.provider.CallStackDataProvider"):
-#            print('  {0}: {1} ({2})'.format("Function Duration Statistics", "Function Duration Statistics", "org.eclipse.tracecompass.internal.analysis.profiling.core.callgraph.callgraphanalysis.statistics"))
+        #if (o.id == "org.eclipse.tracecompass.internal.analysis.profiling.callstack.provider.CallStackDataProvider"):
+        #    print('  {0}: {1} ({2})'.format("Function Duration Statistics", "Function Duration Statistics",
+        #          "org.eclipse.tracecompass.internal.analysis.profiling.core.callgraph.callgraphanalysis.statistics"))
+
 
 def get_descriptor(uuid, id):
     response = tsp_client.fetch_experiment_output(uuid, id)
@@ -86,31 +96,52 @@ def get_descriptor(uuid, id):
         return response.model
     return None
 
-description="""CLI client to send Trace Server Protocol commands to a Trace Server."""
 
-if __name__=="__main__":
+description = """CLI client to send Trace Server Protocol commands to a Trace Server."""
+
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=description)
-    parser.add_argument("--ip", dest="ip_address", help="IP address  of trace server", metavar="IP", default="localhost")
-    parser.add_argument("--port", dest="port", help="port of trace server", metavar="PORT", default="8080")
-    parser.add_argument("--open-trace", dest="trace", help="Path to trace to open", metavar="TRACE_PATH")
-    parser.add_argument("--name", dest="name", metavar="NAME", help="trace name")
-    parser.add_argument("--list-trace", dest="list_trace", help="Get details on the given trace", metavar="UUID")
-    parser.add_argument("--list-traces", dest="list_traces",  action='store_true',  help="List all open traces on the server")
-    parser.add_argument("--delete-trace", dest="delete_trace", help="Delete a trace on the server", metavar="UUID")
-    parser.add_argument("--open-experiment", dest="experiment", help="Open experiment on the server", metavar="EXP_NAME")
-    parser.add_argument("--list-experiment", dest="list_experiment", help="Get details on the given experiment", metavar="UUID")
-    parser.add_argument("--list-experiments", dest="list_experiments",  action='store_true',  help="List all open experiments on the server")
-    parser.add_argument("--delete-experiment", dest="delete_experiment", help="Delete an experiment on the server", metavar="UUID")
-    parser.add_argument("--list-outputs", dest="list_outputs", help="Gets details on the given trace", metavar="UUID")
-    parser.add_argument("--list-output", dest="list_output", help="Gets details on the given output of a trace", metavar="OUTPUT_ID")
-    parser.add_argument("--get-tree", dest="get_tree", help="Gets the tree of an output", metavar="OUTPUT_ID")
+    parser.add_argument("--ip", dest="ip_address",
+                        help="IP address  of trace server", metavar="IP", default="localhost")
+    parser.add_argument("--port", dest="port",
+                        help="port of trace server", metavar="PORT", default="8080")
+    parser.add_argument("--open-trace", dest="trace",
+                        help="Path to trace to open", metavar="TRACE_PATH")
+    parser.add_argument("--name", dest="name",
+                        metavar="NAME", help="trace name")
+    parser.add_argument("--list-trace", dest="list_trace",
+                        help="Get details on the given trace", metavar="UUID")
+    parser.add_argument("--list-traces", dest="list_traces",
+                        action='store_true',  help="List all open traces on the server")
+    parser.add_argument("--delete-trace", dest="delete_trace",
+                        help="Delete a trace on the server", metavar="UUID")
+    parser.add_argument("--open-experiment", dest="experiment",
+                        help="Open experiment on the server", metavar="EXP_NAME")
+    parser.add_argument("--list-experiment", dest="list_experiment",
+                        help="Get details on the given experiment", metavar="UUID")
+    parser.add_argument("--list-experiments", dest="list_experiments",
+                        action='store_true',  help="List all open experiments on the server")
+    parser.add_argument("--delete-experiment", dest="delete_experiment",
+                        help="Delete an experiment on the server", metavar="UUID")
+    parser.add_argument("--list-outputs", dest="list_outputs",
+                        help="Gets details on the given trace", metavar="UUID")
+    parser.add_argument("--list-output", dest="list_output",
+                        help="Gets details on the given output of a trace", metavar="OUTPUT_ID")
+    parser.add_argument("--get-tree", dest="get_tree",
+                        help="Gets the tree of an output", metavar="OUTPUT_ID")
     parser.add_argument("--uuid", dest="uuid", help="The UUID of a trace")
-    parser.add_argument("--uuids", dest="uuids", help="The list of UUIDs", nargs="*")
-    parser.add_argument("--do-delete-traces", dest="do_delete_traces", action='store_true', help="Also delete traces when deleting experiment")
-    parser.add_argument("--paths", dest="paths", help="List of trace paths to be part of an experiment.", nargs="*")
-    parser.add_argument("--list-extensions", dest="extensions", action='store_true', help="Get the extensions loaded")
-    parser.add_argument("--load-extension", dest="load_extensions", help="Load an extension", metavar="EXTENSION_PATH")
-    parser.add_argument("--delete-extension", dest="delete_extensions", help="Delete an extension", metavar="EXTENSION_NAME")
+    parser.add_argument("--uuids", dest="uuids",
+                        help="The list of UUIDs", nargs="*")
+    parser.add_argument("--do-delete-traces", dest="do_delete_traces",
+                        action='store_true', help="Also delete traces when deleting experiment")
+    parser.add_argument("--paths", dest="paths",
+                        help="List of trace paths to be part of an experiment.", nargs="*")
+    parser.add_argument("--list-extensions", dest="extensions",
+                        action='store_true', help="Get the extensions loaded")
+    parser.add_argument("--load-extension", dest="load_extensions",
+                        help="Load an extension", metavar="EXTENSION_PATH")
+    parser.add_argument("--delete-extension", dest="delete_extensions",
+                        help="Delete an extension", metavar="EXTENSION_NAME")
 
     options = parser.parse_args()
 
@@ -119,14 +150,15 @@ if __name__=="__main__":
         parser.print_help()
         sys.exit(1)
 
-    api_url_base = 'http://{0}:{1}/tsp/api/'.format(options.ip_address, options.port)
+    api_url_base = 'http://{0}:{1}/tsp/api/'.format(
+        options.ip_address, options.port)
     tsp_client = TspClient(api_url_base)
 
     try:
         if (options.trace):
             if options.name is not None:
                 response = tsp_client.open_trace(options.name, options.trace)
-                if response.status_code == 200: 
+                if response.status_code == 200:
                     res = response.model
                     print_trace(res)
                     sys.exit(0)
@@ -138,7 +170,7 @@ if __name__=="__main__":
 
         if (options.list_trace):
             response = tsp_client.fetch_trace(options.list_trace)
-            if response.status_code == 200: 
+            if response.status_code == 200:
                 res = response.model
                 print_trace(res)
                 sys.exit(0)
@@ -159,7 +191,7 @@ if __name__=="__main__":
 
         if (options.delete_trace):
             response = tsp_client.delete_trace(options.delete_trace, False)
-            if response.status_code == 200: 
+            if response.status_code == 200:
                 print("Successfully deleted trace")
                 sys.exit(0)
             else:
@@ -171,7 +203,7 @@ if __name__=="__main__":
                 for path in options.paths:
                     name = os.path.basename(os.path.normpath(path))
                     response = tsp_client.open_trace(name, path)
-                    if response.status_code == 200: 
+                    if response.status_code == 200:
                         res = response.model
                         trace_uuids.append(res.UUID)
                     else:
@@ -182,8 +214,9 @@ if __name__=="__main__":
                 print("Provide a path for the trace using option --paths")
                 sys.exit(1)
 
-            response = tsp_client.open_experiment(options.experiment, trace_uuids)
-            if response.status_code == 200: 
+            response = tsp_client.open_experiment(
+                options.experiment, trace_uuids)
+            if response.status_code == 200:
                 res = response.model
                 print_experiment(res)
                 sys.exit(0)
@@ -192,7 +225,7 @@ if __name__=="__main__":
 
         if (options.list_experiment):
             response = tsp_client.fetch_experiment(options.list_experiment)
-            if response.status_code == 200: 
+            if response.status_code == 200:
                 res = response.model
                 print_experiment(res)
                 sys.exit(0)
@@ -213,13 +246,14 @@ if __name__=="__main__":
 
         if (options.delete_experiment):
             response = tsp_client.delete_experiment(options.delete_experiment)
-            if response.status_code == 200: 
+            if response.status_code == 200:
                 print("Successfully deleted experiment")
-                
+
                 if (options.do_delete_traces):
                     for trace in response.model.traces.traces:
-                        del_response = tsp_client.delete_trace(trace.UUID, False)
-                        if del_response.status_code == 200: 
+                        del_response = tsp_client.delete_trace(
+                            trace.UUID, False)
+                        if del_response.status_code == 200:
                             print("Successfully deleted trace")
                         else:
                             print("Failed deleting trace " + trace.name)
@@ -228,7 +262,8 @@ if __name__=="__main__":
                 sys.exit(1)
 
         if (options.list_outputs):
-            response = tsp_client.fetch_experiment_outputs(options.list_outputs)
+            response = tsp_client.fetch_experiment_outputs(
+                options.list_outputs)
             if response.status_code == 200:
                 output_descriptors = response.model
                 print_outputs(output_descriptors.descriptors)
@@ -239,7 +274,8 @@ if __name__=="__main__":
 
         if (options.list_output):
             if options.uuid is not None:
-                output_descriptor = get_descriptor(options.uuid, options.list_output)
+                output_descriptor = get_descriptor(
+                    options.uuid, options.list_output)
                 if (output_descriptor is not None):
                     print(output_descriptor)
             else:
@@ -248,12 +284,14 @@ if __name__=="__main__":
 
         if (options.get_tree):
             if options.uuid is not None:
-                
-                output_descriptor = get_descriptor(options.uuid, options.get_tree)
+
+                output_descriptor = get_descriptor(
+                    options.uuid, options.get_tree)
                 if (output_descriptor is None):
                     sys.exit(1)
-                
-                response = tsp_client.fetch_timegraph_tree(options.uuid, options.get_tree)
+
+                response = tsp_client.fetch_timegraph_tree(
+                    options.uuid, options.get_tree)
                 if response.status_code == 200:
                     tree = response.model.model
 
@@ -271,7 +309,7 @@ if __name__=="__main__":
             else:
                 print("Trace UUID is missing")
                 sys.exit(1)
-        
+
         if (options.extensions):
             response = tsp_client.fetch_extensions()
             if response.status_code == 200:
@@ -304,4 +342,3 @@ if __name__=="__main__":
         print('Unexpected error: {0}'.format(e))
         sys.exit(1)
 sys.exit(0)
-
