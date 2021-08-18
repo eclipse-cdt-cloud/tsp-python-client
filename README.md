@@ -12,6 +12,28 @@ This trace server bundles non-UI, core plug-ins of the [Eclipse Trace Compass](h
 
 The **tsp-cli-client** script and the **tsp** module is under construction. This is an initial draft and only limited features have been currently implemented. **tsp** module only provides some limited number of TSP calls. The API will undergo revision till a stable version is reached.
 
+## Setup
+
+To initialize a local virtual environment, type the following commands in the root directory:
+
+```shell
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+The virtual environment can be replaced with another local setup.
+
+## Tests
+
+To run currently available integration tests, launch a server and type the following command in the root directory:
+
+```shell
+.venv/bin/pytest
+```
+
+Above, the pytest command can be replaced with another local installation.
+
 ## Usage
 
 To use the **tsp-cli-client** script, type the following command in the root directory to get the usage:

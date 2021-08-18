@@ -1,5 +1,6 @@
 datetime
 pandas
+pytest
 requests
 tabulate
 termcolor
