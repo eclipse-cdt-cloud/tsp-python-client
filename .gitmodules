@@ -1,0 +1,3 @@
+[submodule "tracecompass-test-traces"]
+	path = tracecompass-test-traces
+	url = https://git.eclipse.org/r/tracecompass/tracecompass-test-traces.git
