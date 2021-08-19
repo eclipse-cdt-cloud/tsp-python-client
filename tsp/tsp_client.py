@@ -111,10 +111,10 @@ class TspClient(object):
         api_url = '{0}traces/{1}'.format(self.base_url, uuid)
         parameters = {}
         if delete_trace:
-            parameters.append('deleteTrace', "true")
+            parameters['deleteTrace'] = "true"
 
         if remove_cache:
-            parameters.append('removeCache', "true")
+            parameters['removeCache'] = "true"
 
         response = requests.delete(api_url, json=parameters, headers=headers)
         if response.status_code == 200:
