@@ -49,14 +49,14 @@ optional arguments:
   --list-experiments    List all open experiments on the server
   --delete-experiment UUID
                         Delete an experiment on the server
-  --list-outputs UUID   Gets details on the given trace
+  --list-outputs UUID   Get details on the given trace
   --list-output OUTPUT_ID
-                        Gets details on the given output of a trace
-  --get-tree OUTPUT_ID  Gets the tree of an output
+                        Get details on the given output of a trace
+  --get-tree OUTPUT_ID  Get the tree of an output
   --uuid UUID           The UUID of a trace
   --uuids [UUIDS ...]   The list of UUIDs
   --do-delete-traces    Also delete traces when deleting experiment
-  --paths [PATHS ...]   List of trace paths to be part of an experiment.
+  --paths [PATHS ...]   List of trace paths to be part of an experiment
   --list-extensions     Get the extensions loaded
   --load-extension EXTENSION_PATH
                         Load an extension
