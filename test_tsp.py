@@ -47,6 +47,14 @@ class TestTspClient:
     def other(self):
         return f'{os.getcwd()}/tracecompass-test-traces/ctf/src/main/resources/kernel_vm'
 
+    @pytest.fixture(scope="module", autouse=True)
+    def test_fetch_traces(self):
+        """Check server availability before each test; don't fail all tests if none, but exit."""
+        try:
+            self.tsp_client.fetch_traces()
+        except Exception as e:
+            pytest.exit(str(e))
+
     def test_fetch_traces_none(self):
         response = self.tsp_client.fetch_traces()
         assert response.status_code == 200
