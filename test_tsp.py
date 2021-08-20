@@ -36,6 +36,21 @@ class TestTspClient:
     [6] Some setup steps are minimized where the test method scope doesn't require more data.
     """
 
+    def _delete_experiments(self):
+        """To be called at the end of tests opening experiments, before deleting traces."""
+        response = self.tsp_client.fetch_experiments()
+        for experiment in response.model.experiments:
+            self.tsp_client.delete_experiment(experiment.UUID)
+            assert response.status_code == 200
+
+    def _delete_traces(self):
+        """To be called at the end of tests opening traces, after deleting experiments."""
+        response = self.tsp_client.fetch_traces()
+        for trace in response.model.traces:
+            # Do not also delete the trace from disk; file part of this repo.
+            self.tsp_client.delete_trace(trace.UUID, False)
+            assert response.status_code == 200
+
     # Not a pytest fixture so that VS Code may find its definitions.
     tsp_client = TspClient('http://localhost:8080/tsp/api/')
 
@@ -54,13 +69,14 @@ class TestTspClient:
             self.tsp_client.fetch_traces()
         except Exception as e:
             pytest.exit(str(e))
+        # Deleting experiments/traces from here didn't work consistently.
 
     def test_fetch_traces_none(self):
         response = self.tsp_client.fetch_traces()
         assert response.status_code == 200
         assert not response.model.traces
 
-    def test_open_trace_twice_then_delete(self, kernel, other):
+    def test_open_trace_twice(self, kernel, other):
         response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
         assert response.status_code == 200
         response = self.tsp_client.open_trace(os.path.basename(other), other)
@@ -68,13 +84,9 @@ class TestTspClient:
 
         response = self.tsp_client.fetch_traces()
         assert len(response.model.traces) == 2
-        # Delete each previously opened trace to clean server for next run.
-        for trace in response.model.traces:
-            # Do not also delete the trace from disk; file part of this repo.
-            response = self.tsp_client.delete_trace(trace.UUID, False)
-            assert response.status_code == 200
+        self._delete_traces()
 
-    def test_fetch_opened_trace_then_delete(self, kernel):
+    def test_fetch_opened_trace(self, kernel):
         response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
         assert response.status_code == 200
         expected_uuid = response.model.UUID
@@ -82,9 +94,7 @@ class TestTspClient:
         response = self.tsp_client.fetch_trace(expected_uuid)
         assert response.status_code == 200
         assert response.model.UUID == expected_uuid
-
-        response = self.tsp_client.delete_trace(expected_uuid, False)
-        assert response.status_code == 200
+        self._delete_traces()
 
     def test_opened_trace_deleted(self, kernel):
         response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
@@ -111,7 +121,7 @@ class TestTspClient:
         assert response.status_code == 200
         assert not response.model.experiments
 
-    def test_open_experiment_then_delete(self, kernel, other):
+    def test_open_experiment(self, kernel, other):
         traces = []
         response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
         traces.append(response.model.UUID)
@@ -124,16 +134,10 @@ class TestTspClient:
 
         response = self.tsp_client.fetch_experiments()
         assert len(response.model.experiments) == 1
-        experiment_uuid = response.model.experiments[0].UUID
+        self._delete_experiments()
+        self._delete_traces()
 
-        response = self.tsp_client.delete_experiment(experiment_uuid)
-        assert response.status_code == 200
-        response = self.tsp_client.fetch_traces()
-        for trace in response.model.traces:
-            response = self.tsp_client.delete_trace(trace.UUID, False)
-            assert response.status_code == 200
-
-    def test_fetch_opened_experiment_then_delete(self, kernel):
+    def test_fetch_opened_experiment(self, kernel):
         traces = []
         response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
         traces.append(response.model.UUID)
@@ -145,11 +149,8 @@ class TestTspClient:
         response = self.tsp_client.fetch_experiment(expected_uuid)
         assert response.status_code == 200
         assert response.model.UUID == expected_uuid
-
-        response = self.tsp_client.delete_experiment(expected_uuid)
-        assert response.status_code == 200
-        response = self.tsp_client.delete_trace(traces[0], False)
-        assert response.status_code == 200
+        self._delete_experiments()
+        self._delete_traces()
 
     def test_opened_experiment_deleted(self, kernel):
         traces = []
@@ -162,7 +163,7 @@ class TestTspClient:
 
         response = self.tsp_client.delete_experiment(experiment_uuid)
         assert response.status_code == 200
-        response = self.tsp_client.delete_trace(traces[0], False)
-        assert response.status_code == 200
+        self._delete_traces()
+
         response = self.tsp_client.fetch_experiment(experiment_uuid)
         assert response.status_code == 404
