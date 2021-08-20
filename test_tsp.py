@@ -26,6 +26,16 @@ import pytest
 
 
 class TestTspClient:
+    """TspClient test methods.
+
+    [1] Each test below has a specific TSP endpoint focus, coming with its minimal assertions kit.
+    [2] This means that some asserts only appear in the test that specifically exercises them.
+    [3] Asserts for teardown test steps are otherwise repeated to confirm data deletions.
+    [4] This is to diagnose potential subsequent test failures caused by uncleaned server data.
+    [5] Should data get corrupted by test runs, ./tsp-cli-client can be used to manually clean it.
+    [6] Some setup steps are minimized where the test method scope doesn't require more data.
+    """
+
     # Not a pytest fixture so that VS Code may find its definitions.
     tsp_client = TspClient('http://localhost:8080/tsp/api/')
 
