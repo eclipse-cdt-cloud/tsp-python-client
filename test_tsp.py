@@ -54,6 +54,12 @@ class TestTspClient:
     # Not a pytest fixture so that VS Code may find its definitions.
     tsp_client = TspClient('http://localhost:8080/tsp/api/')
 
+    name = 'FunctionGraph.xml'
+
+    @pytest.fixture(scope='module')
+    def extension(self):
+        return f'{os.getcwd()}/org.eclipse.tracecompass.incubator/tracetypes/org.eclipse.tracecompass.incubator.ftrace.core/xml_analyses/{self.name}'
+
     @pytest.fixture(scope='module')
     def kernel(self):
         return f'{os.getcwd()}/tracecompass-test-traces/ctf/src/main/resources/kernel'
@@ -220,3 +226,26 @@ class TestTspClient:
         assert response.model.model_type == response.model.model_type.TIME_GRAPH_TREE
         self._delete_experiments()
         self._delete_traces()
+
+    def test_fetch_extensions_none(self):
+        response = self.tsp_client.fetch_extensions()
+        assert response.status_code == 200
+        assert not response.model.extension_set
+
+    def test_post_extension(self, extension):
+        response = self.tsp_client.post_extension(extension)
+        assert response.status_code == 200
+
+        response = self.tsp_client.fetch_extensions()
+        assert len(response.model.extension_set) == 1
+
+        response = self.tsp_client.delete_extension(self.name)
+        assert response.status_code == 200
+
+    def test_posted_extension_deleted(self, extension):
+        response = self.tsp_client.post_extension(extension)
+        response = self.tsp_client.delete_extension(self.name)
+        assert response.status_code == 200
+
+        response = self.tsp_client.fetch_extensions()
+        assert not response.model.extension_set

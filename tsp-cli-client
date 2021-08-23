@@ -138,9 +138,9 @@ if __name__ == "__main__":
                         help="List of trace paths to be part of an experiment", nargs="*")
     parser.add_argument("--list-extensions", dest="extensions",
                         action='store_true', help="Get the extensions loaded")
-    parser.add_argument("--load-extension", dest="load_extensions",
+    parser.add_argument("--load-extension", dest="load_extension",
                         help="Load an extension", metavar="EXTENSION_PATH")
-    parser.add_argument("--delete-extension", dest="delete_extensions",
+    parser.add_argument("--delete-extension", dest="delete_extension",
                         help="Delete an extension", metavar="EXTENSION_NAME")
 
     options = parser.parse_args()
@@ -325,15 +325,15 @@ if __name__ == "__main__":
             else:
                 sys.exit(1)
 
-        if (options.load_extensions):
-            response = tsp_client.post_extensions(options.load_extensions)
+        if (options.load_extension):
+            response = tsp_client.post_extension(options.load_extension)
             if response.status_code == 200:
                 sys.exit(0)
             else:
                 sys.exit(1)
 
-        if (options.delete_extensions):
-            response = tsp_client.delete_extensions(options.delete_extensions)
+        if (options.delete_extension):
+            response = tsp_client.delete_extension(options.delete_extension)
             if response.status_code == 200:
                 sys.exit(0)
             else:
