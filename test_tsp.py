@@ -167,3 +167,36 @@ class TestTspClient:
 
         response = self.tsp_client.fetch_experiment(experiment_uuid)
         assert response.status_code == 404
+
+    def test_fetch_experiment_outputs(self, kernel):
+        traces = []
+        response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
+        traces.append(response.model.UUID)
+        response = self.tsp_client.open_experiment(
+            os.path.basename(kernel), traces)
+        assert response.status_code == 200
+        experiment_uuid = response.model.UUID
+
+        response = self.tsp_client.fetch_experiment_outputs(experiment_uuid)
+        assert response.status_code == 200
+        assert len(response.model.descriptors) > 0
+        self._delete_experiments()
+        self._delete_traces()
+
+    def test_fetch_experiment_output(self, kernel):
+        traces = []
+        response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
+        traces.append(response.model.UUID)
+        response = self.tsp_client.open_experiment(
+            os.path.basename(kernel), traces)
+        assert response.status_code == 200
+        experiment_uuid = response.model.UUID
+
+        response = self.tsp_client.fetch_experiment_outputs(experiment_uuid)
+        expected_id = response.model.descriptors[0].id
+        response = self.tsp_client.fetch_experiment_output(
+            experiment_uuid, expected_id)
+        assert response.status_code == 200
+        assert response.model.id == expected_id
+        self._delete_experiments()
+        self._delete_traces()
