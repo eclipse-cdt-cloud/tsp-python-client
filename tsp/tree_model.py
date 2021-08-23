@@ -104,7 +104,7 @@ class TreeItem(object):
             if len(labels) == 1:
                 if(depth > 0):
                     print("  ", end="")
-                for x in range((int)(depth / self._indent) - 1):
+                for _ in range((int)(depth / self._indent) - 1):
                     print("| ", end="")
                 other = ""
                 others = self._entry.others
@@ -117,7 +117,7 @@ class TreeItem(object):
                 label_str = ""
                 if(depth > 0):
                     label_str = label_str + "  "
-                for x in range((int)(depth / self._indent) - 1):
+                for _ in range((int)(depth / self._indent) - 1):
                     label_str = label_str + "| "
                 i = 0
                 label_str = label_str + prefix
