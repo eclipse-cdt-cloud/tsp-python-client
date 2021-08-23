@@ -33,6 +33,7 @@ END_TIME_KEY = "end"
 IS_FINAL_KEY = "final"
 COMPATIBLE_PROVIDERS_KEY = "compatibleProviders"
 
+
 class OutputDescriptor(object):
     '''
     classdocs
@@ -50,19 +51,19 @@ class OutputDescriptor(object):
             del params[ID_KEY]
         else:
             self.id = None
-            
+
         '''
         Human readable name
-        ''' 
+        '''
         if NAME_KEY in params:
             self.name = params.get(NAME_KEY)
             del params[NAME_KEY]
         else:
             self.name = UNKOWN
-            
+
         '''
         Description of the output provider
-        ''' 
+        '''
         if DESCRIPTION_KEY in params:
             self.description = params.get(DESCRIPTION_KEY)
             del params[DESCRIPTION_KEY]
@@ -72,60 +73,60 @@ class OutputDescriptor(object):
         '''
         Type of data returned by this output.
         Serve as a hint to determine what kind of view should be use for this output (ex. XY, Time Graph, Table, etc..)
-        ''' 
+        '''
         if TYPE_KEY in params:
             self.type = params.get(TYPE_KEY)
             del params[TYPE_KEY]
         else:
             self.type = UNKOWN
-            
+
         '''
         Map of query parameters that the provider accept
-        ''' 
+        '''
         if QUERY_PARAMETERS_KEY in params:
             self.query_parameters = params.get(QUERY_PARAMETERS_KEY)
             del params[QUERY_PARAMETERS_KEY]
         else:
             self.query_parameters = {}
-            
+
         '''
         Start time
-        ''' 
+        '''
         if START_TIME_KEY in params:
             self.start = params.get(START_TIME_KEY)
             del params[START_TIME_KEY]
         else:
             self.start = 0
-            
+
         '''
         end time
-        ''' 
+        '''
         if END_TIME_KEY in params:
             self.end = params.get(END_TIME_KEY)
             del params[END_TIME_KEY]
         else:
             self.end = 0
-        
+
         '''
         Indicate if the start, end times and current model are final,
         or if they will need to be refreshed later to represent a more up to date version
-        ''' 
+        '''
         if IS_FINAL_KEY in params:
             self.final = params.get(IS_FINAL_KEY)
             del params[IS_FINAL_KEY]
         else:
             self.final = 0
-        
+
         '''
         List of compatible outputs that can be used in the same view (ex. as overlay)
         '''
-        
+
         if COMPATIBLE_PROVIDERS_KEY in params:
             self.compatible_providers = params.get(COMPATIBLE_PROVIDERS_KEY)
             del params[COMPATIBLE_PROVIDERS_KEY]
         else:
             self.compatible_providers = []
-            
+
         '''
         Store other key/value pairs that are not defined in the TSP in a dictionary
         '''

@@ -111,7 +111,6 @@ Time graph row described by an array of states for a specific entry
 
 class TimeGraphRow(object):
     def __init__(self, params):
-
         '''
         Entry Id associated to the state array
         '''

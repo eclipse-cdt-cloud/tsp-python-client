@@ -21,15 +21,17 @@
 # SOFTWARE.
 
 from tsp.trace import Trace
+
+
 class TraceSet(object):
     '''
     classdocs
     '''
+
     def __init__(self, params):
         '''
         Constructor
         '''
         self.traces = []
-        for obj in params: 
+        for obj in params:
             self.traces.append(Trace(obj))
-        

@@ -35,6 +35,7 @@ class EntryModel(object):
     '''
     Entry model that will be returned by the server
     '''
+
     def __init__(self, params, model_type=ModelType.XY_TREE):
         '''
         Array of entry column

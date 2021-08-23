@@ -25,6 +25,7 @@ PARENTKEY_KEY = "parentKey"
 SYTLE_VALUES_KEY = "styleValues"
 STYLES_KEY = "styles"
 
+
 class OutputElementStyle(object):
     '''
     Output element style object for one style key. It supports style
@@ -45,10 +46,10 @@ class OutputElementStyle(object):
             del params[PARENTKEY_KEY]
         else:
             self.parent_key = None
-            
+
         '''
         Style values to override or define properties
-        ''' 
+        '''
         if SYTLE_VALUES_KEY in params:
             self.style_values = params.get(SYTLE_VALUES_KEY)
             del params[SYTLE_VALUES_KEY]
@@ -61,12 +62,13 @@ class OutputElementStyle(object):
         self.others = {}
         if params:
             self.others = copy.deepcopy(params)
-            
 
-class OutputStyleModel(object):    
+
+class OutputStyleModel(object):
     '''
     Style model that will be returned by the server
     '''
+
     def __init__(self, params):
         '''
         Constructor

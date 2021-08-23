@@ -31,10 +31,12 @@ NB_EVENT_KEY = "nbEvents"
 PATH_TIME_KEY = "path"
 INDEXING_STATUS_KEY = "indexingStatus"
 
+
 class Trace(object):
     '''
     Model of a single trace
     '''
+
     def __init__(self, params):
         '''
         Constructor
@@ -88,8 +90,8 @@ class Trace(object):
             self.number_of_events = params.get(NB_EVENT_KEY)
             del params[NB_EVENT_KEY]
         else:
-            self.number_of_events = 0 
-        
+            self.number_of_events = 0
+
         '''
         Indicate if the indexing of the trace is completed or still running.
         If it still running, the end time and number of events are not final
@@ -99,11 +101,10 @@ class Trace(object):
             del params[INDEXING_STATUS_KEY]
         else:
             self.indexin_status = 0
-        
+
         '''
         Store other key/value pairs that are not defined in the TSP in a dictionary
         '''
         self.others = {}
         if params:
             self.others = copy.deepcopy(params)
-        
