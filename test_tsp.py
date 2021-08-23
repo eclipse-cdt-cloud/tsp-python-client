@@ -69,7 +69,9 @@ class TestTspClient:
             self.tsp_client.fetch_traces()
         except Exception as e:
             pytest.exit(str(e))
-        # Deleting experiments/traces from here didn't work consistently.
+        # Deleting left-over data here doesn't work consistently, but remains handy if tests fail.
+        self._delete_experiments()
+        self._delete_traces()
 
     def test_fetch_traces_none(self):
         response = self.tsp_client.fetch_traces()
@@ -198,5 +200,23 @@ class TestTspClient:
             experiment_uuid, expected_id)
         assert response.status_code == 200
         assert response.model.id == expected_id
+        self._delete_experiments()
+        self._delete_traces()
+
+    def test_fetch_timegraph_tree(self, kernel):
+        traces = []
+        response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
+        traces.append(response.model.UUID)
+        response = self.tsp_client.open_experiment(
+            os.path.basename(kernel), traces)
+        assert response.status_code == 200
+        experiment_uuid = response.model.UUID
+
+        response = self.tsp_client.fetch_experiment_outputs(experiment_uuid)
+        output_id = response.model.descriptors[0].id
+        response = self.tsp_client.fetch_timegraph_tree(
+            experiment_uuid, output_id)
+        assert response.status_code == 200
+        assert response.model.model_type == response.model.model_type.TIME_GRAPH_TREE
         self._delete_experiments()
         self._delete_traces()
