@@ -264,7 +264,7 @@ class TspClient(object):
     '''
     Load an extension
      '''
-    def post_extensions(self, mypath):
+    def post_extension(self, mypath):
         api_url = '{0}xml'.format(self.base_url)
 
         payload = dict(path=mypath)
@@ -279,7 +279,7 @@ class TspClient(object):
     '''
     Delete an extension
      '''
-    def delete_extensions(self, name):
+    def delete_extension(self, name):
         api_url = '{0}xml/{1}'.format(self.base_url, name)
 
         response = requests.delete(api_url, headers=headers_form)
