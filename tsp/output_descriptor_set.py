@@ -21,15 +21,17 @@
 # SOFTWARE.
 
 from tsp.output_descriptor import OutputDescriptor
+
+
 class OutputDescriptorSet(object):
     '''
     classdocs
     '''
+
     def __init__(self, params):
         '''
         Constructor
         '''
         self.descriptors = []
-        for obj in params: 
+        for obj in params:
             self.descriptors.append(OutputDescriptor(obj))
-        

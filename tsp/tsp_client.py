@@ -33,7 +33,8 @@ from tsp.experiment import Experiment
 from tsp.output_descriptor import OutputDescriptor
 
 headers = {'content-type': 'application/json', 'Accept': 'application/json'}
-headers_form = {'content-type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'}
+headers_form = {'content-type': 'application/x-www-form-urlencoded',
+                'Accept': 'application/json'}
 
 PARAMETERS_KEY = 'parameters'
 REQUESTED_TIME_KEY = 'requested_times'
@@ -55,6 +56,7 @@ class TspClient(object):
     :return: :class:`TspClientResponse <TraceSet>` object
     :rtype: TspClientResponse
      '''
+
     def fetch_traces(self):
         api_url = '{0}traces'.format(self.base_url)
         response = requests.get(api_url, headers=headers)
@@ -70,6 +72,7 @@ class TspClient(object):
     :return: :class:`TspClientResponse <Trace>` object
     :rtype: TspClientResponse
     '''
+
     def fetch_trace(self, uuid):
         api_url = '{0}traces/{1}'.format(self.base_url, uuid)
         response = requests.get(api_url, headers=headers)
@@ -85,6 +88,7 @@ class TspClient(object):
     :return: :class:`TspClientResponse <Trace>` object
     :rtype: TspClientResponse
     '''
+
     def open_trace(self, name, path):
         api_url = '{0}traces'.format(self.base_url)
 
@@ -107,6 +111,7 @@ class TspClient(object):
     :return: :class:`TspClientResponse <Trace>` object
     :rtype: TspClientResponse
      '''
+
     def delete_trace(self, uuid, delete_trace, remove_cache=False):
         api_url = '{0}traces/{1}'.format(self.base_url, uuid)
         parameters = {}
@@ -128,6 +133,7 @@ class TspClient(object):
     :return: :class:`TspClientResponse <ExperimentSet>` object
     :rtype: TspClientResponse
     '''
+
     def fetch_experiments(self):
         api_url = '{0}experiments'.format(self.base_url)
         response = requests.get(api_url, headers=headers)
@@ -143,6 +149,7 @@ class TspClient(object):
     :return: :class:`TspClientResponse <Experiment>` object
     :rtype: TspClientResponse
     '''
+
     def fetch_experiment(self, uuid):
         api_url = '{0}experiments/{1}'.format(self.base_url, uuid)
         response = requests.get(api_url, headers=headers)
@@ -158,6 +165,7 @@ class TspClient(object):
     :return: :class:`TspClientResponse <Trace>` object
     :rtype: TspClientResponse
     '''
+
     def delete_experiment(self, uuid):
         api_url = '{0}experiments/{1}'.format(self.base_url, uuid)
         response = requests.delete(api_url, headers=headers)
@@ -172,6 +180,7 @@ class TspClient(object):
      * :param parameters: Query object
      * :rtype: The created experiment
     '''
+
     def open_experiment(self, name, traces):
         api_url = '{0}experiments'.format(self.base_url)
 
@@ -192,6 +201,7 @@ class TspClient(object):
     :return: :class:  `TspClientResponse <OutputDescriptorSet>` object
     :rtype: TspClientResponse
      '''
+
     def fetch_experiment_outputs(self, exp_uuid):
         api_url = '{0}experiments/{1}/outputs/'.format(self.base_url, exp_uuid)
 
@@ -200,7 +210,8 @@ class TspClient(object):
         if response.status_code == 200:
             return TspClientResponse(OutputDescriptorSet(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
         else:
-            print("get output descriptors failed: {0}".format(response.status_code))
+            print("get output descriptors failed: {0}".format(
+                response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
     '''
@@ -211,8 +222,10 @@ class TspClient(object):
     :returns: :class:  `TspClientResponse <OutputDescriptor>` object OutputDescriptor
     :rtype: TspClientResponse
      '''
+
     def fetch_experiment_output(self, exp_uuid, output_id):
-        api_url = '{0}experiments/{1}/outputs/{2}'.format(self.base_url, exp_uuid, output_id)
+        api_url = '{0}experiments/{1}/outputs/{2}'.format(
+            self.base_url, exp_uuid, output_id)
 
         response = requests.get(api_url, headers=headers)
 
@@ -230,8 +243,10 @@ class TspClient(object):
     :returns: :class:  `TspClientResponse <GenericResponse>` object Time graph entry response with entries and headers
     :rtype: TspClientResponse
      '''
+
     def fetch_timegraph_tree(self, exp_uuid, output_id, parameters=None):
-        api_url = '{0}experiments/{1}/outputs/timeGraph/{2}/tree'.format(self.base_url, exp_uuid, output_id)
+        api_url = '{0}experiments/{1}/outputs/timeGraph/{2}/tree'.format(
+            self.base_url, exp_uuid, output_id)
 
         params = parameters
         if (parameters is None):
@@ -250,6 +265,7 @@ class TspClient(object):
     '''
     Fetch Extensions (loaded files)
      '''
+
     def fetch_extensions(self):
         api_url = '{0}xml'.format(self.base_url)
 
@@ -264,6 +280,7 @@ class TspClient(object):
     '''
     Load an extension
      '''
+
     def post_extension(self, mypath):
         api_url = '{0}xml'.format(self.base_url)
 
@@ -279,6 +296,7 @@ class TspClient(object):
     '''
     Delete an extension
      '''
+
     def delete_extension(self, name):
         api_url = '{0}xml/{1}'.format(self.base_url, name)
 

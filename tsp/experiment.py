@@ -39,6 +39,7 @@ class Experiment(object):
     '''
     Model of a single Experiment
     '''
+
     def __init__(self, params):
         '''
         Constructor

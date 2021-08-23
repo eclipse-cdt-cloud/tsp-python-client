@@ -36,6 +36,7 @@ class EntryHeader(object):
     '''
     Entry Header
     '''
+
     def __init__(self, params):
         '''
         Displayed name
@@ -47,6 +48,7 @@ class Entry(object):
     '''
     Basic entry
     '''
+
     def __init__(self, params, copy_others=True):
         '''
         Unique Id for the entry

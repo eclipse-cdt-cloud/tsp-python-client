@@ -30,6 +30,7 @@ class ColumnDescriptor(object):
     '''
     Basic entry
     '''
+
     def __init__(self, params, copy_others=True):
         '''
         Text of header for the entry
