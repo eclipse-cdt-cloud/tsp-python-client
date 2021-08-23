@@ -72,7 +72,7 @@ class GenericResponse(object):
         Model returned in the response
         '''
         self.model = params.get(MODEL_KEY)
-        if MODEL_KEY in params:
+        if MODEL_KEY in params and params.get(MODEL_KEY) is not None:
             if self.model_type == ModelType.TIME_GRAPH_TREE:
                 self.model = EntryModel(params.get(MODEL_KEY), self.model_type)
             elif self.model_type == ModelType.XY_TREE:
