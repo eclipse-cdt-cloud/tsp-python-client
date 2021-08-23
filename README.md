@@ -29,6 +29,7 @@ The virtual environment can be replaced with another local setup.
 To run currently available integration tests, launch a server and type the following command in the root directory:
 
 ```shell
+git submodule update --init
 .venv/bin/pytest
 ```
 
