@@ -252,6 +252,32 @@ class TspClient(object):
             print("failed to get tree: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
+    def fetch_xy_tree(self, exp_uuid, output_id, parameters=None):
+        '''
+        Fetch XY tree, Model extends Entry
+        :param exp_uuid: Experiment UUID
+        :param output_id: Output ID
+        :param parameters: Query object
+        :returns: :class:  `TspClientResponse <GenericResponse>` object XY entry response with entries and headers
+        :rtype: TspClientResponse
+        '''
+        api_url = '{0}experiments/{1}/outputs/XY/{2}/tree'.format(
+            self.base_url, exp_uuid, output_id)
+
+        params = parameters
+        if (parameters is None):
+            requested_times = [0, 1]
+            my_parameters = {REQUESTED_TIME_KEY: requested_times}
+            params = {PARAMETERS_KEY: my_parameters}
+
+        response = requests.post(api_url, json=params, headers=headers)
+
+        if response.status_code == 200:
+            return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')), ModelType.XY_TREE), response.status_code, response.text)
+        else:
+            print("failed to get tree: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
     def fetch_extensions(self):
         '''
         Fetch Extensions (loaded files)
