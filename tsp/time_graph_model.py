@@ -93,7 +93,7 @@ class TimeGraphModel(object):
         self.rows = []
         if ROWS_KEY in params:
             for row in params.get(ROWS_KEY):
-                self.rows = TimeGraphRow(row)
+                self.rows.append(TimeGraphRow(row))
             del params[ROWS_KEY]
         '''
         Store other key/value pairs that are not defined in the TSP in
@@ -124,7 +124,7 @@ class TimeGraphRow(object):
         self.states = []
         if STATES_KEY in params:
             for state in params.get(STATES_KEY):
-                self.states = TimeGraphState(state)
+                self.states.append(TimeGraphState(state))
             del params[STATES_KEY]
         '''
         Store other key/value pairs that are not defined in the TSP in
