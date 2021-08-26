@@ -295,8 +295,6 @@ if __name__ == "__main__":
                 if response.status_code == 200:
                     tree = response.model.model
 
-                    entries = tree.entries
-
                     if (output_descriptor.type == "DATA_TREE"):
                         treeModel = TreeModel(tree.entries, tree.descriptors)
                         treeModel.print()
