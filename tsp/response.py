@@ -79,8 +79,7 @@ class GenericResponse(object):
             if self.model_type == ModelType.TIME_GRAPH_TREE:
                 self.model = EntryModel(params.get(MODEL_KEY), self.model_type)
             elif self.model_type == ModelType.XY_TREE:
-                # TODO
-                print("not implemented")
+                self.model = EntryModel(params.get(MODEL_KEY))
             elif self.model_type == ModelType.STATES:
                 # TODO
                 print("not implemented")

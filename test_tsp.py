@@ -228,6 +228,23 @@ class TestTspClient:
         self._delete_experiments()
         self._delete_traces()
 
+    def test_fetch_xy_tree(self, kernel):
+        traces = []
+        response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
+        traces.append(response.model.UUID)
+        response = self.tsp_client.open_experiment(
+            os.path.basename(kernel), traces)
+        assert response.status_code == 200
+        experiment_uuid = response.model.UUID
+
+        response = self.tsp_client.fetch_experiment_outputs(experiment_uuid)
+        output_id = response.model.descriptors[0].id
+        response = self.tsp_client.fetch_xy_tree(experiment_uuid, output_id)
+        assert response.status_code == 200
+        assert response.model.model_type == response.model.model_type.XY_TREE
+        self._delete_experiments()
+        self._delete_traces()
+
     def test_fetch_extensions_none(self):
         response = self.tsp_client.fetch_extensions()
         assert response.status_code == 200
