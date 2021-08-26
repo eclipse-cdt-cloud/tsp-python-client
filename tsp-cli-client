@@ -36,6 +36,7 @@ from os.path import os
 
 from tsp.tree_model import TreeModel
 from tsp.tsp_client import TspClient
+from tsp.xy_model import XYModel
 
 #api_token = 'your_token_goes_here'
 NS_PER_SEC = 1000000000
@@ -137,6 +138,12 @@ if __name__ == "__main__":
                         help="Get the timegraph tree of an output", metavar="OUTPUT_ID")
     parser.add_argument("--get-xy-tree", dest="get_xy_tree",
                         help="Get the XY tree of an output", metavar="OUTPUT_ID")
+    parser.add_argument("--get-xy", dest="get_xy",
+                        help="Get the XY data of an output", metavar="OUTPUT_ID")
+    parser.add_argument("--items", dest="items",
+                        help="The list of XY items requested", nargs="*")
+    parser.add_argument("--times", dest="times",
+                        help="The list of XY times requested", nargs="*")
     parser.add_argument("--uuid", dest="uuid", help="The UUID of a trace")
     parser.add_argument("--uuids", dest="uuids",
                         help="The list of UUIDs", nargs="*")
@@ -331,6 +338,28 @@ if __name__ == "__main__":
                     else:
                         treeModel = TreeModel(tree.entries)
                     treeModel.print()
+                    sys.exit(0)
+                else:
+                    sys.exit(1)
+            else:
+                print("Trace UUID is missing")
+                sys.exit(1)
+
+        if (options.get_xy):
+            if not options.items or not options.times:
+                print("Provide requested --items and --times for the XY data")
+                sys.exit(1)
+
+            if options.uuid is not None:
+                parameters = {TspClient.REQUESTED_TIME_KEY: list(map(int, options.times)),
+                              TspClient.REQUESTED_ITEM_KEY: list(map(int, options.items))}
+                params = {TspClient.PARAMETERS_KEY: parameters}
+
+                response = tsp_client.fetch_xy(
+                    options.uuid, options.get_xy, params)
+                if response.status_code == 200:
+                    xyModel = response.model.model
+                    xyModel.print()
                     sys.exit(0)
                 else:
                     sys.exit(1)

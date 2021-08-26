@@ -37,14 +37,15 @@ headers = {'content-type': 'application/json', 'Accept': 'application/json'}
 headers_form = {'content-type': 'application/x-www-form-urlencoded',
                 'Accept': 'application/json'}
 
-PARAMETERS_KEY = 'parameters'
-REQUESTED_TIME_KEY = 'requested_times'
-
 
 class TspClient(object):
     '''
     Trace Server Protocol tsp_cli_client
     '''
+
+    PARAMETERS_KEY = 'parameters'
+    REQUESTED_TIME_KEY = 'requested_times'
+    REQUESTED_ITEM_KEY = 'requested_items'
 
     def __init__(self, base_url):
         '''
@@ -241,8 +242,8 @@ class TspClient(object):
         params = parameters
         if (parameters is None):
             requested_times = [0, 1]
-            my_parameters = {REQUESTED_TIME_KEY: requested_times}
-            params = {PARAMETERS_KEY: my_parameters}
+            my_parameters = {self.REQUESTED_TIME_KEY: requested_times}
+            params = {self.PARAMETERS_KEY: my_parameters}
 
         response = requests.post(api_url, json=params, headers=headers)
 
@@ -267,8 +268,8 @@ class TspClient(object):
         params = parameters
         if (parameters is None):
             requested_times = [0, 1]
-            my_parameters = {REQUESTED_TIME_KEY: requested_times}
-            params = {PARAMETERS_KEY: my_parameters}
+            my_parameters = {self.REQUESTED_TIME_KEY: requested_times}
+            params = {self.PARAMETERS_KEY: my_parameters}
 
         response = requests.post(api_url, json=params, headers=headers)
 
@@ -276,6 +277,26 @@ class TspClient(object):
             return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')), ModelType.XY_TREE), response.status_code, response.text)
         else:
             print("failed to get tree: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    def fetch_xy(self, exp_uuid, output_id, parameters):
+        '''
+        Fetch XY xy, XYModel
+        :param exp_uuid: Experiment UUID
+        :param output_id: Output ID
+        :param parameters: Query object (mandatory here; no defaults possible)
+        :returns: :class:  `TspClientResponse <GenericResponse>` object XY series response
+        :rtype: TspClientResponse
+        '''
+        api_url = '{0}experiments/{1}/outputs/XY/{2}/xy'.format(
+            self.base_url, exp_uuid, output_id)
+
+        response = requests.post(api_url, json=parameters, headers=headers)
+
+        if response.status_code == 200:
+            return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')), ModelType.XY), response.status_code, response.text)
+        else:
+            print("failed to get xy: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_extensions(self):
