@@ -297,10 +297,9 @@ if __name__ == "__main__":
 
                     if (output_descriptor.type == "DATA_TREE"):
                         treeModel = TreeModel(tree.entries, tree.descriptors)
-                        treeModel.print()
                     else:
                         treeModel = TreeModel(tree.entries)
-                        treeModel.print()
+                    treeModel.print()
                     sys.exit(0)
                 else:
                     sys.exit(1)
