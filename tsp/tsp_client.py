@@ -51,13 +51,12 @@ class TspClient(object):
         '''
         self.base_url = base_url
 
-    '''
-    Fetch all available traces on the server
-    :return: :class:`TspClientResponse <TraceSet>` object
-    :rtype: TspClientResponse
-     '''
-
     def fetch_traces(self):
+        '''
+        Fetch all available traces on the server
+        :return: :class:`TspClientResponse <TraceSet>` object
+        :rtype: TspClientResponse
+        '''
         api_url = '{0}traces'.format(self.base_url)
         response = requests.get(api_url, headers=headers)
         if response.status_code == 200:
@@ -66,14 +65,13 @@ class TspClient(object):
             print("get traces failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    '''
-    Fetch a specific trace information
-    :param uuid: Trace UUID to fetch
-    :return: :class:`TspClientResponse <Trace>` object
-    :rtype: TspClientResponse
-    '''
-
     def fetch_trace(self, uuid):
+        '''
+        Fetch a specific trace information
+        :param uuid: Trace UUID to fetch
+        :return: :class:`TspClientResponse <Trace>` object
+        :rtype: TspClientResponse
+        '''
         api_url = '{0}traces/{1}'.format(self.base_url, uuid)
         response = requests.get(api_url, headers=headers)
         if response.status_code == 200:
@@ -82,14 +80,13 @@ class TspClient(object):
             print("get trace failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    '''
-    Open a trace on the server
-     parameters: Query object
-    :return: :class:`TspClientResponse <Trace>` object
-    :rtype: TspClientResponse
-    '''
-
     def open_trace(self, name, path):
+        '''
+        Open a trace on the server
+        parameters: Query object
+        :return: :class:`TspClientResponse <Trace>` object
+        :rtype: TspClientResponse
+        '''
         api_url = '{0}traces'.format(self.base_url)
 
         my_parameters = {'name': name, 'uri': path}
@@ -103,16 +100,15 @@ class TspClient(object):
             print("post trace failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    '''
-    Delete a trace on the server
-    :param uuid: Trace UUID to delete
-    :param delete_trace: Also delete the trace from disk
-    :param remove_cache: Remove all cache for this trace
-    :return: :class:`TspClientResponse <Trace>` object
-    :rtype: TspClientResponse
-     '''
-
     def delete_trace(self, uuid, delete_trace, remove_cache=False):
+        '''
+        Delete a trace on the server
+        :param uuid: Trace UUID to delete
+        :param delete_trace: Also delete the trace from disk
+        :param remove_cache: Remove all cache for this trace
+        :return: :class:`TspClientResponse <Trace>` object
+        :rtype: TspClientResponse
+        '''
         api_url = '{0}traces/{1}'.format(self.base_url, uuid)
         parameters = {}
         if delete_trace:
@@ -128,13 +124,12 @@ class TspClient(object):
             print("delete trace failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    '''
-    Fetch all available experiments on the server
-    :return: :class:`TspClientResponse <ExperimentSet>` object
-    :rtype: TspClientResponse
-    '''
-
     def fetch_experiments(self):
+        '''
+        Fetch all available experiments on the server
+        :return: :class:`TspClientResponse <ExperimentSet>` object
+        :rtype: TspClientResponse
+        '''
         api_url = '{0}experiments'.format(self.base_url)
         response = requests.get(api_url, headers=headers)
         if response.status_code == 200:
@@ -143,14 +138,13 @@ class TspClient(object):
             print("get experiments failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    '''
-    Fetch a specific experiment information
-    :param uuid: Trace UUID to fetch
-    :return: :class:`TspClientResponse <Experiment>` object
-    :rtype: TspClientResponse
-    '''
-
     def fetch_experiment(self, uuid):
+        '''
+        Fetch a specific experiment information
+        :param uuid: Trace UUID to fetch
+        :return: :class:`TspClientResponse <Experiment>` object
+        :rtype: TspClientResponse
+        '''
         api_url = '{0}experiments/{1}'.format(self.base_url, uuid)
         response = requests.get(api_url, headers=headers)
         if response.status_code == 200:
@@ -159,14 +153,13 @@ class TspClient(object):
             print("get trace failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    '''
-    Delete a specific experiment
-    :param uuid: Trace UUID to fetch
-    :return: :class:`TspClientResponse <Trace>` object
-    :rtype: TspClientResponse
-    '''
-
     def delete_experiment(self, uuid):
+        '''
+        Delete a specific experiment
+        :param uuid: Trace UUID to fetch
+        :return: :class:`TspClientResponse <Trace>` object
+        :rtype: TspClientResponse
+        '''
         api_url = '{0}experiments/{1}'.format(self.base_url, uuid)
         response = requests.delete(api_url, headers=headers)
         if response.status_code == 200:
@@ -175,13 +168,12 @@ class TspClient(object):
             print("delete experiment failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    '''
-     * Create an experiment on the server
-     * :param parameters: Query object
-     * :rtype: The created experiment
-    '''
-
     def open_experiment(self, name, traces):
+        '''
+        Create an experiment on the server
+        :param parameters: Query object
+        :rtype: The created experiment
+        '''
         api_url = '{0}experiments'.format(self.base_url)
 
         my_parameters = {'name': name, 'traces': traces}
@@ -195,14 +187,13 @@ class TspClient(object):
             print("post experiment failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    '''
-    List all the outputs associated to this experiment
-    :param exp_uuid: Experiment UUID
-    :return: :class:  `TspClientResponse <OutputDescriptorSet>` object
-    :rtype: TspClientResponse
-     '''
-
     def fetch_experiment_outputs(self, exp_uuid):
+        '''
+        List all the outputs associated to this experiment
+        :param exp_uuid: Experiment UUID
+        :return: :class:  `TspClientResponse <OutputDescriptorSet>` object
+        :rtype: TspClientResponse
+        '''
         api_url = '{0}experiments/{1}/outputs/'.format(self.base_url, exp_uuid)
 
         response = requests.get(api_url, headers=headers)
@@ -214,16 +205,15 @@ class TspClient(object):
                 response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    '''
-    Fetch given output descriptor
-    :param exp_uuid: Experiment UUID
-    :param output_id: Output ID
-    :param parameters: Query object
-    :returns: :class:  `TspClientResponse <OutputDescriptor>` object OutputDescriptor
-    :rtype: TspClientResponse
-     '''
-
     def fetch_experiment_output(self, exp_uuid, output_id):
+        '''
+        Fetch given output descriptor
+        :param exp_uuid: Experiment UUID
+        :param output_id: Output ID
+        :param parameters: Query object
+        :returns: :class:  `TspClientResponse <OutputDescriptor>` object OutputDescriptor
+        :rtype: TspClientResponse
+        '''
         api_url = '{0}experiments/{1}/outputs/{2}'.format(
             self.base_url, exp_uuid, output_id)
 
@@ -235,16 +225,15 @@ class TspClient(object):
             print("failed to get tree: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    '''
-    Fetch Time Graph tree, Model extends TimeGraphEntry
-    :param exp_uuid: Experiment UUID
-    :param output_id: Output ID
-    :param parameters: Query object
-    :returns: :class:  `TspClientResponse <GenericResponse>` object Time graph entry response with entries and headers
-    :rtype: TspClientResponse
-     '''
-
     def fetch_timegraph_tree(self, exp_uuid, output_id, parameters=None):
+        '''
+        Fetch Time Graph tree, Model extends TimeGraphEntry
+        :param exp_uuid: Experiment UUID
+        :param output_id: Output ID
+        :param parameters: Query object
+        :returns: :class:  `TspClientResponse <GenericResponse>` object Time graph entry response with entries and headers
+        :rtype: TspClientResponse
+        '''
         api_url = '{0}experiments/{1}/outputs/timeGraph/{2}/tree'.format(
             self.base_url, exp_uuid, output_id)
 
@@ -262,11 +251,10 @@ class TspClient(object):
             print("failed to get tree: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    '''
-    Fetch Extensions (loaded files)
-     '''
-
     def fetch_extensions(self):
+        '''
+        Fetch Extensions (loaded files)
+        '''
         api_url = '{0}xml'.format(self.base_url)
 
         response = requests.get(api_url, headers=headers)
@@ -277,11 +265,10 @@ class TspClient(object):
             print("failed to get extensions: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    '''
-    Load an extension
-     '''
-
     def post_extension(self, mypath):
+        '''
+        Load an extension
+        '''
         api_url = '{0}xml'.format(self.base_url)
 
         payload = dict(path=mypath)
@@ -293,11 +280,10 @@ class TspClient(object):
             print("post extension failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    '''
-    Delete an extension
-     '''
-
     def delete_extension(self, name):
+        '''
+        Delete an extension
+        '''
         api_url = '{0}xml/{1}'.format(self.base_url, name)
 
         response = requests.delete(api_url, headers=headers_form)

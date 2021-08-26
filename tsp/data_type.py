@@ -21,12 +21,12 @@
 # SOFTWARE.
 from enum import Enum
 
-'''
-Type enum to define different data descriptors
-'''
-
 
 class DataType(Enum):
+    '''
+    Type enum to define different data descriptors
+    '''
+
     NUMBER = "NUMBER"
     BINARY_NUMBER = "BINARY_NUMBER"
     TIMESTAMP = "TIMESTAMP"

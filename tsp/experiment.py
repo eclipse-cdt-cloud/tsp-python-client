@@ -44,6 +44,7 @@ class Experiment(object):
         '''
         Constructor
         '''
+
         '''
         Experiment's unique identifier
         '''
@@ -52,14 +53,16 @@ class Experiment(object):
             del params[UUID_KEY]
         else:
             self.UUID = NA
+
         '''
-         User defined name for the experiment
-         '''
+        User defined name for the experiment
+        '''
         if NAME_KEY in params:
             self.name = params.get(NAME_KEY)
             del params[NAME_KEY]
         else:
             self.name = NA
+
         '''
         Experiment's start time
         '''
@@ -68,9 +71,10 @@ class Experiment(object):
             del params[START_TIME_KEY]
         else:
             self.start = -1
+
         '''
-         Experiment's end time
-         '''
+        Experiment's end time
+        '''
         if END_TIME_KEY in params:
             self.end = params.get(END_TIME_KEY)
             del params[END_TIME_KEY]

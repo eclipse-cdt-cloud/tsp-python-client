@@ -21,12 +21,12 @@
 # SOFTWARE.
 from enum import Enum
 
-'''
-Type enum to distinquish different parsing cases
-'''
-
 
 class ModelType(Enum):
+    '''
+    Type enum to distinquish different parsing cases
+    '''
+
     TIME_GRAPH_TREE = "time_graph_tree"
     XY_TREE = "xy_tree"
     STATES = "states"

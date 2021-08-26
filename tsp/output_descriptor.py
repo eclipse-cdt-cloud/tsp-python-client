@@ -43,6 +43,7 @@ class OutputDescriptor(object):
         '''
         Constructor
         '''
+
         '''
         Output provider's ID
         '''
@@ -99,7 +100,7 @@ class OutputDescriptor(object):
             self.start = 0
 
         '''
-        end time
+        End time
         '''
         if END_TIME_KEY in params:
             self.end = params.get(END_TIME_KEY)
@@ -120,7 +121,6 @@ class OutputDescriptor(object):
         '''
         List of compatible outputs that can be used in the same view (ex. as overlay)
         '''
-
         if COMPATIBLE_PROVIDERS_KEY in params:
             self.compatible_providers = params.get(COMPATIBLE_PROVIDERS_KEY)
             del params[COMPATIBLE_PROVIDERS_KEY]
