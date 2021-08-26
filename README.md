@@ -56,8 +56,9 @@ usage: tsp-cli-client [-h] [--ip IP] [--port PORT] [--open-trace TRACE_PATH]
                       [--list-experiment UUID] [--list-experiments]
                       [--delete-experiment UUID] [--list-outputs UUID]
                       [--list-output OUTPUT_ID] [--get-tree OUTPUT_ID]
-                      [--get-xy-tree OUTPUT_ID] [--uuid UUID]
-                      [--uuids [UUIDS ...]] [--do-delete-traces]
+                      [--get-xy-tree OUTPUT_ID] [--get-xy OUTPUT_ID]
+                      [--items [ITEMS ...]] [--times [TIMES ...]]
+                      [--uuid UUID] [--uuids [UUIDS ...]] [--do-delete-traces]
                       [--paths [PATHS ...]] [--list-extensions]
                       [--load-extension EXTENSION_PATH]
                       [--delete-extension EXTENSION_NAME]
@@ -87,6 +88,9 @@ optional arguments:
   --get-tree OUTPUT_ID  Get the timegraph tree of an output
   --get-xy-tree OUTPUT_ID
                         Get the XY tree of an output
+  --get-xy OUTPUT_ID    Get the XY data of an output
+  --items [ITEMS ...]   The list of XY items requested
+  --times [TIMES ...]   The list of XY times requested
   --uuid UUID           The UUID of a trace
   --uuids [UUIDS ...]   The list of UUIDs
   --do-delete-traces    Also delete traces when deleting experiment
