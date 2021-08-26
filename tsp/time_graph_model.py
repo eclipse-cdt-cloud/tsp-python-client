@@ -37,14 +37,15 @@ STYLE_KEY = "style"
 SOURCE_ID_TAG = "sourceId"
 DESTINATION_ID_TAG = "destinationId"
 
-'''
-Entry in a time graph
-'''
-
 
 class TimeGraphEntry(Entry):
+    '''
+    Entry in a time graph
+    '''
+
     def __init__(self, params):
         super(TimeGraphEntry, self).__init__(params, False)
+
         '''
         Type of the entry
         '''
@@ -82,12 +83,10 @@ class TimeGraphEntry(Entry):
             self.others = copy.deepcopy(params)
 
 
-'''
-Time Graph model that will be returned by the server
-'''
-
-
 class TimeGraphModel(object):
+    '''
+    Time Graph model that will be returned by the server
+    '''
 
     def __init__(self, params):
         self.rows = []
@@ -95,6 +94,7 @@ class TimeGraphModel(object):
             for row in params.get(ROWS_KEY):
                 self.rows.append(TimeGraphRow(row))
             del params[ROWS_KEY]
+
         '''
         Store other key/value pairs that are not defined in the TSP in
         a dictionary
@@ -104,12 +104,11 @@ class TimeGraphModel(object):
             self.others = copy.deepcopy(params)
 
 
-'''
-Time graph row described by an array of states for a specific entry
-'''
-
-
 class TimeGraphRow(object):
+    '''
+    Time graph row described by an array of states for a specific entry
+    '''
+
     def __init__(self, params):
         '''
         Entry Id associated to the state array
@@ -126,6 +125,7 @@ class TimeGraphRow(object):
             for state in params.get(STATES_KEY):
                 self.states.append(TimeGraphState(state))
             del params[STATES_KEY]
+
         '''
         Store other key/value pairs that are not defined in the TSP in
         a dictionary
@@ -135,12 +135,11 @@ class TimeGraphRow(object):
             self.others = copy.deepcopy(params)
 
 
-'''
-Time graph state
-'''
-
-
 class TimeGraphState(object):
+    '''
+    Time graph state
+    '''
+
     def __init__(self, params):
         '''
         Start time of the state
@@ -193,12 +192,11 @@ class TimeGraphState(object):
             self.others = copy.deepcopy(params)
 
 
-'''
-Arrow for time graph
-'''
-
-
 class TimeGraphArrow(object):
+    '''
+    Arrow for time graph
+    '''
+
     def __init__(self, params):
         '''
         Source entry Id for the arrow

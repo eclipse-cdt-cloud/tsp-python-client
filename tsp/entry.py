@@ -57,6 +57,7 @@ class Entry(object):
         if ID_KEY in params:
             self.id = params.get(ID_KEY)
             del params[ID_KEY]
+
         '''
         Parent entry Id, or -1 if the entry does not have a parent
         '''
@@ -64,6 +65,7 @@ class Entry(object):
         if PARENT_ID_KEY in params:
             self.parent_id = params.get(PARENT_ID_KEY)
             del params[PARENT_ID_KEY]
+
         '''
         Array of string that represent the content of each column
         '''

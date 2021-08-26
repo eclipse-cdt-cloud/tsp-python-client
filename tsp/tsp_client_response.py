@@ -35,14 +35,17 @@ class TspClientResponse(object):
         '''
         Constructor
         '''
+
         '''
         The model of TSP call or None i 
         '''
         self.model = model
+
         '''
         The HTTP status code
         '''
         self.status_code = status
+
         ''' 
         The status message
         '''

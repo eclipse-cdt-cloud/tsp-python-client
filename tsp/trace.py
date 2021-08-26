@@ -41,6 +41,7 @@ class Trace(object):
         '''
         Constructor
         '''
+
         '''
         Trace's unique identifier
         '''
@@ -49,14 +50,16 @@ class Trace(object):
             del params[UUID_KEY]
         else:
             self.UUID = NA
+
         '''
-         User defined name for the trace
-         '''
+        User defined name for the trace
+        '''
         if NAME_KEY in params:
             self.name = params.get(NAME_KEY)
             del params[NAME_KEY]
         else:
             self.name = NA
+
         '''
         Trace's start time
         '''
@@ -65,9 +68,10 @@ class Trace(object):
             del params[START_TIME_KEY]
         else:
             self.start = -1
+
         '''
-         Trace's end time
-         '''
+        Trace's end time
+        '''
         if END_TIME_KEY in params:
             self.end = params.get(END_TIME_KEY)
             del params[END_TIME_KEY]
@@ -76,7 +80,7 @@ class Trace(object):
 
         '''
         URI of the trace
-         '''
+        '''
         if PATH_TIME_KEY in params:
             self.path = params.get(PATH_TIME_KEY)
             del params[PATH_TIME_KEY]

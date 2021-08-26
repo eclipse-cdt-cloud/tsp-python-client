@@ -38,6 +38,7 @@ class OutputElementStyle(object):
         '''
         Constructor
         '''
+
         '''
         Parent style key
         '''
@@ -73,6 +74,7 @@ class OutputStyleModel(object):
         '''
         Constructor
         '''
+
         '''
         Parent style key
         '''
@@ -81,6 +83,7 @@ class OutputStyleModel(object):
             del params[STYLES_KEY]
         else:
             self.style = None
+
         '''
         Store other key/value pairs that are not defined in the TSP in a dictionary
         '''

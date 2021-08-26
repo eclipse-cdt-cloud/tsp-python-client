@@ -40,14 +40,17 @@ class ResponseStatus(Enum):
     waiting some time. Request data provider until COMPLETED status is received
     '''
     RUNNING = "RUNNING"
+
     '''
     Model is complete, no need to request data provider again
     '''
     COMPLETED = "COMPLETED"
+
     '''
     Error happened. Please see logs or detailed message of status.
     '''
     FAILED = "FAILED"
+
     '''
     Task has been cancelled. Please see logs or detailed message of status.
     '''
@@ -63,11 +66,11 @@ class GenericResponse(object):
     '''
 
     def __init__(self, params, model_type):
-        self.model_type = model_type
-
         '''
         Constructor
         '''
+        self.model_type = model_type
+
         '''
         Model returned in the response
         '''
@@ -100,8 +103,8 @@ class GenericResponse(object):
             self.status = ResponseStatus(params.get(RESPONSE_STATUS_KEY))
         else:
             self.status = ResponseStatus.FAILED
-        '''
 
+        '''
         Message associated with the response
         '''
         if STATUS_MESSAGE_KEY in params:
