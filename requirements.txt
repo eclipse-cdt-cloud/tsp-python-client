@@ -1,6 +1,7 @@
 datetime
 pandas
 pytest
+pytest-cov
 requests
 tabulate
 termcolor
