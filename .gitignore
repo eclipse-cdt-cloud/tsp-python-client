@@ -1,4 +1,5 @@
 # LC_COLLATE=C sort
+/.coverage
 /.venv/
 /__pycache__/
 /tsp/__pycache__/

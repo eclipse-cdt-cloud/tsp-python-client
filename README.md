@@ -35,6 +35,12 @@ git submodule update --init
 
 Above, the pytest command can be replaced with another local installation.
 
+Add this to that command to also get **tsp** module code test coverage, here listing uncovered line numbers only:
+
+```shell
+pytest --cov tsp --cov-report term-missing:skip-covered
+```
+
 ## Usage
 
 To use the **tsp-cli-client** script, type the following command in the root directory to get the usage:
