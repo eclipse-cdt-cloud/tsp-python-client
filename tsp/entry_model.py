@@ -71,8 +71,7 @@ class EntryModel(object):
             del params[ENTRIES_KEY]
 
         '''
-        Store other key/value pairs that are not defined in the TSP in a
-        dictionary
+        Store other key/value pairs that are not defined in the TSP in a dictionary
         '''
         self.others = {}
         if params:
