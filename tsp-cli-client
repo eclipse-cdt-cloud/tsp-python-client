@@ -22,15 +22,18 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+
 import argparse
 import sys
-from tsp.tsp_client import TspClient
+
 from requests.exceptions import ConnectionError
 from termcolor import colored
 from datetime import timedelta
-from tsp.tree_model import TreeModel
 from decimal import Decimal
 from os.path import os
+
+from tsp.tree_model import TreeModel
+from tsp.tsp_client import TspClient
 
 #api_token = 'your_token_goes_here'
 NS_PER_SEC = 1000000000

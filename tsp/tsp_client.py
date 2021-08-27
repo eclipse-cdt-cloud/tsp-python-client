@@ -20,10 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from tsp.trace import Trace
-import requests
-from tsp.trace_set import TraceSet
 import json
+import requests
+
+from tsp.trace import Trace
+from tsp.trace_set import TraceSet
 from tsp.tsp_client_response import TspClientResponse
 from tsp.output_descriptor_set import OutputDescriptorSet
 from tsp.response import GenericResponse, ModelType
