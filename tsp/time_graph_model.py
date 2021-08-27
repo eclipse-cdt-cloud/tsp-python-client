@@ -77,8 +77,7 @@ class TimeGraphEntry(Entry):
             del params[HAS_ROW_MODEL_KEY]
 
         '''
-        Store other key/value pairs that are not defined in the TSP in
-        a dictionary
+        Store other key/value pairs that are not defined in the TSP in a dictionary
         '''
         self.others = {}
         if params:
@@ -98,8 +97,7 @@ class TimeGraphModel(object):
             del params[ROWS_KEY]
 
         '''
-        Store other key/value pairs that are not defined in the TSP in
-        a dictionary
+        Store other key/value pairs that are not defined in the TSP in a dictionary
         '''
         self.others = {}
         if params:
@@ -129,8 +127,7 @@ class TimeGraphRow(object):
             del params[STATES_KEY]
 
         '''
-        Store other key/value pairs that are not defined in the TSP in
-        a dictionary
+        Store other key/value pairs that are not defined in the TSP in a dictionary
         '''
         self.others = {}
         if params:
@@ -186,8 +183,7 @@ class TimeGraphState(object):
             del params[STYLE_KEY]
 
         '''
-        Store other key/value pairs that are not defined in the TSP in
-        a dictionary
+        Store other key/value pairs that are not defined in the TSP in a dictionary
         '''
         self.others = {}
         if params:
@@ -243,8 +239,7 @@ class TimeGraphArrow(object):
             del params[STYLE_KEY]
 
         '''
-        Store other key/value pairs that are not defined in the TSP in
-        a dictionary
+        Store other key/value pairs that are not defined in the TSP in a dictionary
         '''
         self.others = {}
         if params:
