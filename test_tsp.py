@@ -20,9 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from tsp.tsp_client import TspClient
 import os
 import pytest
+
+from tsp.tsp_client import TspClient
 
 
 class TestTspClient:

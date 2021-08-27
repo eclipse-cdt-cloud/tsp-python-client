@@ -20,9 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import copy
+
 from tsp.trace import NAME_KEY
 from tsp.output_element_style import OutputElementStyle
-import copy
 
 ID_KEY = "id"
 PARENT_ID_KEY = "parentId"

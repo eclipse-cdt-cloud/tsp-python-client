@@ -19,12 +19,15 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-from tsp.data_type import DataType
+
 from datetime import timedelta
 from datetime import datetime
 from decimal import Decimal
 from tabulate import tabulate
+
 import pandas as pd
+
+from tsp.data_type import DataType
 
 
 class TreeModel(object):
