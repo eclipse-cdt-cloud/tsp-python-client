@@ -106,6 +106,7 @@ description = """CLI client to send Trace Server Protocol commands to a Trace Se
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=description)
+
     parser.add_argument("--ip", dest="ip_address",
                         help="IP address  of trace server", metavar="IP", default="localhost")
     parser.add_argument("--port", dest="port",
@@ -188,7 +189,6 @@ if __name__ == "__main__":
             if response.status_code == 200:
                 if not response.model.traces:
                     print("No traces open on the server")
-
                 for t in response.model.traces:
                     print_trace(t)
                 sys.exit(0)
@@ -243,7 +243,6 @@ if __name__ == "__main__":
             if response.status_code == 200:
                 if not response.model.experiments:
                     print("No experiments open on the server")
-
                 for exp in response.model.experiments:
                     print_experiment(exp)
                 sys.exit(0)
@@ -254,7 +253,6 @@ if __name__ == "__main__":
             response = tsp_client.delete_experiment(options.delete_experiment)
             if response.status_code == 200:
                 print("Successfully deleted experiment")
-
                 if (options.do_delete_traces):
                     for trace in response.model.traces.traces:
                         del_response = tsp_client.delete_trace(
@@ -317,13 +315,10 @@ if __name__ == "__main__":
             response = tsp_client.fetch_extensions()
             if response.status_code == 200:
                 extension_set = response.model
-
                 if not extension_set:
                     print('No extensions loaded')
-
                 for e in extension_set.extension_set:
                     print('  {0}'.format(e.extension))
-
                 sys.exit(0)
             else:
                 sys.exit(1)
@@ -344,4 +339,5 @@ if __name__ == "__main__":
     except ConnectionError as e:
         print('Unexpected error: {0}'.format(e))
         sys.exit(1)
+
 sys.exit(0)
