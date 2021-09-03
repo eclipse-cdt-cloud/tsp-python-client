@@ -307,6 +307,9 @@ if __name__ == "__main__":
                     options.uuid, options.get_tree)
                 if response.status_code == 200:
                     tree = response.model.model
+                    if tree is None:
+                        print("Tree had no model; retry?")
+                        sys.exit(1)
 
                     if (output_descriptor.type == "DATA_TREE"):
                         treeModel = TreeModel(tree.entries, tree.descriptors)
@@ -332,6 +335,9 @@ if __name__ == "__main__":
                     options.uuid, options.get_xy_tree)
                 if response.status_code == 200:
                     tree = response.model.model
+                    if tree is None:
+                        print("Tree had no model; retry?")
+                        sys.exit(1)
 
                     if (output_descriptor.type == "TREE_TIME_XY"):
                         treeModel = TreeModel(tree.entries, tree.descriptors)
