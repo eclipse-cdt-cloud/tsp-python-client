@@ -1,3 +1,4 @@
+argcomplete
 datetime
 pandas
 pytest

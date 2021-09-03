@@ -43,6 +43,8 @@ pytest --cov tsp --cov-report term-missing:skip-covered
 
 ## Usage
 
+To activate completion for **tsp-cli-client** options, follow [these instructions](https://kislyuk.github.io/argcomplete/#activating-global-completion).
+
 To use the **tsp-cli-client** script, type the following command in the root directory to get the usage:
 
 ```python
