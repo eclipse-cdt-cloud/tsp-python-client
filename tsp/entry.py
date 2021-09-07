@@ -76,7 +76,8 @@ class Entry(object):
             del params[LABELS_KEY]
 
         '''
-        Style key used to search for a The style map can be obtained by using the style endpoint.
+        Style key used to search for a style.
+        The style map can be obtained by using the style endpoint.
         '''
         self.style = None
         if STYLE_KEY in params:
