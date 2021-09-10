@@ -272,20 +272,7 @@ class TestTspClient:
             assert response.model is not None
             status = response.model.status.upper()
 
-        parameters = {}
-        requested_items = []
-        for entry in response.model.model.entries:
-            requested_items.append(entry.id)
-        parameters[TspClient.REQUESTED_ITEM_KEY] = requested_items
-
-        requested_times = []
-        requested_time = REQUESTED_TIME_START
-        while len(requested_times) < REQUESTED_TIME_LENGTH:
-            requested_time += REQUESTED_TIME_STEP
-            requested_times.append(int(requested_time))
-        parameters[TspClient.REQUESTED_TIME_KEY] = requested_times
-
-        params = {TspClient.PARAMETERS_KEY: parameters}
+        params = self.__requested_parameters(response)
         response = self.tsp_client.fetch_xy(experiment_uuid, output_id, params)
         assert response.status_code == 200
         assert response.model.model_type == response.model.model_type.XY
@@ -311,20 +298,7 @@ class TestTspClient:
             assert response.model is not None
             status = response.model.status.upper()
 
-        parameters = {}
-        requested_items = []
-        for entry in response.model.model.entries:
-            requested_items.append(entry.id)
-        parameters[TspClient.REQUESTED_ITEM_KEY] = requested_items
-
-        requested_times = []
-        requested_time = REQUESTED_TIME_START
-        while len(requested_times) < REQUESTED_TIME_LENGTH:
-            requested_time += REQUESTED_TIME_STEP
-            requested_times.append(int(requested_time))
-        parameters[TspClient.REQUESTED_TIME_KEY] = requested_times
-
-        params = {TspClient.PARAMETERS_KEY: parameters}
+        params = self.__requested_parameters(response)
         response = self.tsp_client.fetch_timegraph_tree(
             experiment_uuid, output_id, params)
         assert response.status_code == 200
@@ -353,3 +327,18 @@ class TestTspClient:
 
         response = self.tsp_client.fetch_extensions()
         assert not response.model.extension_set
+
+    def __requested_parameters(self, response):
+        parameters = {}
+        requested_items = []
+        for entry in response.model.model.entries:
+            requested_items.append(entry.id)
+        parameters[TspClient.REQUESTED_ITEM_KEY] = requested_items
+
+        requested_times = []
+        requested_time = REQUESTED_TIME_START
+        while len(requested_times) < REQUESTED_TIME_LENGTH:
+            requested_time += REQUESTED_TIME_STEP
+            requested_times.append(int(requested_time))
+        parameters[TspClient.REQUESTED_TIME_KEY] = requested_times
+        return {TspClient.PARAMETERS_KEY: parameters}
