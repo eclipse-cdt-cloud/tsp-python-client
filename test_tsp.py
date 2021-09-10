@@ -27,11 +27,11 @@ import time
 from tsp.response import ResponseStatus
 from tsp.tsp_client import TspClient
 
-REQUESTED_TIME_XY_START = 1332170682440133097
-REQUESTED_TIME_XY_END = 1332170692664579801
-REQUESTED_TIME_XY_LENGTH = 10
-REQUESTED_TIME_XY_STEP = (REQUESTED_TIME_XY_END -
-                          REQUESTED_TIME_XY_START) / REQUESTED_TIME_XY_LENGTH
+REQUESTED_TIME_START = 1332170682440133097
+REQUESTED_TIME_END = 1332170692664579801
+REQUESTED_TIME_LENGTH = 10
+REQUESTED_TIME_STEP = (REQUESTED_TIME_END -
+                       REQUESTED_TIME_START) / REQUESTED_TIME_LENGTH
 
 
 class TestTspClient:
@@ -279,9 +279,9 @@ class TestTspClient:
         parameters[TspClient.REQUESTED_ITEM_KEY] = requested_items
 
         requested_times = []
-        requested_time = REQUESTED_TIME_XY_START
-        while len(requested_times) < REQUESTED_TIME_XY_LENGTH:
-            requested_time += REQUESTED_TIME_XY_STEP
+        requested_time = REQUESTED_TIME_START
+        while len(requested_times) < REQUESTED_TIME_LENGTH:
+            requested_time += REQUESTED_TIME_STEP
             requested_times.append(int(requested_time))
         parameters[TspClient.REQUESTED_TIME_KEY] = requested_times
 
@@ -289,6 +289,45 @@ class TestTspClient:
         response = self.tsp_client.fetch_xy(experiment_uuid, output_id, params)
         assert response.status_code == 200
         assert response.model.model_type == response.model.model_type.XY
+        self._delete_experiments()
+        self._delete_traces()
+
+    def test_fetch_timegraph_tree_complete(self, kernel):
+        traces = []
+        response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
+        traces.append(response.model.UUID)
+        response = self.tsp_client.open_experiment(
+            os.path.basename(kernel), traces)
+        assert response.status_code == 200
+        experiment_uuid = response.model.UUID
+
+        response = self.tsp_client.fetch_experiment_outputs(experiment_uuid)
+        output_id = response.model.descriptors[0].id
+        status = ResponseStatus.RUNNING.name
+        while status == ResponseStatus.RUNNING.name:
+            time.sleep(1)
+            response = self.tsp_client.fetch_timegraph_tree(
+                experiment_uuid, output_id)
+            assert response.model is not None
+            status = response.model.status.upper()
+
+        parameters = {}
+        requested_items = []
+        for entry in response.model.model.entries:
+            requested_items.append(entry.id)
+        parameters[TspClient.REQUESTED_ITEM_KEY] = requested_items
+
+        requested_times = []
+        requested_time = REQUESTED_TIME_START
+        while len(requested_times) < REQUESTED_TIME_LENGTH:
+            requested_time += REQUESTED_TIME_STEP
+            requested_times.append(int(requested_time))
+        parameters[TspClient.REQUESTED_TIME_KEY] = requested_times
+
+        params = {TspClient.PARAMETERS_KEY: parameters}
+        response = self.tsp_client.fetch_timegraph_tree(
+            experiment_uuid, output_id, params)
+        assert response.status_code == 200
         self._delete_experiments()
         self._delete_traces()
 
