@@ -27,8 +27,6 @@ from tabulate import tabulate
 
 import pandas as pd
 
-from tsp.data_type import DataType
-
 
 class TreeModel(object):
 
