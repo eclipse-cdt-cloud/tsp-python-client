@@ -41,7 +41,7 @@ class ColumnDescriptor(object):
             del params[TEXT_KEY]
 
         '''
-        Label of tooltop of the header
+        Label of tooltip of the header
         '''
         self.tooltip = ''
         if TOOLTIP_KEY in params:
