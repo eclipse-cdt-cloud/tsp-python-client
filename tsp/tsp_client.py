@@ -195,7 +195,7 @@ class TspClient(object):
         :return: :class:  `TspClientResponse <OutputDescriptorSet>` object
         :rtype: TspClientResponse
         '''
-        api_url = '{0}experiments/{1}/outputs/'.format(self.base_url, exp_uuid)
+        api_url = '{0}experiments/{1}/outputs'.format(self.base_url, exp_uuid)
 
         response = requests.get(api_url, headers=headers)
 
