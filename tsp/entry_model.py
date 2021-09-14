@@ -62,8 +62,7 @@ class EntryModel(object):
         '''
         self.entries = []
         if ENTRIES_KEY in params:
-            entries = params.get(ENTRIES_KEY)
-            for entry in entries:
+            for entry in params.get(ENTRIES_KEY):
                 if model_type == ModelType.TIME_GRAPH_TREE:
                     self.entries.append(TimeGraphEntry(entry))
                 else:
