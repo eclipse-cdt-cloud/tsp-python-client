@@ -107,13 +107,9 @@ class TreeItem(object):
                     print("  ", end="")
                 for _ in range((int)(depth / self._indent) - 1):
                     print("| ", end="")
-                other = ""
-                others = self._entry.others
                 # TODO print TimeGraphEntry specific fields
-                for k in others:
-                    other = ('{0} ({1}, {2})'.format(other, k, others.get(k)))
-                print("{0}{1} ({1}, {2}) {3} {4}".format(
-                    prefix, self._entry.labels[0], self._entry.id, self._entry.parent_id, other))
+                print("{0}{1} ({1}, {2}) {3}".format(
+                    prefix, self._entry.labels[0], self._entry.id, self._entry.parent_id))
             else:
                 label_str = ""
                 if(depth > 0):

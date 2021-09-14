@@ -69,10 +69,3 @@ class EntryModel(object):
                 else:
                     self.entries.append(Entry(entry))
             del params[ENTRIES_KEY]
-
-        '''
-        Store other key/value pairs that are not defined in the TSP in a dictionary
-        '''
-        self.others = {}
-        if params:
-            self.others = copy.deepcopy(params)

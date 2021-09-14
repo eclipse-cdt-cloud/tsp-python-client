@@ -31,7 +31,7 @@ class ColumnDescriptor(object):
     Basic entry
     '''
 
-    def __init__(self, params, copy_others=True):
+    def __init__(self, params):
         '''
         Text of header for the entry
         '''
@@ -47,12 +47,3 @@ class ColumnDescriptor(object):
         if TOOLTIP_KEY in params:
             self.tooltip = params.get(TOOLTIP_KEY)
             del params[TOOLTIP_KEY]
-
-        '''
-        Store other key/value pairs that are not defined in the TSP in a dictionary
-        '''
-        self.copy_others = copy_others
-        if copy_others:
-            self.others = {}
-            if params:
-                self.others = copy.deepcopy(params)

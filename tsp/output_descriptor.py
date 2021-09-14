@@ -127,10 +127,3 @@ class OutputDescriptor(object):
             del params[COMPATIBLE_PROVIDERS_KEY]
         else:
             self.compatible_providers = []
-
-        '''
-        Store other key/value pairs that are not defined in the TSP in a dictionary
-        '''
-        self.others = {}
-        if params:
-            self.others = copy.deepcopy(params)

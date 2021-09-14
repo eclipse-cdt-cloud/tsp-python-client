@@ -50,7 +50,7 @@ class Entry(object):
     Basic entry
     '''
 
-    def __init__(self, params, copy_others=True):
+    def __init__(self, params):
         '''
         Unique Id for the entry
         '''
@@ -84,12 +84,3 @@ class Entry(object):
             if params.get(STYLE_KEY) is not None:
                 self.style = OutputElementStyle(params.get(STYLE_KEY))
             del params[STYLE_KEY]
-
-        '''
-        Store other key/value pairs that are not defined in the TSP in a dictionary
-        '''
-        self.copy_others = copy_others
-        if copy_others:
-            self.others = {}
-            if params:
-                self.others = copy.deepcopy(params)

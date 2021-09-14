@@ -105,10 +105,3 @@ class Experiment(object):
         '''
         if TRACES_TIME_KEY in params:
             self.traces = TraceSet(params.get(TRACES_TIME_KEY))
-
-        '''
-        Store other key/value pairs that are not defined in the TSP in a dictionary
-        '''
-        self.others = {}
-        if params:
-            self.others = copy.deepcopy(params)
