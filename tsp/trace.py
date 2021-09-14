@@ -106,10 +106,3 @@ class Trace(object):
             del params[INDEXING_STATUS_KEY]
         else:
             self.indexin_status = 0
-
-        '''
-        Store other key/value pairs that are not defined in the TSP in a dictionary
-        '''
-        self.others = {}
-        if params:
-            self.others = copy.deepcopy(params)

@@ -46,7 +46,7 @@ class TimeGraphEntry(Entry):
     '''
 
     def __init__(self, params):
-        super(TimeGraphEntry, self).__init__(params, False)
+        super(TimeGraphEntry, self).__init__(params)
 
         '''
         Type of the entry
@@ -76,13 +76,6 @@ class TimeGraphEntry(Entry):
             self.has_row_model = params.get(HAS_ROW_MODEL_KEY)
             del params[HAS_ROW_MODEL_KEY]
 
-        '''
-        Store other key/value pairs that are not defined in the TSP in a dictionary
-        '''
-        self.others = {}
-        if params:
-            self.others = copy.deepcopy(params)
-
 
 class TimeGraphModel(object):
     '''
@@ -95,13 +88,6 @@ class TimeGraphModel(object):
             for row in params.get(ROWS_KEY):
                 self.rows.append(TimeGraphRow(row))
             del params[ROWS_KEY]
-
-        '''
-        Store other key/value pairs that are not defined in the TSP in a dictionary
-        '''
-        self.others = {}
-        if params:
-            self.others = copy.deepcopy(params)
 
 
 class TimeGraphRow(object):
@@ -125,13 +111,6 @@ class TimeGraphRow(object):
             for state in params.get(STATES_KEY):
                 self.states.append(TimeGraphState(state))
             del params[STATES_KEY]
-
-        '''
-        Store other key/value pairs that are not defined in the TSP in a dictionary
-        '''
-        self.others = {}
-        if params:
-            self.others = copy.deepcopy(params)
 
 
 class TimeGraphState(object):
@@ -182,13 +161,6 @@ class TimeGraphState(object):
             self.style = params.get(STYLE_KEY)
             del params[STYLE_KEY]
 
-        '''
-        Store other key/value pairs that are not defined in the TSP in a dictionary
-        '''
-        self.others = {}
-        if params:
-            self.others = copy.deepcopy(params)
-
 
 class TimeGraphArrow(object):
     '''
@@ -237,10 +209,3 @@ class TimeGraphArrow(object):
         if STYLE_KEY in params:
             self.style = params.get(STYLE_KEY)
             del params[STYLE_KEY]
-
-        '''
-        Store other key/value pairs that are not defined in the TSP in a dictionary
-        '''
-        self.others = {}
-        if params:
-            self.others = copy.deepcopy(params)

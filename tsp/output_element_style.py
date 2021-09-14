@@ -58,13 +58,6 @@ class OutputElementStyle(object):
         else:
             self.style_values = {}
 
-        '''
-        Store other key/value pairs that are not defined in the TSP in a dictionary
-        '''
-        self.others = {}
-        if params:
-            self.others = copy.deepcopy(params)
-
 
 class OutputStyleModel(object):
     '''
@@ -84,10 +77,3 @@ class OutputStyleModel(object):
             del params[STYLES_KEY]
         else:
             self.style = None
-
-        '''
-        Store other key/value pairs that are not defined in the TSP in a dictionary
-        '''
-        self.others = {}
-        if params:
-            self.others = copy.deepcopy(params)

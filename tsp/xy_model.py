@@ -66,13 +66,6 @@ class XYModel(object):
                 self.series.append(XYSeries(series))
             del params[SERIES_KEY]
 
-        '''
-        Store other key/value pairs that are not defined in the TSP in a dictionary
-        '''
-        self.others = {}
-        if params:
-            self.others = copy.deepcopy(params)
-
     def print(self):
         print(f'XY title: {self.title}')
 
@@ -83,8 +76,6 @@ class XYModel(object):
 
         for series in self.series:
             series.print()
-        for other_item in self.others.items():
-            print(f'XY other item: {other_item}')
 
 
 class XYSeries(object):
@@ -148,13 +139,6 @@ class XYSeries(object):
                 self.tags.append(tag)
             del params[TAGS_KEY]
 
-        '''
-        Store other key/value pairs that are not defined in the TSP in a dictionary
-        '''
-        self.others = {}
-        if params:
-            self.others = copy.deepcopy(params)
-
     def print(self):
         print(f' Series name: {self.series_name}')
         print(f' Series id: {self.series_id}')
@@ -168,8 +152,6 @@ class XYSeries(object):
             print(f' Series Y-value: {value}')
         for tag in self.tags:
             print(f' Series tag: {tag}')
-        for other_item in self.others.items():
-            print(f' Series other item: {other_item}')
 
 
 class XYAxis(object):
@@ -199,16 +181,7 @@ class XYAxis(object):
             self.data_type = params.get(DATA_TYPE_KEY)
             del params[DATA_TYPE_KEY]
 
-        '''
-        Store other key/value pairs that are not defined in the TSP in a dictionary
-        '''
-        self.others = {}
-        if params:
-            self.others = copy.deepcopy(params)
-
     def print(self):
         print(f'  Axis label: {self.label}')
         print(f'  Axis unit: {self.unit}')
         print(f'  Axis data type: {self.data_type}')
-        for other_item in self.others.items():
-            print(f'  Axis other item: {other_item}')
