@@ -81,7 +81,7 @@ class GenericResponse(object):
                 self.model = EntryModel(params.get(MODEL_KEY), self.model_type)
             elif self.model_type == ModelType.XY_TREE:
                 self.model = EntryModel(params.get(MODEL_KEY))
-            elif self.model_type == ModelType.STATES:
+            elif self.model_type == ModelType.STATES:  # pragma: no cover
                 # TODO
                 print("not implemented")
             elif self.model_type == ModelType.XY:
@@ -100,7 +100,7 @@ class GenericResponse(object):
         '''
         if RESPONSE_STATUS_KEY in params:
             self.status = ResponseStatus(params.get(RESPONSE_STATUS_KEY))
-        else:
+        else:  # pragma: no cover
             self.status = ResponseStatus.FAILED
 
         '''
@@ -108,5 +108,5 @@ class GenericResponse(object):
         '''
         if STATUS_MESSAGE_KEY in params:
             self.status = params.get(STATUS_MESSAGE_KEY)
-        else:
+        else:  # pragma: no cover
             self.status = ""

@@ -49,7 +49,7 @@ class Trace(object):
         if UUID_KEY in params:
             self.UUID = params.get(UUID_KEY)
             del params[UUID_KEY]
-        else:
+        else:  # pragma: no cover
             self.UUID = NA
 
         '''
@@ -58,7 +58,7 @@ class Trace(object):
         if NAME_KEY in params:
             self.name = params.get(NAME_KEY)
             del params[NAME_KEY]
-        else:
+        else:  # pragma: no cover
             self.name = NA
 
         '''
@@ -67,7 +67,7 @@ class Trace(object):
         if START_TIME_KEY in params:
             self.start = params.get(START_TIME_KEY)
             del params[START_TIME_KEY]
-        else:
+        else:  # pragma: no cover
             self.start = -1
 
         '''
@@ -76,7 +76,7 @@ class Trace(object):
         if END_TIME_KEY in params:
             self.end = params.get(END_TIME_KEY)
             del params[END_TIME_KEY]
-        else:
+        else:  # pragma: no cover
             self.end = -1
 
         '''
@@ -85,7 +85,7 @@ class Trace(object):
         if PATH_TIME_KEY in params:
             self.path = params.get(PATH_TIME_KEY)
             del params[PATH_TIME_KEY]
-        else:
+        else:  # pragma: no cover
             self.path = -1
 
         '''
@@ -94,7 +94,7 @@ class Trace(object):
         if NB_EVENT_KEY in params:
             self.number_of_events = params.get(NB_EVENT_KEY)
             del params[NB_EVENT_KEY]
-        else:
+        else:  # pragma: no cover
             self.number_of_events = 0
 
         '''
@@ -104,5 +104,5 @@ class Trace(object):
         if INDEXING_STATUS_KEY in params:
             self.indexin_status = params.get(INDEXING_STATUS_KEY)
             del params[INDEXING_STATUS_KEY]
-        else:
+        else:  # pragma: no cover
             self.indexin_status = 0
