@@ -51,7 +51,7 @@ class OutputDescriptor(object):
         if ID_KEY in params:
             self.id = params.get(ID_KEY)
             del params[ID_KEY]
-        else:
+        else:  # pragma: no cover
             self.id = None
 
         '''
@@ -60,7 +60,7 @@ class OutputDescriptor(object):
         if NAME_KEY in params:
             self.name = params.get(NAME_KEY)
             del params[NAME_KEY]
-        else:
+        else:  # pragma: no cover
             self.name = UNKOWN
 
         '''
@@ -69,7 +69,7 @@ class OutputDescriptor(object):
         if DESCRIPTION_KEY in params:
             self.description = params.get(DESCRIPTION_KEY)
             del params[DESCRIPTION_KEY]
-        else:
+        else:  # pragma: no cover
             self.description = UNKOWN
 
         '''
@@ -79,7 +79,7 @@ class OutputDescriptor(object):
         if TYPE_KEY in params:
             self.type = params.get(TYPE_KEY)
             del params[TYPE_KEY]
-        else:
+        else:  # pragma: no cover
             self.type = UNKOWN
 
         '''
