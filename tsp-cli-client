@@ -34,7 +34,7 @@ from datetime import timedelta
 from decimal import Decimal
 from os.path import os
 
-from tsp.tree_model import TreeModel
+from tree_model import TreeModel
 from tsp.tsp_client import TspClient
 from tsp.xy_model import XYModel
 
