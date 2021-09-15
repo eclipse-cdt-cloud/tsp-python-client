@@ -241,9 +241,7 @@ class TspClient(object):
 
         params = parameters
         if (parameters is None):
-            requested_times = [0, 1]
-            my_parameters = {self.REQUESTED_TIME_KEY: requested_times}
-            params = {self.PARAMETERS_KEY: my_parameters}
+            params = {}
 
         response = requests.post(api_url, json=params, headers=headers)
 
@@ -267,9 +265,7 @@ class TspClient(object):
 
         params = parameters
         if (parameters is None):
-            requested_times = [0, 1]
-            my_parameters = {self.REQUESTED_TIME_KEY: requested_times}
-            params = {self.PARAMETERS_KEY: my_parameters}
+            params = {}
 
         response = requests.post(api_url, json=params, headers=headers)
 
