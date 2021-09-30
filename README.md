@@ -1,12 +1,12 @@
 # tsp-python-client
 
-Client-side implementation, in Python, of the [Trace Server Protocol (TSP)](https://github.com/theia-ide/trace-server-protocol).
+Client-side implementation, in Python, of the [Trace Server Protocol (TSP)][tsp].
 
 It provides a module that can be included in Python scripts to query a trace server via the Trace Server Protocol (TSP). The script **tsp-cli-client** provides a command-line interface for querying a trace server.
 
-An example trace server implementation is provided by the [Eclipse Trace Compass Incubator](https://projects.eclipse.org/projects/tools.tracecompass.incubator) project and can be downloaded [here](https://download.eclipse.org/tracecompass.incubator/trace-server/rcp/). It can be used to test this script and module.
+An example trace server implementation is provided by the [Eclipse Trace Compass Incubator][inc] project and can be downloaded [here][rcp]. It can be used to test this script and module.
 
-This trace server bundles non-UI, core plug-ins of the [Eclipse Trace Compass](https://www.eclipse.org/tracecompass/) project and comes with a server-side TSP implementation.
+This trace server bundles non-UI, core plug-ins of the [Eclipse Trace Compass][etc] project and comes with a server-side TSP implementation.
 
 ## Status
 
@@ -43,7 +43,7 @@ pytest --cov tsp --cov-report term-missing:skip-covered
 
 ## Usage
 
-To activate completion for **tsp-cli-client** options, follow [these instructions](https://kislyuk.github.io/argcomplete/#activating-global-completion).
+To activate completion for **tsp-cli-client** options, follow [these instructions][agc].
 
 To use the **tsp-cli-client** script, type the following command in the root directory to get the usage:
 
@@ -101,3 +101,9 @@ optional arguments:
   --delete-extension EXTENSION_NAME
                         Delete an extension
 ```
+
+[agc]: https://kislyuk.github.io/argcomplete/#activating-global-completion
+[etc]: https://www.eclipse.org/tracecompass/
+[inc]: https://projects.eclipse.org/projects/tools.tracecompass.incubator
+[rcp]: https://download.eclipse.org/tracecompass.incubator/trace-server/rcp/
+[tsp]: https://github.com/theia-ide/trace-server-protocol
