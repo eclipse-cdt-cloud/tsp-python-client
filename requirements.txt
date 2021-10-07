@@ -1,6 +1,8 @@
 argcomplete
+autopep8
 datetime
 pandas
+pylint
 pytest
 pytest-cov
 requests
