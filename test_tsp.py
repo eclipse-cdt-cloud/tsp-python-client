@@ -69,7 +69,8 @@ class TestTspClient:
 
     @pytest.fixture(scope='module')
     def extension(self):
-        return f'{os.getcwd()}/org.eclipse.tracecompass.incubator/tracetypes/org.eclipse.tracecompass.incubator.ftrace.core/xml_analyses/{self.name}'
+        return (f'{os.getcwd()}/org.eclipse.tracecompass.incubator/tracetypes/'
+                f'org.eclipse.tracecompass.incubator.ftrace.core/xml_analyses/{self.name}')
 
     @pytest.fixture(scope='module')
     def kernel(self):
