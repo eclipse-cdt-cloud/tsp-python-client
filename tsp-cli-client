@@ -26,9 +26,9 @@
 
 import argcomplete
 import argparse
+import requests
 import sys
 
-from requests.exceptions import ConnectionError
 from termcolor import colored
 from datetime import timedelta
 from decimal import Decimal
@@ -398,7 +398,7 @@ if __name__ == "__main__":
                 sys.exit(0)
             else:
                 sys.exit(1)
-    except ConnectionError as e:
+    except requests.exceptions.ConnectionError as e:
         print('Unexpected error: {0}'.format(e))
         sys.exit(1)
 
