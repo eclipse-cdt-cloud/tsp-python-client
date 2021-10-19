@@ -21,9 +21,10 @@
 # SOFTWARE.
 
 import os
+import time
+
 import pytest
 import requests
-import time
 
 from tsp.response import ResponseStatus
 from tsp.tsp_client import TspClient
