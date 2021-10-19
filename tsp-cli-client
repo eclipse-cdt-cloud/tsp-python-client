@@ -36,7 +36,6 @@ from os.path import os
 
 from tree_model import TreeModel
 from tsp.tsp_client import TspClient
-from tsp.xy_model import XYModel
 
 #api_token = 'your_token_goes_here'
 NS_PER_SEC = 1000000000
