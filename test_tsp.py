@@ -22,6 +22,7 @@
 
 import os
 import pytest
+import requests
 import time
 
 from tsp.response import ResponseStatus
@@ -82,7 +83,7 @@ class TestTspClient:
         """Check server availability before each test; don't fail all tests if none, but exit."""
         try:
             self.tsp_client.fetch_traces()
-        except Exception as e:
+        except requests.exceptions.ConnectionError as e:
             pytest.exit(str(e))
         # Deleting left-over data here doesn't work consistently, but remains handy if tests fail.
         self._delete_experiments()
