@@ -52,8 +52,8 @@ def print_experiment(elem):
         elem.name, print_uuid(elem), elem.start, elem.end, elem.number_of_events, elem.indexin_status))
     print('Trace(s):')
     print('------')
-    for trace in elem.traces.traces:
-        print_trace(trace)
+    for elem_trace in elem.traces.traces:
+        print_trace(elem_trace)
 
 
 def print_trace(elem):
@@ -63,9 +63,9 @@ def print_trace(elem):
 
 def print_time(elem):
     try:
-        t = Decimal(elem)
-        time = int(int(t) / NS_PER_SEC)
-        ns = int(t) % NS_PER_SEC
+        elem_dec = Decimal(elem)
+        time = int(int(elem_dec) / NS_PER_SEC)
+        ns = int(elem_dec) % NS_PER_SEC
         if (time != 0):
             return '{0} s'.format(timedelta(seconds=time, microseconds=ns/1000))
         if ns > 1000000:
@@ -73,8 +73,8 @@ def print_time(elem):
         if ns > 1000:
             return '{0} µs'.format(ns / 1000)
         return '{0} ns'.format(ns)
-    except ValueError as e:
-        print(e)
+    except ValueError as ve:
+        print(ve)
         return elem
 
 
@@ -96,10 +96,10 @@ def print_outputs(descriptors):
         #          "org.eclipse.tracecompass.internal.analysis.profiling.core.callgraph.callgraphanalysis.statistics"))
 
 
-def get_descriptor(uuid, id):
-    response = tsp_client.fetch_experiment_output(uuid, id)
-    if response.status_code == 200:
-        return response.model
+def get_descriptor(uuid, output_id):
+    resp = tsp_client.fetch_experiment_output(uuid, output_id)
+    if resp.status_code == 200:
+        return resp.model
     return None
 
 
