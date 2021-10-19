@@ -92,6 +92,7 @@ class TreeItem(object):
     def get_children(self):
         return self._children
 
+    # pylint: disable=fixme
     def print(self, data, depth=0):
         row = []
         if self._entry is not None:

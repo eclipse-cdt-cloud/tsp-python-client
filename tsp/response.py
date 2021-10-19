@@ -82,7 +82,6 @@ class GenericResponse(object):
             elif self.model_type == ModelType.XY_TREE:
                 self.model = EntryModel(params.get(MODEL_KEY))
             elif self.model_type == ModelType.STATES:  # pragma: no cover
-                # TODO
                 print("not implemented")
             elif self.model_type == ModelType.XY:
                 self.model = XYModel(params.get(MODEL_KEY))

@@ -83,6 +83,7 @@ def print_output(output):
           output.description, output.type, output.id))
 
 
+# pylint: disable=fixme,line-too-long
 def print_outputs(descriptors):
     if not descriptors:
         print('No output descriptors for trace {0} ({1}))'.format(
