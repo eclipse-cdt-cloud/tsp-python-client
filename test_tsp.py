@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+"""TestTspClient class file."""
+
 import os
 import time
 
@@ -69,15 +71,18 @@ class TestTspClient:
 
     @pytest.fixture(scope='module')
     def extension(self):
+        """Absolute xml analysis file path."""
         return (f'{os.getcwd()}/org.eclipse.tracecompass.incubator/tracetypes/'
                 f'org.eclipse.tracecompass.incubator.ftrace.core/xml_analyses/{self.name}')
 
     @pytest.fixture(scope='module')
     def kernel(self):
+        """Absolute kernel test trace path."""
         return f'{os.getcwd()}/tracecompass-test-traces/ctf/src/main/resources/kernel'
 
     @pytest.fixture(scope='module')
     def other(self):
+        """Absolute kernel-vm test trace path."""
         return f'{os.getcwd()}/tracecompass-test-traces/ctf/src/main/resources/kernel_vm'
 
     @pytest.fixture(scope="module", autouse=True)
@@ -92,11 +97,13 @@ class TestTspClient:
         self._delete_traces()
 
     def test_fetch_traces_none(self):
+        """Expect no traces without opening any."""
         response = self.tsp_client.fetch_traces()
         assert response.status_code == 200
         assert not response.model.traces
 
     def test_open_trace_twice(self, kernel, other):
+        """Expect two traces after opening them."""
         response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
         assert response.status_code == 200
         response = self.tsp_client.open_trace(os.path.basename(other), other)
@@ -107,6 +114,7 @@ class TestTspClient:
         self._delete_traces()
 
     def test_fetch_opened_trace(self, kernel):
+        """Expect trace that was opened."""
         response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
         assert response.status_code == 200
         expected_uuid = response.model.UUID
@@ -117,6 +125,7 @@ class TestTspClient:
         self._delete_traces()
 
     def test_opened_trace_deleted(self, kernel):
+        """Expect no trace after deletion."""
         response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
         assert response.status_code == 200
         trace_uuid = response.model.UUID
@@ -128,6 +137,7 @@ class TestTspClient:
         assert response.status_code == 404
 
     def test_opened_trace_deleted_with_cache(self, kernel):
+        """Expect trace deleted while removing cache."""
         response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
         assert response.status_code == 200
         trace_uuid = response.model.UUID
@@ -137,11 +147,13 @@ class TestTspClient:
         assert response.status_code == 200
 
     def test_fetch_experiments_none(self):
+        """Expect no experiments without opening any (nor traces)."""
         response = self.tsp_client.fetch_experiments()
         assert response.status_code == 200
         assert not response.model.experiments
 
     def test_open_experiment(self, kernel, other):
+        """Expect experiment after opening it with traces."""
         traces = []
         response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
         traces.append(response.model.UUID)
@@ -158,6 +170,7 @@ class TestTspClient:
         self._delete_traces()
 
     def test_fetch_opened_experiment(self, kernel):
+        """Expect experiment that was opened."""
         traces = []
         response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
         traces.append(response.model.UUID)
@@ -173,6 +186,7 @@ class TestTspClient:
         self._delete_traces()
 
     def test_opened_experiment_deleted(self, kernel):
+        """Expect no experiment after deletion."""
         traces = []
         response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
         traces.append(response.model.UUID)
@@ -189,6 +203,7 @@ class TestTspClient:
         assert response.status_code == 404
 
     def test_fetch_experiment_outputs(self, kernel):
+        """Expect some experiment outputs."""
         traces = []
         response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
         traces.append(response.model.UUID)
@@ -204,6 +219,7 @@ class TestTspClient:
         self._delete_traces()
 
     def test_fetch_experiment_output(self, kernel):
+        """Expect opened experiment output."""
         traces = []
         response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
         traces.append(response.model.UUID)
@@ -222,6 +238,7 @@ class TestTspClient:
         self._delete_traces()
 
     def test_fetch_timegraph_tree(self, kernel):
+        """Expect timegraph tree out of opened trace experiment."""
         traces = []
         response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
         traces.append(response.model.UUID)
@@ -240,6 +257,7 @@ class TestTspClient:
         self._delete_traces()
 
     def test_fetch_xy_tree(self, kernel):
+        """Expect XY tree out of opened trace experiment."""
         traces = []
         response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
         traces.append(response.model.UUID)
@@ -257,6 +275,7 @@ class TestTspClient:
         self._delete_traces()
 
     def test_fetch_xy(self, kernel):
+        """Expect XY data out of completed trace experiment."""
         traces = []
         response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
         traces.append(response.model.UUID)
@@ -283,6 +302,7 @@ class TestTspClient:
         self._delete_traces()
 
     def test_fetch_timegraph_tree_complete(self, kernel):
+        """Expect completing timegraph tree."""
         traces = []
         response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
         traces.append(response.model.UUID)
@@ -309,11 +329,13 @@ class TestTspClient:
         self._delete_traces()
 
     def test_fetch_extensions_none(self):
+        """Expect no extensions without posting any."""
         response = self.tsp_client.fetch_extensions()
         assert response.status_code == 200
         assert not response.model.extension_set
 
     def test_post_extension(self, extension):
+        """Expect extension after posting it."""
         response = self.tsp_client.post_extension(extension)
         assert response.status_code == 200
 
@@ -324,6 +346,7 @@ class TestTspClient:
         assert response.status_code == 200
 
     def test_posted_extension_deleted(self, extension):
+        """Expect no extension after deletion."""
         response = self.tsp_client.post_extension(extension)
         response = self.tsp_client.delete_extension(self.name)
         assert response.status_code == 200
