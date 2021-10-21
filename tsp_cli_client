@@ -106,10 +106,10 @@ def __get_descriptor(uuid, output_id):
     return None
 
 
-description = """CLI client to send Trace Server Protocol commands to a Trace Server."""
+DESCRIPTION = """CLI client to send Trace Server Protocol commands to a Trace Server."""
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=description)
+    parser = argparse.ArgumentParser(description=DESCRIPTION)
 
     parser.add_argument("--ip", dest="ip_address",
                         help="IP address  of trace server", metavar="IP", default="localhost")
@@ -169,9 +169,9 @@ if __name__ == "__main__":
         parser.print_help()
         sys.exit(1)
 
-    api_url_base = 'http://{0}:{1}/tsp/api/'.format(
+    API_URL_BASE = 'http://{0}:{1}/tsp/api/'.format(
         options.ip_address, options.port)
-    tsp_client = TspClient(api_url_base)
+    tsp_client = TspClient(API_URL_BASE)
 
     try:
         if options.trace:
