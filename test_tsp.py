@@ -75,13 +75,15 @@ class TestTspClient:
         return (f'{os.getcwd()}/org.eclipse.tracecompass.incubator/tracetypes/'
                 f'org.eclipse.tracecompass.incubator.ftrace.core/xml_analyses/{self.name}')
 
+    @staticmethod
     @pytest.fixture(scope='module')
-    def kernel(self):
+    def kernel():
         """Absolute kernel test trace path."""
         return f'{os.getcwd()}/tracecompass-test-traces/ctf/src/main/resources/kernel'
 
+    @staticmethod
     @pytest.fixture(scope='module')
-    def other(self):
+    def other():
         """Absolute kernel-vm test trace path."""
         return f'{os.getcwd()}/tracecompass-test-traces/ctf/src/main/resources/kernel_vm'
 
@@ -354,7 +356,8 @@ class TestTspClient:
         response = self.tsp_client.fetch_extensions()
         assert not response.model.extension_set
 
-    def __requested_parameters(self, response):
+    @staticmethod
+    def __requested_parameters(response):
         parameters = {}
         requested_items = []
         for entry in response.model.model.entries:
