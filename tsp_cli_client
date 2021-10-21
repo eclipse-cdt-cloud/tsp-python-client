@@ -43,6 +43,8 @@ from tsp.tsp_client import TspClient
 #api_token = 'your_token_goes_here'
 NS_PER_SEC = 1000000000
 
+# pylint: disable=consider-using-f-string
+
 
 def __print_uuid(elem):
     return colored(elem.UUID, 'yellow')
@@ -52,7 +54,8 @@ def __print_experiment(elem):
     print('Experiment:')
     print('----------')
     print('  {0}: ({1}) start={2} end={3} nbEvents={4} indexing={5}'.format(
-        elem.name, __print_uuid(elem), elem.start, elem.end, elem.number_of_events, elem.indexin_status))
+        elem.name, __print_uuid(elem), elem.start, elem.end,
+        elem.number_of_events, elem.indexin_status))
     print('Trace(s):')
     print('------')
     for elem_trace in elem.traces.traces:
@@ -61,7 +64,8 @@ def __print_experiment(elem):
 
 def __print_trace(elem):
     print('    {0}: {1} ({2}) start={3} end={4} nbEvents={5} indexing={6}'.format(
-        elem.name, elem.path, __print_uuid(elem), elem.start, elem.end, elem.number_of_events, elem.indexin_status))
+        elem.name, elem.path, __print_uuid(elem), elem.start, elem.end,
+        elem.number_of_events, elem.indexin_status))
 
 
 def __print_time(elem):
