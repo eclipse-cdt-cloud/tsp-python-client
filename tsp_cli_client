@@ -68,16 +68,16 @@ def __print_time(elem):
     try:
         elem_dec = Decimal(elem)
         time = int(int(elem_dec) / NS_PER_SEC)
-        ns = int(elem_dec) % NS_PER_SEC
+        nanos = int(elem_dec) % NS_PER_SEC
         if (time != 0):
-            return '{0} s'.format(timedelta(seconds=time, microseconds=ns/1000))
-        if ns > 1000000:
-            return '{0} ms'.format(ns / 1000000)
-        if ns > 1000:
-            return '{0} µs'.format(ns / 1000)
-        return '{0} ns'.format(ns)
-    except ValueError as ve:
-        print(ve)
+            return '{0} s'.format(timedelta(seconds=time, microseconds=nanos/1000))
+        if nanos > 1000000:
+            return '{0} ms'.format(nanos / 1000000)
+        if nanos > 1000:
+            return '{0} µs'.format(nanos / 1000)
+        return '{0} ns'.format(nanos)
+    except ValueError as error:
+        print(error)
         return elem
 
 
@@ -91,8 +91,8 @@ def __print_outputs(descriptors):
     if not descriptors:
         print('No output descriptors for trace {0} ({1}))'.format(
             t.name, __print_uuid(t)))
-    for o in output_descriptors.descriptors:
-        __print_output(o)
+    for descriptor in output_descriptors.descriptors:
+        __print_output(descriptor)
         # TODO remove when available
         #if (o.id == "org.eclipse.tracecompass.internal.analysis.profiling.callstack.provider.CallStackDataProvider"):
         #    print('  {0}: {1} ({2})'.format("Function Duration Statistics", "Function Duration Statistics",
