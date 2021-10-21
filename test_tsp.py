@@ -38,6 +38,7 @@ REQUESTED_TIME_STEP = (REQUESTED_TIME_END -
                        REQUESTED_TIME_START) / REQUESTED_TIME_LENGTH
 
 
+# pylint: disable=too-many-public-methods
 class TestTspClient:
     """TspClient test methods.
 
