@@ -43,21 +43,21 @@ class TreeModel(object):
 
             parent = id_map[entry.parent_id]
             # pylint: disable=consider-iterating-dictionary
-            if (entry.parent_id in id_map.keys() and elem not in parent.get_children()):
+            if entry.parent_id in id_map.keys() and elem not in parent.get_children():
                 parent.add_child(elem)
                 elem.set_parent(parent)
 
     def print(self):
         """Render this tree model."""
         data = []
-        if (self._descriptors is not None):
+        if self._descriptors is not None:
             headers = []
             for descriptor in self._descriptors:
                 headers.append(descriptor.text)
             for child in self._root.get_children():
                 data = child.print(data, 0)
             df = {}
-            if (len(headers) == len(data)):
+            if len(headers) == len(data):
                 df = pd.DataFrame(data, columns=headers)
             else:
                 df = pd.DataFrame(data)
@@ -115,7 +115,7 @@ class TreeItem(object):
             if depth > 0:
                 prefix = "|____"
             if len(labels) == 1:
-                if(depth > 0):
+                if depth > 0:
                     print("  ", end="")
                 for _ in range((int)(depth / self._indent) - 1):
                     print("| ", end="")
@@ -125,14 +125,14 @@ class TreeItem(object):
                     prefix, self._entry.labels[0], self._entry.id, self._entry.parent_id))
             else:
                 label_str = ""
-                if(depth > 0):
+                if depth > 0:
                     label_str = label_str + "  "
                 for _ in range((int)(depth / self._indent) - 1):
                     label_str = label_str + "| "
                 i = 0
                 label_str = label_str + prefix
                 for label in labels:
-                    if (i == 0):
+                    if i == 0:
                         row.append(label_str + label)
                     else:
                         row.append(label)
