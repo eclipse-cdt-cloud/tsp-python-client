@@ -42,6 +42,7 @@ class TreeModel(object):
             id_map[entry.id] = elem
 
             parent = id_map[entry.parent_id]
+            # pylint: disable=consider-iterating-dictionary
             if (entry.parent_id in id_map.keys() and elem not in parent.get_children()):
                 parent.add_child(elem)
                 elem.set_parent(parent)
