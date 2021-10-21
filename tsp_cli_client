@@ -29,8 +29,6 @@
 import argparse
 import sys
 
-from datetime import timedelta
-from decimal import Decimal
 from os.path import os
 
 import argcomplete
@@ -66,23 +64,6 @@ def __print_trace(elem):
     print('    {0}: {1} ({2}) start={3} end={4} nbEvents={5} indexing={6}'.format(
         elem.name, elem.path, __print_uuid(elem), elem.start, elem.end,
         elem.number_of_events, elem.indexin_status))
-
-
-def __print_time(elem):
-    try:
-        elem_dec = Decimal(elem)
-        time = int(int(elem_dec) / NS_PER_SEC)
-        nanos = int(elem_dec) % NS_PER_SEC
-        if time != 0:
-            return '{0} s'.format(timedelta(seconds=time, microseconds=nanos/1000))
-        if nanos > 1000000:
-            return '{0} ms'.format(nanos / 1000000)
-        if nanos > 1000:
-            return '{0} µs'.format(nanos / 1000)
-        return '{0} ns'.format(nanos)
-    except ValueError as error:
-        print(error)
-        return elem
 
 
 def __print_output(output):
