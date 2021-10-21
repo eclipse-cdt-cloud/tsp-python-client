@@ -26,16 +26,17 @@
 
 """Manual CLI script file."""
 
-import argcomplete
 import argparse
-import requests
 import sys
 
-from termcolor import colored
 from datetime import timedelta
 from decimal import Decimal
 from os.path import os
 
+import argcomplete
+import requests
+
+from termcolor import colored
 from tree_model import TreeModel
 from tsp.tsp_client import TspClient
 
