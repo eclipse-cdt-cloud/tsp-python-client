@@ -56,12 +56,12 @@ class TreeModel(object):
                 headers.append(descriptor.text)
             for child in self._root.get_children():
                 data = child.print(data, 0)
-            df = {}
+            frame = {}
             if len(headers) == len(data):
-                df = pd.DataFrame(data, columns=headers)
+                frame = pd.DataFrame(data, columns=headers)
             else:
-                df = pd.DataFrame(data)
-            print(tabulate(df.values, headers, tablefmt="fancy_grid"))
+                frame = pd.DataFrame(data)
+            print(tabulate(frame.values, headers, tablefmt="fancy_grid"))
         else:
             for child in self._root.get_children():
                 child.print(data, 0)
