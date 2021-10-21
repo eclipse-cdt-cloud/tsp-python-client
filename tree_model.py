@@ -20,12 +20,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+"""TreeModel and TreeItem classes file."""
+
 from tabulate import tabulate
 
 import pandas as pd
 
 
 class TreeModel(object):
+    """TreeModel class implementation."""
 
     def __init__(self, entries, descriptors=None):
         self._descriptors = descriptors
@@ -44,6 +47,7 @@ class TreeModel(object):
                 elem.set_parent(parent)
 
     def print(self):
+        """Render this tree model."""
         data = []
         if (self._descriptors is not None):
             headers = []
@@ -63,6 +67,7 @@ class TreeModel(object):
 
 
 class TreeItem(object):
+    """TreeItem class implementation."""
 
     def __init__(self, entry=None):
         self._entry = entry
@@ -72,28 +77,36 @@ class TreeItem(object):
         self._indent = 2
 
     def set_parent(self, parent):
+        """Set the parent for this tree item."""
         self._parent = parent
 
     def get_parent(self):
+        """Return the parent set for this tree item."""
         return self._parent
 
     def set_entry(self, entry):
+        """Set the entry for this tree item."""
         self._entry = entry
 
     def get_entry(self):
+        """Return the entry set for this tree item."""
         return self._entry
 
     def set_trace(self, trace):
+        """Set the trace for this tree item."""
         self._trace = trace
 
     def add_child(self, child):
+        """Add the child as part of this tree item's children."""
         self._children.append(child)
 
     def get_children(self):
+        """Return the children set for this tree item."""
         return self._children
 
     # pylint: disable=fixme
     def print(self, data, depth=0):
+        """Render this tree item."""
         row = []
         if self._entry is not None:
             labels = self._entry.labels
