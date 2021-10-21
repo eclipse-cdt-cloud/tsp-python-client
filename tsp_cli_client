@@ -69,7 +69,7 @@ def __print_time(elem):
         elem_dec = Decimal(elem)
         time = int(int(elem_dec) / NS_PER_SEC)
         nanos = int(elem_dec) % NS_PER_SEC
-        if (time != 0):
+        if time != 0:
             return '{0} s'.format(timedelta(seconds=time, microseconds=nanos/1000))
         if nanos > 1000000:
             return '{0} ms'.format(nanos / 1000000)
@@ -94,7 +94,7 @@ def __print_outputs(descriptors):
     for descriptor in output_descriptors.descriptors:
         __print_output(descriptor)
         # TODO remove when available
-        #if (o.id == "org.eclipse.tracecompass.internal.analysis.profiling.callstack.provider.CallStackDataProvider"):
+        #if o.id == "org.eclipse.tracecompass.internal.analysis.profiling.callstack.provider.CallStackDataProvider"):
         #    print('  {0}: {1} ({2})'.format("Function Duration Statistics", "Function Duration Statistics",
         #          "org.eclipse.tracecompass.internal.analysis.profiling.core.callgraph.callgraphanalysis.statistics"))
 
@@ -174,7 +174,7 @@ if __name__ == "__main__":
     tsp_client = TspClient(api_url_base)
 
     try:
-        if (options.trace):
+        if options.trace:
             if options.name is not None:
                 response = tsp_client.open_trace(options.name, options.trace)
                 if response.status_code == 200:
@@ -187,7 +187,7 @@ if __name__ == "__main__":
                 print("Provide a name for the trace using option --name")
                 sys.exit(1)
 
-        if (options.list_trace):
+        if options.list_trace:
             response = tsp_client.fetch_trace(options.list_trace)
             if response.status_code == 200:
                 res = response.model
@@ -196,7 +196,7 @@ if __name__ == "__main__":
             else:
                 sys.exit(1)
 
-        if (options.list_traces):
+        if options.list_traces:
             response = tsp_client.fetch_traces()
             if response.status_code == 200:
                 if not response.model.traces:
@@ -207,7 +207,7 @@ if __name__ == "__main__":
             else:
                 sys.exit(1)
 
-        if (options.delete_trace):
+        if options.delete_trace:
             response = tsp_client.delete_trace(options.delete_trace, False)
             if response.status_code == 200:
                 print("Successfully deleted trace")
@@ -216,7 +216,7 @@ if __name__ == "__main__":
                 sys.exit(1)
 
         trace_uuids = []
-        if (options.experiment):
+        if options.experiment:
             if options.paths is not None:
                 for path in options.paths:
                     name = os.path.basename(os.path.normpath(path))
@@ -241,7 +241,7 @@ if __name__ == "__main__":
             else:
                 sys.exit(1)
 
-        if (options.list_experiment):
+        if options.list_experiment:
             response = tsp_client.fetch_experiment(options.list_experiment)
             if response.status_code == 200:
                 res = response.model
@@ -250,7 +250,7 @@ if __name__ == "__main__":
             else:
                 sys.exit(1)
 
-        if (options.list_experiments):
+        if options.list_experiments:
             response = tsp_client.fetch_experiments()
             if response.status_code == 200:
                 if not response.model.experiments:
@@ -261,11 +261,11 @@ if __name__ == "__main__":
             else:
                 sys.exit(1)
 
-        if (options.delete_experiment):
+        if options.delete_experiment:
             response = tsp_client.delete_experiment(options.delete_experiment)
             if response.status_code == 200:
                 print("Successfully deleted experiment")
-                if (options.do_delete_traces):
+                if options.do_delete_traces:
                     for trace in response.model.traces.traces:
                         del_response = tsp_client.delete_trace(
                             trace.UUID, False)
@@ -277,7 +277,7 @@ if __name__ == "__main__":
             else:
                 sys.exit(1)
 
-        if (options.list_outputs):
+        if options.list_outputs:
             response = tsp_client.fetch_experiment_outputs(
                 options.list_outputs)
             if response.status_code == 200:
@@ -288,22 +288,22 @@ if __name__ == "__main__":
                 print("List outputs failed")
                 sys.exit(1)
 
-        if (options.list_output):
+        if options.list_output:
             if options.uuid is not None:
                 output_descriptor = __get_descriptor(
                     options.uuid, options.list_output)
-                if (output_descriptor is not None):
+                if output_descriptor is not None:
                     print(output_descriptor)
             else:
                 print("Trace UUID is missing")
                 sys.exit(1)
 
-        if (options.get_tree):
+        if options.get_tree:
             if options.uuid is not None:
 
                 output_descriptor = __get_descriptor(
                     options.uuid, options.get_tree)
-                if (output_descriptor is None):
+                if output_descriptor is None:
                     sys.exit(1)
 
                 response = tsp_client.fetch_timegraph_tree(
@@ -314,7 +314,7 @@ if __name__ == "__main__":
                         print("Tree had no model; retry?")
                         sys.exit(1)
 
-                    if (output_descriptor.type == "DATA_TREE"):
+                    if output_descriptor.type == "DATA_TREE":
                         treeModel = TreeModel(tree.entries, tree.descriptors)
                     else:
                         treeModel = TreeModel(tree.entries)
@@ -326,12 +326,12 @@ if __name__ == "__main__":
                 print("Trace UUID is missing")
                 sys.exit(1)
 
-        if (options.get_xy_tree):
+        if options.get_xy_tree:
             if options.uuid is not None:
 
                 output_descriptor = __get_descriptor(
                     options.uuid, options.get_xy_tree)
-                if (output_descriptor is None):
+                if output_descriptor is None:
                     sys.exit(1)
 
                 response = tsp_client.fetch_xy_tree(
@@ -342,7 +342,7 @@ if __name__ == "__main__":
                         print("Tree had no model; retry?")
                         sys.exit(1)
 
-                    if (output_descriptor.type == "TREE_TIME_XY"):
+                    if output_descriptor.type == "TREE_TIME_XY":
                         treeModel = TreeModel(tree.entries, tree.descriptors)
                     else:
                         treeModel = TreeModel(tree.entries)
@@ -354,7 +354,7 @@ if __name__ == "__main__":
                 print("Trace UUID is missing")
                 sys.exit(1)
 
-        if (options.get_xy):
+        if options.get_xy:
             if not options.items or not options.times:
                 print("Provide requested --items and --times for the XY data")
                 sys.exit(1)
@@ -376,7 +376,7 @@ if __name__ == "__main__":
                 print("Trace UUID is missing")
                 sys.exit(1)
 
-        if (options.extensions):
+        if options.extensions:
             response = tsp_client.fetch_extensions()
             if response.status_code == 200:
                 extension_set = response.model
@@ -388,14 +388,14 @@ if __name__ == "__main__":
             else:
                 sys.exit(1)
 
-        if (options.load_extension):
+        if options.load_extension:
             response = tsp_client.post_extension(options.load_extension)
             if response.status_code == 200:
                 sys.exit(0)
             else:
                 sys.exit(1)
 
-        if (options.delete_extension):
+        if options.delete_extension:
             response = tsp_client.delete_extension(options.delete_extension)
             if response.status_code == 200:
                 sys.exit(0)
