@@ -3,7 +3,7 @@
 Client-side implementation, in Python, of the [Trace Server Protocol (TSP)][tsp].
 
 It provides a module that can be included in Python scripts to query a trace server via the Trace Server Protocol (TSP).
-The script **tsp-cli-client** provides a command-line interface for querying a trace server.
+The script **tsp_cli_client** provides a command-line interface for querying a trace server.
 
 An example trace server implementation is provided by the [Eclipse Trace Compass Incubator][inc] project and can be downloaded [here][rcp].
 It can be used to test this script and module.
@@ -12,7 +12,7 @@ This trace server bundles non-UI, core plug-ins of the [Eclipse Trace Compass][e
 
 ## Status
 
-- The **tsp-cli-client** script and the **tsp** module is under construction.
+- The **tsp_cli_client** script and the **tsp** module is under construction.
 - This is an initial draft and only limited features have been currently implemented.
 - **tsp** module only provides some limited number of TSP calls.
 - The API will undergo revision till a stable version is reached.
@@ -48,14 +48,14 @@ pytest --cov tsp --cov-report term-missing:skip-covered
 
 ## Usage
 
-To activate completion for **tsp-cli-client** options, follow [these instructions][agc].
+To activate completion for **tsp_cli_client** options, follow [these instructions][agc].
 
-To use the **tsp-cli-client** script, type the following command in the root directory to get the usage:
+To use the **tsp_cli_client** script, type the following command in the root directory to get the usage:
 
 ```python
-./tsp-cli-client -h
+./tsp_cli_client -h
 
-usage: tsp-cli-client [-h] [--ip IP] [--port PORT] [--open-trace TRACE_PATH]
+usage: tsp_cli_client [-h] [--ip IP] [--port PORT] [--open-trace TRACE_PATH]
                       [--name NAME] [--list-trace UUID] [--list-traces]
                       [--delete-trace UUID] [--open-experiment EXP_NAME]
                       [--list-experiment UUID] [--list-experiments]

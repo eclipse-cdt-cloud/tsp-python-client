@@ -45,7 +45,7 @@ class TestTspClient:
     [2] This means that some asserts only appear in the test that specifically exercises them.
     [3] Asserts for teardown test steps are otherwise repeated to confirm data deletions.
     [4] This is to diagnose potential subsequent test failures caused by uncleaned server data.
-    [5] Should data get corrupted by test runs, ./tsp-cli-client can be used to manually clean it.
+    [5] Should data get corrupted by test runs, ./tsp_cli_client can be used to manually clean it.
     [6] Some setup steps are minimized where the test method scope doesn't require more data.
     """
 
