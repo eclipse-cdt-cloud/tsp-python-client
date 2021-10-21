@@ -105,7 +105,8 @@ class TreeItem(object):
                     print("  ", end="")
                 for _ in range((int)(depth / self._indent) - 1):
                     print("| ", end="")
-                # TODO print TimeGraphEntry specific fields
+                # TODO print TimeGraphEntry specific fields below; re-enable pylint's:
+                # pylint: disable=consider-using-f-string
                 print("{0}{1} ({1}, {2}) {3}".format(
                     prefix, self._entry.labels[0], self._entry.id, self._entry.parent_id))
             else:
