@@ -27,7 +27,7 @@ from tabulate import tabulate
 import pandas as pd
 
 
-class TreeModel(object):
+class TreeModel:
     """TreeModel class implementation."""
 
     def __init__(self, entries, descriptors=None):
@@ -67,7 +67,7 @@ class TreeModel(object):
                 child.print(data, 0)
 
 
-class TreeItem(object):
+class TreeItem:
     """TreeItem class implementation."""
 
     def __init__(self, entry=None):
