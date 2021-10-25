@@ -27,6 +27,7 @@ from tabulate import tabulate
 import pandas as pd
 
 
+# pylint: disable=too-few-public-methods
 class TreeModel:
     """TreeModel class implementation."""
 
