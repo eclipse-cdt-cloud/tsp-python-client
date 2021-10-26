@@ -63,6 +63,9 @@ class XYModel(object):
             del params[SERIES_KEY]
 
     def print(self):  # pragma: no cover
+        '''
+        XY model rendering below
+        '''
         print(f'XY title: {self.title}')
 
         common_x_axis = False
@@ -124,6 +127,9 @@ class XYSeries(object):
             del params[TAGS_KEY]
 
     def print(self):  # pragma: no cover
+        '''
+        XY series rendering below
+        '''
         print(f' Series name: {self.series_name}')
         print(f' Series id: {self.series_id}')
 
@@ -162,6 +168,9 @@ class XYAxis(object):
             del params[DATA_TYPE_KEY]
 
     def print(self):  # pragma: no cover
+        '''
+        XY axis rendering
+        '''
         print(f'  Axis label: {self.label}')
         print(f'  Axis unit: {self.unit}')
         print(f'  Axis data type: {self.data_type}')
