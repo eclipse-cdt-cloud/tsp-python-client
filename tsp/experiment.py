@@ -35,7 +35,7 @@ TRACES_TIME_KEY = "traces"
 INDEXING_STATUS_KEY = "indexingStatus"
 
 
-class Experiment(object):
+class Experiment:
     '''
     Model of a single Experiment
     '''

@@ -25,7 +25,7 @@
 from tsp.experiment import Experiment
 
 
-class ExperimentSet(object):
+class ExperimentSet:
     '''
     classdocs
     '''

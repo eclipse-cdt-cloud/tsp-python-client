@@ -33,7 +33,7 @@ PATH_TIME_KEY = "path"
 INDEXING_STATUS_KEY = "indexingStatus"
 
 
-class Trace(object):
+class Trace:
     '''
     Model of a single trace
     '''

@@ -37,7 +37,7 @@ UNIT_KEY = "unit"
 DATA_TYPE_KEY = "dataType"
 
 
-class XYModel(object):
+class XYModel:
     '''
     Model of a XY chart, contains at least one XY series
     '''
@@ -77,7 +77,7 @@ class XYModel(object):
             series.print()
 
 
-class XYSeries(object):
+class XYSeries:
     '''
     Represent a XY series and its values
     '''
@@ -144,7 +144,7 @@ class XYSeries(object):
             print(f' Series tag: {tag}')
 
 
-class XYAxis(object):
+class XYAxis:
     '''
     Description of an axis for XY chart
     '''

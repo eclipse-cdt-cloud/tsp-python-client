@@ -35,7 +35,7 @@ IS_FINAL_KEY = "final"
 COMPATIBLE_PROVIDERS_KEY = "compatibleProviders"
 
 
-class OutputDescriptor(object):
+class OutputDescriptor:
     '''
     classdocs
     '''

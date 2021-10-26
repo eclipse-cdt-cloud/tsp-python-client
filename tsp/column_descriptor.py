@@ -26,7 +26,7 @@ TEXT_KEY = "text"
 TOOLTIP_KEY = "tooltip"
 
 
-class ColumnDescriptor(object):
+class ColumnDescriptor:
     '''
     Basic entry
     '''

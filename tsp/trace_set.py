@@ -25,7 +25,7 @@
 from tsp.trace import Trace
 
 
-class TraceSet(object):
+class TraceSet:
     '''
     classdocs
     '''

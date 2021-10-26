@@ -28,7 +28,7 @@ RESPONSE_STATUS_KEY = "status"
 STATUS_MESSAGE_KEY = "statusMessage"
 
 
-class TspClientResponse(object):
+class TspClientResponse:
     '''
     Class that for providing the tsp
     '''

@@ -23,7 +23,7 @@
 """Extension class file."""
 
 
-class Extension(object):
+class Extension:
     '''
     Class to handle extensions available on the remote node
     '''

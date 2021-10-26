@@ -32,7 +32,7 @@ ENTRIES_KEY = "entries"
 DESCRIPTORS_KEY = "columnDescriptors"
 
 
-class EntryModel(object):
+class EntryModel:
     '''
     Entry model that will be returned by the server
     '''

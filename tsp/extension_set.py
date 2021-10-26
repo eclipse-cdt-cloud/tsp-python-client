@@ -25,7 +25,7 @@
 from tsp.extension import Extension
 
 
-class ExtensionSet(object):
+class ExtensionSet:
     '''
     Class to handle extensions available on the remote node
     '''

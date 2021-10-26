@@ -59,7 +59,7 @@ class ResponseStatus(Enum):
     CANCELLED = "CANCELLED"
 
 
-class GenericResponse(object):
+class GenericResponse:
     '''
     Output element style object for one style key. It supports style
     inheritance. To avoid creating new styles the element style can have a parent

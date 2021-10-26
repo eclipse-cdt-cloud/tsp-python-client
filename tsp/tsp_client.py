@@ -41,7 +41,7 @@ headers_form = {'content-type': 'application/x-www-form-urlencoded',
 
 
 # pylint: disable=consider-using-f-string
-class TspClient(object):
+class TspClient:
     '''
     Trace Server Protocol tsp_cli_client
     '''

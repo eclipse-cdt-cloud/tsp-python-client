@@ -32,7 +32,7 @@ HEADER_NAME_KEY = "name"
 UNKNOWN_ID = -1
 
 
-class EntryHeader(object):
+class EntryHeader:
     '''
     Entry Header
     '''
@@ -44,7 +44,7 @@ class EntryHeader(object):
         self.name = params
 
 
-class Entry(object):
+class Entry:
     '''
     Basic entry
     '''

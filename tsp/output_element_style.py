@@ -27,7 +27,7 @@ SYTLE_VALUES_KEY = "styleValues"
 STYLES_KEY = "styles"
 
 
-class OutputElementStyle(object):
+class OutputElementStyle:
     '''
     Output element style object for one style key. It supports style
     inheritance. To avoid creating new styles the element style can have a parent
@@ -55,7 +55,7 @@ class OutputElementStyle(object):
             self.style_values = {}
 
 
-class OutputStyleModel(object):
+class OutputStyleModel:
     '''
     Style model that will be returned by the server
     '''

@@ -69,7 +69,7 @@ class TimeGraphEntry(Entry):
             del params[HAS_ROW_MODEL_KEY]
 
 
-class TimeGraphModel(object):
+class TimeGraphModel:
     '''
     Time Graph model that will be returned by the server
     '''
@@ -82,7 +82,7 @@ class TimeGraphModel(object):
             del params[ROWS_KEY]
 
 
-class TimeGraphRow(object):
+class TimeGraphRow:
     '''
     Time graph row described by an array of states for a specific entry
     '''
@@ -103,7 +103,7 @@ class TimeGraphRow(object):
             del params[STATES_KEY]
 
 
-class TimeGraphState(object):
+class TimeGraphState:
     '''
     Time graph state
     '''
@@ -142,7 +142,7 @@ class TimeGraphState(object):
             del params[STYLE_KEY]
 
 
-class TimeGraphArrow(object):
+class TimeGraphArrow:
     '''
     Arrow for time graph
     '''

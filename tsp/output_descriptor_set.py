@@ -25,7 +25,7 @@
 from tsp.output_descriptor import OutputDescriptor
 
 
-class OutputDescriptorSet(object):
+class OutputDescriptorSet:
     '''
     classdocs
     '''
