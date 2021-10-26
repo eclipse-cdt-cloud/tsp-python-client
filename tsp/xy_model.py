@@ -48,16 +48,12 @@ class XYModel(object):
             self.title = params.get(TITLE_KEY)
             del params[TITLE_KEY]
 
-        '''
-        Indicate if all the Y values are using the same X axis
-        '''
+        # Indicate if all the Y values are using the same X axis
         if COMMON_X_AXIS_KEY in params:
             self.common_x_axis = params.get(COMMON_X_AXIS_KEY)
             del params[COMMON_X_AXIS_KEY]
 
-        '''
-        Array of XY series
-        '''
+        # Array of XY series
         self.series = []
         if SERIES_KEY in params:
             for series in params.get(SERIES_KEY):
@@ -89,48 +85,36 @@ class XYSeries(object):
             self.series_name = params.get(SERIES_NAME_KEY)
             del params[SERIES_NAME_KEY]
 
-        '''
-        Ìd of the series
-        '''
+        # Ìd of the series
         if SERIES_ID_KEY in params:
             self.series_id = params.get(SERIES_ID_KEY)
             del params[SERIES_ID_KEY]
 
-        '''
-        Description of the X axis
-        '''
+        # Description of the X axis
         if X_AXIS_KEY in params:
             self.x_axis = XYAxis(params.get(X_AXIS_KEY))
             del params[X_AXIS_KEY]
 
-        '''
-        Description of the Y axis
-        '''
+        # Description of the Y axis
         if Y_AXIS_KEY in params:
             self.y_axis = XYAxis(params.get(Y_AXIS_KEY))
             del params[Y_AXIS_KEY]
 
-        '''
-        Series' X values
-        '''
+        # Series' X values
         self.x_values = []
         if X_VALUES_KEY in params:
             for x_value in params.get(X_VALUES_KEY):
                 self.x_values.append(x_value)
             del params[X_VALUES_KEY]
 
-        '''
-        Series' Y values
-        '''
+        # Series' Y values
         self.y_values = []
         if Y_VALUES_KEY in params:
             for y_value in params.get(Y_VALUES_KEY):
                 self.y_values.append(y_value)
             del params[Y_VALUES_KEY]
 
-        '''
-        Array of tags for each XY value, used when a value passes a filter
-        '''
+        # Array of tags for each XY value, used when a value passes a filter
         self.tags = []
         if TAGS_KEY in params:
             for tag in params.get(TAGS_KEY):
@@ -165,16 +149,12 @@ class XYAxis(object):
             self.label = params.get(LABEL_KEY)
             del params[LABEL_KEY]
 
-        '''
-        The units used for the axis, to be appended to the numbers
-        '''
+        # The units used for the axis, to be appended to the numbers
         if UNIT_KEY in params:
             self.unit = params.get(UNIT_KEY)
             del params[UNIT_KEY]
 
-        '''
-        Type of data for this axis, to give hint on number formatting
-        '''
+        # Type of data for this axis, to give hint on number formatting
         if DATA_TYPE_KEY in params:
             self.data_type = params.get(DATA_TYPE_KEY)
             del params[DATA_TYPE_KEY]

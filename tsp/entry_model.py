@@ -46,18 +46,14 @@ class EntryModel(object):
                     self.headers.append(EntryHeader(column))
             del params[HEADER_KEY]
 
-        '''
-        Array of column descriptors
-        '''
+        # Array of column descriptors
         self.descriptors = []
         if DESCRIPTORS_KEY in params:
             for column in params.get(DESCRIPTORS_KEY):
                 self.descriptors.append(ColumnDescriptor(column))
             del params[DESCRIPTORS_KEY]
 
-        '''
-        Array of entry
-        '''
+        # Array of entry
         self.entries = []
         if ENTRIES_KEY in params:
             for entry in params.get(ENTRIES_KEY):

@@ -38,9 +38,7 @@ class ColumnDescriptor(object):
             self.text = params.get(TEXT_KEY)
             del params[TEXT_KEY]
 
-        '''
-        Label of tooltip of the header
-        '''
+        # Label of tooltip of the header
         self.tooltip = ''
         if TOOLTIP_KEY in params:
             self.tooltip = params.get(TOOLTIP_KEY)

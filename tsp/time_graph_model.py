@@ -46,30 +46,22 @@ class TimeGraphEntry(Entry):
     def __init__(self, params):
         super(TimeGraphEntry, self).__init__(params)
 
-        '''
-        Type of the entry
-        '''
+        # Type of the entry
         if TYPE_KEY in params:
             self.type = params.get(TYPE_KEY)
             del params[TYPE_KEY]
 
-        '''
-        Start time of the entry
-        '''
+        # Start time of the entry
         if START_TIME_KEY in params:
             self.start_time = params.get(START_TIME_KEY)
             del params[START_TIME_KEY]
 
-        '''
-        End time of the entry
-        '''
+        # End time of the entry
         if END_TIME_KEY in params:
             self.end_time = params.get(END_TIME_KEY)
             del params[END_TIME_KEY]
 
-        '''
-        Indicate if the entry will have row data
-        '''
+        # Indicate if the entry will have row data
         if HAS_ROW_MODEL_KEY in params:
             self.has_row_model = params.get(HAS_ROW_MODEL_KEY)
             del params[HAS_ROW_MODEL_KEY]
@@ -101,9 +93,7 @@ class TimeGraphRow(object):
             self.entry_id = params.get(ENTRY_ID_KEY)
             del params[ENTRY_ID_KEY]
 
-        '''
-        Array of states
-        '''
+        # Array of states
         self.states = []
         if STATES_KEY in params:
             for state in params.get(STATES_KEY):
@@ -124,37 +114,27 @@ class TimeGraphState(object):
             self.start_time = params.get(START_TIME_KEY)
             del params[START_TIME_KEY]
 
-        '''
-        Duration of the state
-        '''
+        # Duration of the state
         if DURATION_KEY in params:
             self.duration = params.get(DURATION_KEY)
             del params[DURATION_KEY]
 
-        '''
-        Label to apply to the state
-        '''
+        # Label to apply to the state
         if LABEL_KEY in params:
             self.label = params.get(LABEL_KEY)
             del params[LABEL_KEY]
 
-        '''
-        Values associated to the state
-        '''
+        # Values associated to the state
         if VALUE_KEY in params:
             self.value = params.get(VALUE_KEY)
             del params[VALUE_KEY]
 
-        '''
-        Tags for the state, used when the state pass a filter
-        '''
+        # Tags for the state, used when the state pass a filter
         if TAGS_KEY in params:
             self.tags = params.get(TAGS_KEY)
             del params[TAGS_KEY]
 
-        '''
-        Optional information on the style to format this state
-        '''
+        # Optional information on the style to format this state
         if STYLE_KEY in params:
             self.style = params.get(STYLE_KEY)
             del params[STYLE_KEY]
@@ -173,37 +153,27 @@ class TimeGraphArrow(object):
             self.source_id = params.get(SOURCE_ID_TAG)
             del params[SOURCE_ID_TAG]
 
-        '''
-        Destination entry Id for the arrow
-        '''
+        # Destination entry Id for the arrow
         if DESTINATION_ID_TAG in params:
             self.destination_id = params.get(DESTINATION_ID_TAG)
             del params[DESTINATION_ID_TAG]
 
-        '''
-        Start time of the arrow
-        '''
+        # Start time of the arrow
         if START_TIME_KEY in params:
             self.start_time = params.get(START_TIME_KEY)
             del params[START_TIME_KEY]
 
-        '''
-        Duration of the arrow
-        '''
+        # Duration of the arrow
         if DURATION_KEY in params:
             self.duration = params.get(DURATION_KEY)
             del params[DURATION_KEY]
 
-        '''
-        Value associated to the arrow
-        '''
+        # Value associated to the arrow
         if VALUE_KEY in params:
             self.value = params.get(VALUE_KEY)
             del params[VALUE_KEY]
 
-        '''
-        Optional information on the style to format this arrow
-        '''
+        # Optional information on the style to format this arrow
         if STYLE_KEY in params:
             self.style = params.get(STYLE_KEY)
             del params[STYLE_KEY]

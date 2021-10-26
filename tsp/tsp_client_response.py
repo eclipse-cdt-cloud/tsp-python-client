@@ -28,7 +28,7 @@ STATUS_MESSAGE_KEY = "statusMessage"
 
 class TspClientResponse(object):
     '''
-    Class that for providing the tsp 
+    Class that for providing the tsp
     '''
 
     def __init__(self, model, status, status_text):
@@ -36,17 +36,11 @@ class TspClientResponse(object):
         Constructor
         '''
 
-        '''
-        The model of TSP call or None i 
-        '''
+        # The model of TSP call or None
         self.model = model
 
-        '''
-        The HTTP status code
-        '''
+        # The HTTP status code
         self.status_code = status
 
-        ''' 
-        The status message
-        '''
+        # The status message
         self.status_text = status_text

@@ -38,18 +38,14 @@ class OutputElementStyle(object):
         Constructor
         '''
 
-        '''
-        Parent style key
-        '''
+        # Parent style key
         if PARENTKEY_KEY in params:
             self.parent_key = params.get(PARENTKEY_KEY)
             del params[PARENTKEY_KEY]
         else:
             self.parent_key = None
 
-        '''
-        Style values to override or define properties
-        '''
+        # Style values to override or define properties
         if SYTLE_VALUES_KEY in params:
             self.style_values = params.get(SYTLE_VALUES_KEY)
             del params[SYTLE_VALUES_KEY]
@@ -67,9 +63,7 @@ class OutputStyleModel(object):
         Constructor
         '''
 
-        '''
-        Parent style key
-        '''
+        # Parent style key
         if STYLES_KEY in params:
             self.style = OutputElementStyle(params.get(STYLES_KEY))
             del params[STYLES_KEY]

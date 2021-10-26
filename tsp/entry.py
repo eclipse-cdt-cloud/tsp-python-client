@@ -56,26 +56,20 @@ class Entry(object):
             self.id = params.get(ID_KEY)
             del params[ID_KEY]
 
-        '''
-        Parent entry Id, or -1 if the entry does not have a parent
-        '''
+        # Parent entry Id, or -1 if the entry does not have a parent
         self.parent_id = UNKNOWN_ID
         if PARENT_ID_KEY in params:
             self.parent_id = params.get(PARENT_ID_KEY)
             del params[PARENT_ID_KEY]
 
-        '''
-        Array of string that represent the content of each column
-        '''
+        # Array of string that represent the content of each column
         self.labels = []
         if LABELS_KEY in params:
             self.labels = params.get(LABELS_KEY)
             del params[LABELS_KEY]
 
-        '''
-        Style key used to search for a style.
-        The style map can be obtained by using the style endpoint.
-        '''
+        # Style key used to search for a style.
+        # The style map can be obtained by using the style endpoint.
         self.style = None
         if STYLE_KEY in params:
             if params.get(STYLE_KEY) is not None:

@@ -71,9 +71,7 @@ class GenericResponse(object):
         '''
         self.model_type = model_type
 
-        '''
-        Model returned in the response
-        '''
+        # Model returned in the response
         self.model = params.get(MODEL_KEY)
         if MODEL_KEY in params and params.get(MODEL_KEY) is not None:
             if self.model_type == ModelType.TIME_GRAPH_TREE:
@@ -86,25 +84,19 @@ class GenericResponse(object):
             elif self.model_type == ModelType.XY:
                 self.model = XYModel(params.get(MODEL_KEY))
 
-        '''
-        Output descriptor
-        '''
+        # Output descriptor
         if OUTPUT_DESCRIPTOR_KEY in params:
             self.output = OutputDescriptor(params.get(OUTPUT_DESCRIPTOR_KEY))
         else:
             self.output = None
 
-        '''
-        Response status as described by ResponseStatus
-        '''
+        # Response status as described by ResponseStatus
         if RESPONSE_STATUS_KEY in params:
             self.status = ResponseStatus(params.get(RESPONSE_STATUS_KEY))
         else:  # pragma: no cover
             self.status = ResponseStatus.FAILED
 
-        '''
-        Message associated with the response
-        '''
+        # Message associated with the response
         if STATUS_MESSAGE_KEY in params:
             self.status = params.get(STATUS_MESSAGE_KEY)
         else:  # pragma: no cover

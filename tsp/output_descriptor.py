@@ -43,83 +43,65 @@ class OutputDescriptor(object):
         Constructor
         '''
 
-        '''
-        Output provider's ID
-        '''
+        # Output provider's ID
         if ID_KEY in params:
             self.id = params.get(ID_KEY)
             del params[ID_KEY]
         else:  # pragma: no cover
             self.id = None
 
-        '''
-        Human readable name
-        '''
+        # Human readable name
         if NAME_KEY in params:
             self.name = params.get(NAME_KEY)
             del params[NAME_KEY]
         else:  # pragma: no cover
             self.name = UNKOWN
 
-        '''
-        Description of the output provider
-        '''
+        # Description of the output provider
         if DESCRIPTION_KEY in params:
             self.description = params.get(DESCRIPTION_KEY)
             del params[DESCRIPTION_KEY]
         else:  # pragma: no cover
             self.description = UNKOWN
 
-        '''
-        Type of data returned by this output.
-        Serve as a hint to determine what kind of view should be use for this output (ex. XY, Time Graph, Table, etc..)
-        '''
+        # Type of data returned by this output.
+        # Serve as a hint to determine what kind of view should be use for this output (ex. XY, Time Graph, Table, etc..)
         if TYPE_KEY in params:
             self.type = params.get(TYPE_KEY)
             del params[TYPE_KEY]
         else:  # pragma: no cover
             self.type = UNKOWN
 
-        '''
-        Map of query parameters that the provider accept
-        '''
+        # Map of query parameters that the provider accept
         if QUERY_PARAMETERS_KEY in params:
             self.query_parameters = params.get(QUERY_PARAMETERS_KEY)
             del params[QUERY_PARAMETERS_KEY]
         else:
             self.query_parameters = {}
 
-        '''
-        Start time
-        '''
+        # Start time
         if START_TIME_KEY in params:
             self.start = params.get(START_TIME_KEY)
             del params[START_TIME_KEY]
         else:
             self.start = 0
 
-        '''
-        End time
-        '''
+        # End time
         if END_TIME_KEY in params:
             self.end = params.get(END_TIME_KEY)
             del params[END_TIME_KEY]
         else:
             self.end = 0
 
-        '''
-        Indicate if the start, end times and current model are final,
-        or if they will need to be refreshed later to represent a more up to date version
-        '''
+        # Indicate if the start, end times and current model are final,
+        # or if they will need to be refreshed later to represent a more up to date version
         if IS_FINAL_KEY in params:
             self.final = params.get(IS_FINAL_KEY)
             del params[IS_FINAL_KEY]
         else:
             self.final = 0
 
-        '''
-        List of compatible outputs that can be used in the same view (ex. as overlay)
-        '''
+        # List of compatible outputs that can be used in the same view (ex. as overlay)
         if COMPATIBLE_PROVIDERS_KEY in params:
             self.compatible_providers = params.get(COMPATIBLE_PROVIDERS_KEY)
             del params[COMPATIBLE_PROVIDERS_KEY]
