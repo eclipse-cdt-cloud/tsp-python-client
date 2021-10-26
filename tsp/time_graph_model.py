@@ -48,7 +48,7 @@ class TimeGraphEntry(Entry):
     '''
 
     def __init__(self, params):
-        super(TimeGraphEntry, self).__init__(params)
+        super().__init__(params)
 
         # Type of the entry
         if TYPE_KEY in params:
