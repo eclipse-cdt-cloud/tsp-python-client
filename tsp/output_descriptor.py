@@ -67,7 +67,8 @@ class OutputDescriptor(object):
             self.description = UNKOWN
 
         # Type of data returned by this output.
-        # Serve as a hint to determine what kind of view should be use for this output (ex. XY, Time Graph, Table, etc..)
+        # Serve as a hint to determine what kind of view should be use for this output
+        # (ex. XY, Time Graph, Table, etc..)
         if TYPE_KEY in params:
             self.type = params.get(TYPE_KEY)
             del params[TYPE_KEY]

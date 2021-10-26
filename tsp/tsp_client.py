@@ -65,7 +65,8 @@ class TspClient(object):
         api_url = '{0}traces'.format(self.base_url)
         response = requests.get(api_url, headers=headers)
         if response.status_code == 200:
-            return TspClientResponse(TraceSet(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+            return TspClientResponse(TraceSet(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
         else:  # pragma: no cover
             print("get traces failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
@@ -80,7 +81,8 @@ class TspClient(object):
         api_url = '{0}traces/{1}'.format(self.base_url, uuid)
         response = requests.get(api_url, headers=headers)
         if response.status_code == 200:
-            return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+            return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
         else:
             print("get trace failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
@@ -100,7 +102,8 @@ class TspClient(object):
         response = requests.post(api_url, json=parameters, headers=headers)
 
         if response.status_code == 200:
-            return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+            return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
         else:  # pragma: no cover
             print("post trace failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
@@ -124,7 +127,8 @@ class TspClient(object):
 
         response = requests.delete(api_url, json=parameters, headers=headers)
         if response.status_code == 200:
-            return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+            return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
         else:  # pragma: no cover
             print("delete trace failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
@@ -138,7 +142,8 @@ class TspClient(object):
         api_url = '{0}experiments'.format(self.base_url)
         response = requests.get(api_url, headers=headers)
         if response.status_code == 200:
-            return TspClientResponse(ExperimentSet(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+            return TspClientResponse(ExperimentSet(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
         else:  # pragma: no cover
             print("get experiments failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
@@ -153,7 +158,8 @@ class TspClient(object):
         api_url = '{0}experiments/{1}'.format(self.base_url, uuid)
         response = requests.get(api_url, headers=headers)
         if response.status_code == 200:
-            return TspClientResponse(Experiment(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+            return TspClientResponse(Experiment(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
         else:
             print("get trace failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
@@ -168,7 +174,8 @@ class TspClient(object):
         api_url = '{0}experiments/{1}'.format(self.base_url, uuid)
         response = requests.delete(api_url, headers=headers)
         if response.status_code == 200:
-            return TspClientResponse(Experiment(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+            return TspClientResponse(Experiment(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
         else:  # pragma: no cover
             print("delete experiment failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
@@ -187,7 +194,8 @@ class TspClient(object):
         response = requests.post(api_url, json=parameters, headers=headers)
 
         if response.status_code == 200:
-            return TspClientResponse(Experiment(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+            return TspClientResponse(Experiment(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
         else:  # pragma: no cover
             print("post experiment failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
@@ -204,7 +212,9 @@ class TspClient(object):
         response = requests.get(api_url, headers=headers)
 
         if response.status_code == 200:
-            return TspClientResponse(OutputDescriptorSet(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+            return TspClientResponse(OutputDescriptorSet(json.loads(
+                response.content.decode('utf-8'))),
+                response.status_code, response.text)
         else:  # pragma: no cover
             print("get output descriptors failed: {0}".format(
                 response.status_code))
@@ -225,7 +235,8 @@ class TspClient(object):
         response = requests.get(api_url, headers=headers)
 
         if response.status_code == 200:
-            return TspClientResponse(OutputDescriptor(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+            return TspClientResponse(OutputDescriptor(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
         else:  # pragma: no cover
             print("failed to get tree: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
@@ -236,7 +247,7 @@ class TspClient(object):
         :param exp_uuid: Experiment UUID
         :param output_id: Output ID
         :param parameters: Query object
-        :returns: :class:  `TspClientResponse <GenericResponse>` object Time graph entry response with entries and headers
+        :returns: :class:  `TspClientResponse <GenericResponse>` object Timegraph entries response
         :rtype: TspClientResponse
         '''
         api_url = '{0}experiments/{1}/outputs/timeGraph/{2}/tree'.format(
@@ -249,7 +260,9 @@ class TspClient(object):
         response = requests.post(api_url, json=params, headers=headers)
 
         if response.status_code == 200:
-            return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')), ModelType.TIME_GRAPH_TREE), response.status_code, response.text)
+            return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')),
+                                                     ModelType.TIME_GRAPH_TREE),
+                                     response.status_code, response.text)
         else:  # pragma: no cover
             print("failed to get tree: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
@@ -260,7 +273,7 @@ class TspClient(object):
         :param exp_uuid: Experiment UUID
         :param output_id: Output ID
         :param parameters: Query object
-        :returns: :class:  `TspClientResponse <GenericResponse>` object XY entry response with entries and headers
+        :returns: :class:  `TspClientResponse <GenericResponse>` object XY entries response
         :rtype: TspClientResponse
         '''
         api_url = '{0}experiments/{1}/outputs/XY/{2}/tree'.format(
@@ -273,7 +286,9 @@ class TspClient(object):
         response = requests.post(api_url, json=params, headers=headers)
 
         if response.status_code == 200:
-            return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')), ModelType.XY_TREE), response.status_code, response.text)
+            return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')),
+                                                     ModelType.XY_TREE),
+                                     response.status_code, response.text)
         else:  # pragma: no cover
             print("failed to get tree: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
@@ -293,7 +308,9 @@ class TspClient(object):
         response = requests.post(api_url, json=parameters, headers=headers)
 
         if response.status_code == 200:
-            return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')), ModelType.XY), response.status_code, response.text)
+            return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')),
+                                                     ModelType.XY),
+                                     response.status_code, response.text)
         else:  # pragma: no cover
             print("failed to get xy: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
@@ -307,7 +324,8 @@ class TspClient(object):
         response = requests.get(api_url, headers=headers)
 
         if response.status_code == 200:
-            return TspClientResponse(ExtensionSet(json.loads(response.content.decode('utf-8'))), response.status_code, response.text)
+            return TspClientResponse(ExtensionSet(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
         else:  # pragma: no cover
             print("failed to get extensions: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
