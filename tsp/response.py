@@ -25,7 +25,6 @@ from enum import Enum
 from tsp.model_type import ModelType
 from tsp.output_descriptor import OutputDescriptor
 from tsp.entry_model import EntryModel
-from tsp.time_graph_model import TimeGraphModel
 from tsp.xy_model import XYModel
 
 MODEL_KEY = "model"
