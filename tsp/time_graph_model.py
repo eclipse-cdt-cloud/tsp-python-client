@@ -39,6 +39,8 @@ STYLE_KEY = "style"
 SOURCE_ID_TAG = "sourceId"
 DESTINATION_ID_TAG = "destinationId"
 
+# pylint: disable=too-few-public-methods
+
 
 class TimeGraphEntry(Entry):
     '''

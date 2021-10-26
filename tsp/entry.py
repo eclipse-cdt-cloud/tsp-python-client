@@ -31,6 +31,8 @@ STYLE_KEY = "style"
 HEADER_NAME_KEY = "name"
 UNKNOWN_ID = -1
 
+# pylint: disable=too-few-public-methods
+
 
 class EntryHeader:
     '''

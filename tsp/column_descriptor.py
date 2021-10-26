@@ -26,6 +26,7 @@ TEXT_KEY = "text"
 TOOLTIP_KEY = "tooltip"
 
 
+# pylint: disable=too-few-public-methods
 class ColumnDescriptor:
     '''
     Basic entry

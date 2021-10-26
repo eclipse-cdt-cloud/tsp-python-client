@@ -28,6 +28,7 @@ RESPONSE_STATUS_KEY = "status"
 STATUS_MESSAGE_KEY = "statusMessage"
 
 
+# pylint: disable=too-few-public-methods
 class TspClientResponse:
     '''
     Class that for providing the tsp

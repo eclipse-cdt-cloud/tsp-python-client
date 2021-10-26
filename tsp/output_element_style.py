@@ -26,6 +26,8 @@ PARENTKEY_KEY = "parentKey"
 SYTLE_VALUES_KEY = "styleValues"
 STYLES_KEY = "styles"
 
+# pylint: disable=too-few-public-methods
+
 
 class OutputElementStyle:
     '''

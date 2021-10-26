@@ -25,6 +25,7 @@
 from tsp.experiment import Experiment
 
 
+# pylint: disable=too-few-public-methods
 class ExperimentSet:
     '''
     classdocs

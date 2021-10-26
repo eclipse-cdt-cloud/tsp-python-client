@@ -35,11 +35,13 @@ TRACES_TIME_KEY = "traces"
 INDEXING_STATUS_KEY = "indexingStatus"
 
 
+# pylint: disable=too-few-public-methods
 class Experiment:
     '''
     Model of a single Experiment
     '''
 
+    # pylint: disable=too-many-branches
     def __init__(self, params):
         '''
         Constructor

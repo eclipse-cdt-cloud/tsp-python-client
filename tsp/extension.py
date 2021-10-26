@@ -23,6 +23,7 @@
 """Extension class file."""
 
 
+# pylint: disable=too-few-public-methods
 class Extension:
     '''
     Class to handle extensions available on the remote node

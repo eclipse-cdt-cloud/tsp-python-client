@@ -35,11 +35,13 @@ IS_FINAL_KEY = "final"
 COMPATIBLE_PROVIDERS_KEY = "compatibleProviders"
 
 
+# pylint: disable=too-few-public-methods,too-many-instance-attributes
 class OutputDescriptor:
     '''
     classdocs
     '''
 
+    # pylint: disable=too-many-branches
     def __init__(self, params):
         '''
         Constructor

@@ -59,6 +59,7 @@ class ResponseStatus(Enum):
     CANCELLED = "CANCELLED"
 
 
+# pylint: disable=too-few-public-methods
 class GenericResponse:
     '''
     Output element style object for one style key. It supports style

@@ -25,6 +25,7 @@
 from tsp.trace import Trace
 
 
+# pylint: disable=too-few-public-methods
 class TraceSet:
     '''
     classdocs

@@ -25,6 +25,7 @@
 from tsp.extension import Extension
 
 
+# pylint: disable=too-few-public-methods
 class ExtensionSet:
     '''
     Class to handle extensions available on the remote node

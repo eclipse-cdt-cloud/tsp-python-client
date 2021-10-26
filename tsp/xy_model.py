@@ -36,6 +36,8 @@ LABEL_KEY = "label"
 UNIT_KEY = "unit"
 DATA_TYPE_KEY = "dataType"
 
+# pylint: disable=too-few-public-methods
+
 
 class XYModel:
     '''

@@ -32,6 +32,7 @@ ENTRIES_KEY = "entries"
 DESCRIPTORS_KEY = "columnDescriptors"
 
 
+# pylint: disable=too-few-public-methods
 class EntryModel:
     '''
     Entry model that will be returned by the server

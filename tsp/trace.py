@@ -33,11 +33,13 @@ PATH_TIME_KEY = "path"
 INDEXING_STATUS_KEY = "indexingStatus"
 
 
+# pylint: disable=too-few-public-methods
 class Trace:
     '''
     Model of a single trace
     '''
 
+    # pylint: disable=too-many-branches
     def __init__(self, params):
         '''
         Constructor

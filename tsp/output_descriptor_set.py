@@ -25,6 +25,7 @@
 from tsp.output_descriptor import OutputDescriptor
 
 
+# pylint: disable=too-few-public-methods
 class OutputDescriptorSet:
     '''
     classdocs
