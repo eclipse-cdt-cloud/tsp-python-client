@@ -47,6 +47,7 @@ class OutputDescriptor(object):
 
         # Output provider's ID
         if ID_KEY in params:
+            # pylint: disable=invalid-name
             self.id = params.get(ID_KEY)
             del params[ID_KEY]
         else:  # pragma: no cover

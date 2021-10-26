@@ -47,6 +47,7 @@ class Experiment(object):
 
         # Experiment's unique identifier
         if UUID_KEY in params:
+            # pylint: disable=invalid-name
             self.UUID = params.get(UUID_KEY)
             del params[UUID_KEY]
         else:  # pragma: no cover

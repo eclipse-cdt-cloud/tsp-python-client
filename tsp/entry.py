@@ -53,6 +53,7 @@ class Entry(object):
         '''
         Unique Id for the entry
         '''
+        # pylint: disable=invalid-name
         self.id = UNKNOWN_ID
         if ID_KEY in params:
             self.id = params.get(ID_KEY)
