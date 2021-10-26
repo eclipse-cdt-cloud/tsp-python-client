@@ -43,7 +43,7 @@ class EntryModel(object):
         '''
         self.headers = []
         if HEADER_KEY in params:
-            if (params.get(HEADER_KEY) is not None):
+            if params.get(HEADER_KEY) is not None:
                 for column in params.get(HEADER_KEY):
                     self.headers.append(EntryHeader(column))
             del params[HEADER_KEY]

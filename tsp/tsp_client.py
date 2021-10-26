@@ -254,7 +254,7 @@ class TspClient(object):
             self.base_url, exp_uuid, output_id)
 
         params = parameters
-        if (parameters is None):
+        if parameters is None:
             params = {}
 
         response = requests.post(api_url, json=params, headers=headers)
@@ -280,7 +280,7 @@ class TspClient(object):
             self.base_url, exp_uuid, output_id)
 
         params = parameters
-        if (parameters is None):
+        if parameters is None:
             params = {}
 
         response = requests.post(api_url, json=params, headers=headers)
