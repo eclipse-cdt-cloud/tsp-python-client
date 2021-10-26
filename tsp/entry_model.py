@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+"""EntryModel class file."""
+
 from tsp.model_type import ModelType
 from tsp.time_graph_model import TimeGraphEntry
 from tsp.entry import EntryHeader, Entry

@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+"""Output Style classes file."""
+
 PARENTKEY_KEY = "parentKey"
 SYTLE_VALUES_KEY = "styleValues"
 STYLES_KEY = "styles"

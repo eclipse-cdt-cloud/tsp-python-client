@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+"""ColumnDescriptor class file."""
+
 TEXT_KEY = "text"
 TOOLTIP_KEY = "tooltip"
 
