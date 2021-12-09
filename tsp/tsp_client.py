@@ -164,6 +164,33 @@ class TspClient:
             print("get trace failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
+    def update_experiment(self, uuid, name, traces):
+        '''
+        Update an experiment on the server
+        :param uuid: Experiment UUID to update
+        :param name: New experiment name or None
+        :param traces: New list of trace UUIDs or None
+        :rtype: The created experiment
+        '''
+        api_url = '{0}experiments/{1}'.format(self.base_url, uuid)
+
+        my_parameters = {}
+        if name is not None:
+            my_parameters['name'] = name
+        if traces is not None:
+            my_parameters['traces'] = name
+
+        parameters = {'parameters': my_parameters}
+
+        response = requests.put(api_url, json=parameters, headers=headers)
+
+        if response.status_code == 200:
+            return TspClientResponse(Experiment(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
+        # pragma: no cover
+        print("put experiment failed: {0}".format(response.status_code))
+        return TspClientResponse(None, response.status_code, response.text)
+
     def delete_experiment(self, uuid):
         '''
         Delete a specific experiment
