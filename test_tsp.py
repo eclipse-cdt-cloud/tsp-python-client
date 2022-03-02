@@ -350,7 +350,7 @@ class TestTspClient:
 
     def test_posted_extension_deleted(self, extension):
         """Expect no extension after deletion."""
-        response = self.tsp_client.post_extension(extension)
+        self.tsp_client.post_extension(extension)
         response = self.tsp_client.delete_extension(self.name)
         assert response.status_code == 200
 
