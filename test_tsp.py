@@ -24,6 +24,7 @@
 
 import os
 import time
+import uuid
 
 import pytest
 import requests
@@ -170,6 +171,22 @@ class TestTspClient:
         response = self.tsp_client.fetch_experiments()
         assert len(response.model.experiments) == 1
         self._delete_experiments()
+        self._delete_traces()
+
+    def test_open_experiment_unopened_trace(self, kernel):
+        """Expect 204 after opening experiment with unopened trace."""
+        traces = []
+        response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
+        traces.append(response.model.UUID)
+        unopened = str(uuid.uuid4())
+        traces.append(unopened)
+
+        response = self.tsp_client.open_experiment(
+            os.path.basename(kernel), traces)
+        assert response.status_code == 204
+
+        response = self.tsp_client.fetch_experiments()
+        assert len(response.model.experiments) == 0
         self._delete_traces()
 
     def test_fetch_opened_experiment(self, kernel):
