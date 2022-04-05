@@ -10,6 +10,8 @@ It can be used to test this script and module.
 
 This trace server bundles non-UI, core plug-ins of the [Eclipse Trace Compass][etc] project and comes with a server-side TSP implementation.
 
+**👋 Want to help?** Read our [contributor guide][contributing].
+
 ## Status
 
 - The **tsp_cli_client** script and the **tsp** module is under construction.
@@ -108,6 +110,7 @@ optional arguments:
 ```
 
 [agc]: https://kislyuk.github.io/argcomplete/#activating-global-completion
+[contributing]: CONTRIBUTING.md
 [etc]: https://www.eclipse.org/tracecompass/
 [inc]: https://projects.eclipse.org/projects/tools.tracecompass.incubator
 [rcp]: https://download.eclipse.org/tracecompass.incubator/trace-server/rcp/
