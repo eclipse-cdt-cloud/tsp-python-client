@@ -114,4 +114,4 @@ optional arguments:
 [etc]: https://www.eclipse.org/tracecompass/
 [inc]: https://projects.eclipse.org/projects/tools.tracecompass.incubator
 [rcp]: https://download.eclipse.org/tracecompass.incubator/trace-server/rcp/
-[tsp]: https://github.com/theia-ide/trace-server-protocol
+[tsp]: https://github.com/eclipse-cdt-cloud/trace-server-protocol
