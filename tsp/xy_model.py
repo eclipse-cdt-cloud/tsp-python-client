@@ -23,7 +23,6 @@
 """XY classes file."""
 
 TITLE_KEY = "title"
-COMMON_X_AXIS_KEY = "commonXAxis"
 SERIES_KEY = "series"
 SERIES_NAME_KEY = "seriesName"
 SERIES_ID_KEY = "seriesId"
@@ -51,11 +50,6 @@ class XYModel:
         if TITLE_KEY in params:
             self.title = params.get(TITLE_KEY)
             del params[TITLE_KEY]
-
-        # Indicate if all the Y values are using the same X axis
-        if COMMON_X_AXIS_KEY in params:
-            self.common_x_axis = params.get(COMMON_X_AXIS_KEY)
-            del params[COMMON_X_AXIS_KEY]
 
         # Array of XY series
         self.series = []
