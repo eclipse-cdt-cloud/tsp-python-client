@@ -89,6 +89,20 @@ class TestTspClient:
         """Absolute kernel-vm test trace path."""
         return f'{os.getcwd()}/tracecompass-test-traces/ctf/src/main/resources/kernel_vm'
 
+    @staticmethod
+    @pytest.fixture(scope='module')
+    def switches():
+        """Absolute switches test trace path."""
+        return (f'{os.getcwd()}/tracecompass-test-traces/ctf/src/main/resources/context-switches/'
+                f'context-switches-kernel')
+
+    @staticmethod
+    @pytest.fixture(scope='module')
+    def ust():
+        """Absolute ust test trace path."""
+        return (f'{os.getcwd()}/tracecompass-test-traces/ctf/src/main/resources/context-switches/'
+                f'context-switches-ust')
+
     @pytest.fixture(scope="module", autouse=True)
     def test_fetch_traces(self):
         """Check server availability before each test; don't fail all tests if none, but exit."""
@@ -254,6 +268,28 @@ class TestTspClient:
             experiment_uuid, expected_id)
         assert response.status_code == 200
         assert response.model.id == expected_id
+        self._delete_experiments()
+        self._delete_traces()
+
+    def test_open_experiment_context_switches(self, switches, ust):
+        """Expect experiment based on context-switches traces."""
+        traces = []
+        response = self.tsp_client.open_trace(
+            os.path.basename(switches), switches)
+        traces.append(response.model.UUID)
+        response = self.tsp_client.open_trace(os.path.basename(ust), ust)
+        traces.append(response.model.UUID)
+        response = self.tsp_client.open_experiment(
+            os.path.basename("context"), traces)
+        assert response.status_code == 200
+        experiment_uuid = response.model.UUID
+
+        response = self.tsp_client.fetch_experiment(experiment_uuid)
+        assert response.status_code == 200
+        for trace in response.model.traces.traces:
+            response = self.tsp_client.fetch_trace(trace.UUID)
+            assert response.status_code == 200
+
         self._delete_experiments()
         self._delete_traces()
 
