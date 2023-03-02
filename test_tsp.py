@@ -32,11 +32,11 @@ import requests
 from tsp.response import ResponseStatus
 from tsp.tsp_client import TspClient
 
+STATISTICS_DP_ID = "org.eclipse.tracecompass.analysis.timing.core.segmentstore.SegmentStoreStatisticsDataProvider:org.eclipse.linuxtools.lttng2.ust.analysis.callstack"
 REQUESTED_TIME_START = 1332170682440133097
 REQUESTED_TIME_END = 1332170692664579801
 REQUESTED_TIME_LENGTH = 10
-REQUESTED_TIME_STEP = (REQUESTED_TIME_END -
-                       REQUESTED_TIME_START) / REQUESTED_TIME_LENGTH
+REQUESTED_TIME_STEP = (REQUESTED_TIME_END - REQUESTED_TIME_START) / REQUESTED_TIME_LENGTH
 
 
 # pylint: disable=too-many-public-methods
@@ -290,6 +290,24 @@ class TestTspClient:
             response = self.tsp_client.fetch_trace(trace.UUID)
             assert response.status_code == 200
 
+        self._delete_experiments()
+        self._delete_traces()
+
+    def test_fetch_data_tree(self, ust):
+        """Expect data tree out of opened trace experiment."""
+        traces = []
+        response = self.tsp_client.open_trace(os.path.basename(ust), ust)
+        traces.append(response.model.UUID)
+        response = self.tsp_client.open_experiment(
+            os.path.basename(ust), traces)
+        assert response.status_code == 200
+        experiment_uuid = response.model.UUID
+
+        response = self.tsp_client.fetch_experiment_outputs(experiment_uuid)
+        output_id = STATISTICS_DP_ID
+        response = self.tsp_client.fetch_datatree(experiment_uuid, output_id)
+        assert response.status_code == 200
+        assert response.model.model_type == response.model.model_type.DATA_TREE
         self._delete_experiments()
         self._delete_traces()
 

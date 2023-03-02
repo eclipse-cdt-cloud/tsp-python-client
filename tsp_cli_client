@@ -91,6 +91,52 @@ def __get_descriptor(uuid, output_id):
     return None
 
 
+def __get_tree(uuid, outputid, treetype):
+    if uuid is not None:
+
+        output_descriptor = __get_descriptor(
+            uuid, outputid)
+
+        if output_descriptor is None:
+            print("Error fetching data provider")
+            sys.exit(1)
+        
+        response = None;
+
+        if treetype == "TIME_GRAPH": 
+            response = tsp_client.fetch_timegraph_tree(
+                uuid, outputid)
+        elif treetype == "TREE_TIME_XY":
+            response = tsp_client.fetch_xy_tree(
+                uuid, outputid)
+        else:
+            response = tsp_client.fetch_datatree(
+                uuid, outputid)
+            # fall back to timegraph-tree for older trace servers
+            if response.status_code != 200:
+                response = tsp_client.fetch_timegraph_tree(
+                uuid, outputid)
+        
+        if response is None:
+            sys.exit(1)
+
+        if response.status_code == 200:
+            tree = response.model.model
+            if tree is None:
+                print("Tree had no model; retry?")
+                sys.exit(1)
+
+            treeModel = TreeModel(tree.entries, tree.headers)
+            treeModel.print()
+            sys.exit(0)
+        else:
+            sys.exit(1)
+    else:
+        print("Trace UUID is missing")
+        sys.exit(1)
+    return None
+
+
 DESCRIPTION = """CLI client to send Trace Server Protocol commands to a Trace Server."""
 
 if __name__ == "__main__":
@@ -123,9 +169,11 @@ if __name__ == "__main__":
     parser.add_argument("--list-output", dest="list_output",
                         help="Get details on the given output of a trace", metavar="OUTPUT_ID")
     parser.add_argument("--get-tree", dest="get_tree",
-                        help="Get the timegraph tree of an output", metavar="OUTPUT_ID")
+                        help="Get the tree of an output of type DATA_TREE", metavar="OUTPUT_ID")
+    parser.add_argument("--get-timegraph-tree", dest="get_timegraph_tree",
+                        help="Get the tree of an output of type TIME_GRAPH", metavar="OUTPUT_ID")
     parser.add_argument("--get-xy-tree", dest="get_xy_tree",
-                        help="Get the XY tree of an output", metavar="OUTPUT_ID")
+                        help="Get the tree of an output of type TREE_TIME_XY", metavar="OUTPUT_ID")
     parser.add_argument("--get-xy", dest="get_xy",
                         help="Get the XY data of an output", metavar="OUTPUT_ID")
     parser.add_argument("--items", dest="items",
@@ -284,60 +332,13 @@ if __name__ == "__main__":
                 sys.exit(1)
 
         if options.get_tree:
-            if options.uuid is not None:
+            __get_tree(options.uuid, options.get_tree, "DATA_TREE");
 
-                output_descriptor = __get_descriptor(
-                    options.uuid, options.get_tree)
-                if output_descriptor is None:
-                    sys.exit(1)
-
-                response = tsp_client.fetch_timegraph_tree(
-                    options.uuid, options.get_tree)
-                if response.status_code == 200:
-                    tree = response.model.model
-                    if tree is None:
-                        print("Tree had no model; retry?")
-                        sys.exit(1)
-
-                    if output_descriptor.type == "DATA_TREE":
-                        treeModel = TreeModel(tree.entries, tree.headers)
-                    else:
-                        treeModel = TreeModel(tree.entries)
-                    treeModel.print()
-                    sys.exit(0)
-                else:
-                    sys.exit(1)
-            else:
-                print("Trace UUID is missing")
-                sys.exit(1)
+        if options.get_timegraph_tree:
+            __get_tree(options.uuid, options.get_timegraph_tree, "TIME_GRAPH");
 
         if options.get_xy_tree:
-            if options.uuid is not None:
-
-                output_descriptor = __get_descriptor(
-                    options.uuid, options.get_xy_tree)
-                if output_descriptor is None:
-                    sys.exit(1)
-
-                response = tsp_client.fetch_xy_tree(
-                    options.uuid, options.get_xy_tree)
-                if response.status_code == 200:
-                    tree = response.model.model
-                    if tree is None:
-                        print("Tree had no model; retry?")
-                        sys.exit(1)
-
-                    if output_descriptor.type == "TREE_TIME_XY":
-                        treeModel = TreeModel(tree.entries, tree.descriptors)
-                    else:
-                        treeModel = TreeModel(tree.entries)
-                    treeModel.print()
-                    sys.exit(0)
-                else:
-                    sys.exit(1)
-            else:
-                print("Trace UUID is missing")
-                sys.exit(1)
+            __get_tree(options.uuid, options.get_xy_tree, "TREE_TIME_XY");
 
         if options.get_xy:
             if not options.items or not options.times:
