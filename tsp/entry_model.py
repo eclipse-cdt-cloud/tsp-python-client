@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (C) 2020 - Ericsson
+# Copyright (C) 2020, 2022 - Ericsson
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +25,9 @@
 from tsp.model_type import ModelType
 from tsp.time_graph_model import TimeGraphEntry
 from tsp.entry import EntryHeader, Entry
-from tsp.column_descriptor import ColumnDescriptor
 
 HEADER_KEY = "headers"
 ENTRIES_KEY = "entries"
-DESCRIPTORS_KEY = "columnDescriptors"
 
 
 # pylint: disable=too-few-public-methods
@@ -48,13 +46,6 @@ class EntryModel:
                 for column in params.get(HEADER_KEY):
                     self.headers.append(EntryHeader(column))
             del params[HEADER_KEY]
-
-        # Array of column descriptors
-        self.descriptors = []
-        if DESCRIPTORS_KEY in params:
-            for column in params.get(DESCRIPTORS_KEY):
-                self.descriptors.append(ColumnDescriptor(column))
-            del params[DESCRIPTORS_KEY]
 
         # Array of entry
         self.entries = []
