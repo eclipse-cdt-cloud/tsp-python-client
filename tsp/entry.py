@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (C) 2020 - Ericsson
+# Copyright (C) 2020, 2022 - Ericsson
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -30,6 +30,8 @@ LABELS_KEY = "labels"
 STYLE_KEY = "style"
 HEADER_NAME_KEY = "name"
 UNKNOWN_ID = -1
+NAME_KEY = "name"
+TOOLTIP_KEY = "tooltip"
 
 # pylint: disable=too-few-public-methods
 
@@ -40,6 +42,7 @@ class EntryHeader:
     '''
 
     def __init__(self, params):
+
         '''
         Displayed name
         '''

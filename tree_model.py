@@ -31,8 +31,8 @@ import pandas as pd
 class TreeModel:
     """TreeModel class implementation."""
 
-    def __init__(self, entries, descriptors=None):
-        self._descriptors = descriptors
+    def __init__(self, entries, headers=None):
+        self._headers = headers
         self._root = TreeItem(None)
         self._root.set_trace("TODO")
         id_map = {}
@@ -51,10 +51,10 @@ class TreeModel:
     def print(self):
         """Render this tree model."""
         data = []
-        if self._descriptors is not None:
+        if self._headers is not None:
             headers = []
-            for descriptor in self._descriptors:
-                headers.append(descriptor.text)
+            for header in self._headers:
+                headers.append(header.name["name"])
             for child in self._root.get_children():
                 data = child.print(data, 0)
             frame = {}
