@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (C) 2020 - Ericsson
+# Copyright (C) 2020, 2022 - Ericsson
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -236,6 +236,32 @@ class TspClient:
 
         if response.status_code == 200:
             return TspClientResponse(OutputDescriptor(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
+        else:  # pragma: no cover
+            print("failed to get tree: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    def fetch_datatree(self, exp_uuid, output_id, parameters=None):
+        '''
+        Fetch Time Graph tree, Model extends TimeGraphEntry
+        :param exp_uuid: Experiment UUID
+        :param output_id: Output ID
+        :param parameters: Query object
+        :returns: :class:  `TspClientResponse <GenericResponse>` object Timegraph entries response
+        :rtype: TspClientResponse
+        '''
+        api_url = '{0}experiments/{1}/outputs/data/{2}/tree'.format(
+            self.base_url, exp_uuid, output_id)
+
+        params = parameters
+        if parameters is None:
+            params = {}
+
+        response = requests.post(api_url, json=params, headers=headers)
+
+        if response.status_code == 200:
+            return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')),
+                                                     ModelType.DATA_TREE),
                                      response.status_code, response.text)
         else:  # pragma: no cover
             print("failed to get tree: {0}".format(response.status_code))

@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (C) 2020 - Ericsson
+# Copyright (C) 2020, 2022 - Ericsson
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -85,6 +85,8 @@ class GenericResponse:
                 print("not implemented")
             elif self.model_type == ModelType.XY:
                 self.model = XYModel(params.get(MODEL_KEY))
+            elif self.model_type == ModelType.DATA_TREE:
+                self.model = EntryModel(params.get(MODEL_KEY), self.model_type)
 
         # Output descriptor
         if OUTPUT_DESCRIPTOR_KEY in params:

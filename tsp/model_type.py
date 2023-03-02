@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (C) 2020 - Ericsson
+# Copyright (C) 2020, 2022 - Ericsson
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -34,3 +34,4 @@ class ModelType(Enum):
     XY_TREE = "xy_tree"
     STATES = "states"
     XY = "xy"
+    DATA_TREE = "data_tree"
