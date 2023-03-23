@@ -126,8 +126,8 @@ def __get_tree(uuid, outputid, treetype):
                 print("Tree had no model; retry?")
                 sys.exit(1)
 
-            treeModel = TreeModel(tree.entries, tree.headers)
-            treeModel.print()
+            tree_model = TreeModel(tree.entries, tree.headers)
+            tree_model.print()
             sys.exit(0)
         else:
             sys.exit(1)
