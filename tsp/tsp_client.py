@@ -41,8 +41,11 @@ headers = {'content-type': APPLICATION_JSON, 'Accept': APPLICATION_JSON}
 headers_form = {'content-type': 'application/x-www-form-urlencoded',
                 'Accept': APPLICATION_JSON}
 
+GET_TREE_FAILED = "failed to get tree: {0}"
 
 # pylint: disable=consider-using-f-string
+
+
 class TspClient:
     '''
     Trace Server Protocol tsp_cli_client
@@ -240,7 +243,7 @@ class TspClient:
             return TspClientResponse(OutputDescriptor(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("failed to get tree: {0}".format(response.status_code))
+            print(GET_TREE_FAILED.format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_datatree(self, exp_uuid, output_id, parameters=None):
@@ -266,7 +269,7 @@ class TspClient:
                                                      ModelType.DATA_TREE),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("failed to get tree: {0}".format(response.status_code))
+            print(GET_TREE_FAILED.format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_timegraph_tree(self, exp_uuid, output_id, parameters=None):
@@ -292,7 +295,7 @@ class TspClient:
                                                      ModelType.TIME_GRAPH_TREE),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("failed to get tree: {0}".format(response.status_code))
+            print(GET_TREE_FAILED.format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_xy_tree(self, exp_uuid, output_id, parameters=None):
@@ -318,7 +321,7 @@ class TspClient:
                                                      ModelType.XY_TREE),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("failed to get tree: {0}".format(response.status_code))
+            print(GET_TREE_FAILED.format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_xy(self, exp_uuid, output_id, parameters):
