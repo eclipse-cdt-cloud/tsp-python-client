@@ -303,7 +303,6 @@ class TestTspClient:
         assert response.status_code == 200
         experiment_uuid = response.model.UUID
 
-        response = self.tsp_client.fetch_experiment_outputs(experiment_uuid)
         output_id = STATISTICS_DP_ID
         response = self.tsp_client.fetch_datatree(experiment_uuid, output_id)
         assert response.status_code == 200
