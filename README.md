@@ -35,7 +35,7 @@ The virtual environment can be replaced with another local setup.
 
 To run currently available integration tests, launch a server and type the following command in the root directory:
 
-**Note: Executing the tests will delete all traces and experiments from trace server workspace. Backup workspace before running the tests or start from fresh workspace**
+**Note: Executing the tests will delete all traces and experiments from trace server workspace. Backup workspace before running the tests or start from fresh workspace.**
 
 ```shell
 git submodule update --init
