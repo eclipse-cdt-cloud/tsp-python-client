@@ -32,11 +32,15 @@ import requests
 from tsp.response import ResponseStatus
 from tsp.tsp_client import TspClient
 
-STATISTICS_DP_ID = "org.eclipse.tracecompass.analysis.timing.core.segmentstore.SegmentStoreStatisticsDataProvider:org.eclipse.linuxtools.lttng2.ust.analysis.callstack"
+STATISTICS_DP_ID = (
+    "org.eclipse.tracecompass.analysis.timing.core.segmentstore.SegmentStoreStatisticsDataProvider:"
+    "org.eclipse.linuxtools.lttng2.ust.analysis.callstack"
+)
 REQUESTED_TIME_START = 1332170682440133097
 REQUESTED_TIME_END = 1332170692664579801
 REQUESTED_TIME_LENGTH = 10
-REQUESTED_TIME_STEP = (REQUESTED_TIME_END - REQUESTED_TIME_START) / REQUESTED_TIME_LENGTH
+REQUESTED_TIME_STEP = (REQUESTED_TIME_END -
+                       REQUESTED_TIME_START) / REQUESTED_TIME_LENGTH
 
 
 # pylint: disable=too-many-public-methods
