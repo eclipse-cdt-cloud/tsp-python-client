@@ -93,6 +93,7 @@ def __get_descriptor(uuid, output_id):
     return None
 
 
+# pylint: disable=redefined-outer-name
 def __get_tree(uuid, outputid, treetype):
     if uuid is not None:
 
