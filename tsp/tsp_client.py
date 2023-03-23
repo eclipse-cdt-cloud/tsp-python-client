@@ -43,7 +43,7 @@ headers_form = {'content-type': 'application/x-www-form-urlencoded',
 
 GET_TREE_FAILED = "failed to get tree: {0}"
 
-# pylint: disable=consider-using-f-string
+# pylint: disable=consider-using-f-string,missing-timeout
 
 
 class TspClient:
