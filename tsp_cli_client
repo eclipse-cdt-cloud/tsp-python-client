@@ -38,7 +38,7 @@ from termcolor import colored
 from tree_model import TreeModel
 from tsp.tsp_client import TspClient
 
-#api_token = 'your_token_goes_here'
+# api_token = 'your_token_goes_here'
 NS_PER_SEC = 1000000000
 
 # pylint: disable=consider-using-f-string
@@ -79,7 +79,7 @@ def __print_outputs(descriptors):
     for descriptor in output_descriptors.descriptors:
         __print_output(descriptor)
         # TODO remove when available
-        #if o.id == "org.eclipse.tracecompass.internal.analysis.profiling.callstack.provider.CallStackDataProvider"):
+        # if o.id == "org.eclipse.tracecompass.internal.analysis.profiling.callstack.provider.CallStackDataProvider"):
         #    print('  {0}: {1} ({2})'.format("Function Duration Statistics", "Function Duration Statistics",
         #          "org.eclipse.tracecompass.internal.analysis.profiling.core.callgraph.callgraphanalysis.statistics"))
 
@@ -100,10 +100,10 @@ def __get_tree(uuid, outputid, treetype):
         if output_descriptor is None:
             print("Error fetching data provider")
             sys.exit(1)
-        
-        response = None;
 
-        if treetype == "TIME_GRAPH": 
+        response = None
+
+        if treetype == "TIME_GRAPH":
             response = tsp_client.fetch_timegraph_tree(
                 uuid, outputid)
         elif treetype == "TREE_TIME_XY":
@@ -115,8 +115,8 @@ def __get_tree(uuid, outputid, treetype):
             # fall back to timegraph-tree for older trace servers
             if response.status_code != 200:
                 response = tsp_client.fetch_timegraph_tree(
-                uuid, outputid)
-        
+                    uuid, outputid)
+
         if response is None:
             sys.exit(1)
 
@@ -332,13 +332,13 @@ if __name__ == "__main__":
                 sys.exit(1)
 
         if options.get_tree:
-            __get_tree(options.uuid, options.get_tree, "DATA_TREE");
+            __get_tree(options.uuid, options.get_tree, "DATA_TREE")
 
         if options.get_timegraph_tree:
-            __get_tree(options.uuid, options.get_timegraph_tree, "TIME_GRAPH");
+            __get_tree(options.uuid, options.get_timegraph_tree, "TIME_GRAPH")
 
         if options.get_xy_tree:
-            __get_tree(options.uuid, options.get_xy_tree, "TREE_TIME_XY");
+            __get_tree(options.uuid, options.get_xy_tree, "TREE_TIME_XY")
 
         if options.get_xy:
             if not options.items or not options.times:

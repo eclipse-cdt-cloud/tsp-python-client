@@ -42,7 +42,6 @@ class EntryHeader:
     '''
 
     def __init__(self, params):
-
         '''
         Displayed name
         '''
