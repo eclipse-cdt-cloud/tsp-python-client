@@ -35,9 +35,11 @@ from tsp.experiment_set import ExperimentSet
 from tsp.experiment import Experiment
 from tsp.output_descriptor import OutputDescriptor
 
-headers = {'content-type': 'application/json', 'Accept': 'application/json'}
+APPLICATION_JSON = 'application/json'
+
+headers = {'content-type': APPLICATION_JSON, 'Accept': APPLICATION_JSON}
 headers_form = {'content-type': 'application/x-www-form-urlencoded',
-                'Accept': 'application/json'}
+                'Accept': APPLICATION_JSON}
 
 
 # pylint: disable=consider-using-f-string
