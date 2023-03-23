@@ -41,6 +41,8 @@ from tsp.tsp_client import TspClient
 # api_token = 'your_token_goes_here'
 NS_PER_SEC = 1000000000
 
+TRACE_MISSING = "Trace UUID is missing"
+
 # pylint: disable=consider-using-f-string
 
 
@@ -132,7 +134,7 @@ def __get_tree(uuid, outputid, treetype):
         else:
             sys.exit(1)
     else:
-        print("Trace UUID is missing")
+        print(TRACE_MISSING)
         sys.exit(1)
     return None
 
@@ -328,7 +330,7 @@ if __name__ == "__main__":
                 if output_descriptor is not None:
                     print(output_descriptor)
             else:
-                print("Trace UUID is missing")
+                print(TRACE_MISSING)
                 sys.exit(1)
 
         if options.get_tree:
@@ -359,7 +361,7 @@ if __name__ == "__main__":
                 else:
                     sys.exit(1)
             else:
-                print("Trace UUID is missing")
+                print(TRACE_MISSING)
                 sys.exit(1)
 
         if options.extensions:
