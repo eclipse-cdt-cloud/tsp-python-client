@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (C) 2020 - Ericsson
+# Copyright (C) 2020, 2023 - Ericsson
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,21 +20,34 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""ExtensionSet class file."""
+"""ConfigurationSet class file."""
 
-from tsp.extension import Extension
+from tsp.configuration import Configuration
 
 
 # pylint: disable=too-few-public-methods
-class ExtensionSet:
+class ConfigurationSet:
     '''
-    Class to handle extensions available on the remote node
+    Class to handle configurations available on the remote node
     '''
 
     def __init__(self, params):
         '''
         Constructor
         '''
-        self.extension_set = []
+        self.configuration_set = []
         for obj in params:
-            self.extension_set.append(Extension(obj))
+            self.configuration_set.append(Configuration(obj))
+
+
+    # pylint: disable=consider-using-f-string
+    def to_string(self):
+        '''
+        to string method
+        '''
+        my_str = ''
+        sep = ''
+        for desc in self.configuration_set:
+            my_str = my_str + '{0}{1}\n'.format(sep, desc.to_string())
+            sep = ', '
+        return my_str

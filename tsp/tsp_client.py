@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (C) 2020, 2022 - Ericsson
+# Copyright (C) 2020, 2023 - Ericsson
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,10 @@ from tsp.trace_set import TraceSet
 from tsp.tsp_client_response import TspClientResponse
 from tsp.output_descriptor_set import OutputDescriptorSet
 from tsp.response import GenericResponse, ModelType
-from tsp.extension_set import ExtensionSet
+from tsp.configuration_source_set import ConfigurationSourceSet
+from tsp.configuration_source import ConfigurationSource
+from tsp.configuration import Configuration
+from tsp.configuration_set import ConfigurationSet
 from tsp.experiment_set import ExperimentSet
 from tsp.experiment import Experiment
 from tsp.output_descriptor import OutputDescriptor
@@ -346,46 +349,114 @@ class TspClient:
             print("failed to get xy: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    def fetch_extensions(self):
+    def fetch_configuration_sources(self):
         '''
         Fetch Extensions (loaded files)
         '''
-        api_url = '{0}xml'.format(self.base_url)
+        api_url = '{0}config/types/'.format(self.base_url)
 
         response = requests.get(api_url, headers=headers)
 
         if response.status_code == 200:
-            return TspClientResponse(ExtensionSet(json.loads(response.content.decode('utf-8'))),
+            return TspClientResponse(ConfigurationSourceSet(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("failed to get extensions: {0}".format(response.status_code))
+            print("failed to get configuration sources: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    def post_extension(self, mypath):
+    def fetch_configuration_source(self, type_id):
+        '''
+        Fetch Extensions (loaded files)
+        '''
+        api_url = '{0}config/types/{1}'.format(self.base_url, type_id)
+
+        response = requests.get(api_url, headers=headers)
+
+        if response.status_code == 200:
+            return TspClientResponse(ConfigurationSource(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
+        else:  # pragma: no cover
+            print("failed to get a configuration source: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    def fetch_configurations(self, type_id):
+        '''
+        Fetch configurations (loaded files)
+        e.g. org.eclipse.tracecompass.tmf.core.config.xmlsourcetype
+        '''
+        api_url = '{0}config/types/{1}/configs'.format(self.base_url, type_id)
+
+        response = requests.get(api_url, headers=headers)
+
+        if response.status_code == 200:
+            return TspClientResponse(ConfigurationSet(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
+        else:  # pragma: no cover
+            print("failed to get configurations: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    def fetch_configuration(self, type_id, config_id):
+        '''
+        Fetch a configuration (loaded file)
+        e.g. org.eclipse.tracecompass.tmf.core.config.xmlsourcetype
+        '''
+        api_url = '{0}config/types/{1}/configs/{2}'.format(self.base_url, type_id, config_id)
+
+        response = requests.get(api_url, headers=headers)
+
+        if response.status_code == 200:
+            return TspClientResponse(Configuration(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
+        else:  # pragma: no cover
+            print("failed to get configuration: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+
+    def post_configuration(self, type_id, params):
         '''
         Load an extension
         '''
-        api_url = '{0}xml'.format(self.base_url)
+        api_url = '{0}config/types/{1}/configs'.format(self.base_url, type_id)
 
-        payload = dict(path=mypath)
-        response = requests.post(api_url, data=payload, headers=headers_form)
+        parameters = {'parameters': params}
+
+        response = requests.post(api_url, json=parameters, headers=headers)
 
         if response.status_code == 200:
-            return TspClientResponse("Loaded", response.status_code, response.text)
+            return TspClientResponse(Configuration(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
         else:  # pragma: no cover
             print("post extension failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    def delete_extension(self, name):
+    def put_configuration(self, type_id, config_id, params):
+        '''
+        Load an extension
+        '''
+        api_url = '{0}config/types/{1}/configs/{2}'.format(self.base_url, type_id, config_id)
+
+        parameters = {'parameters': params}
+
+        response = requests.put(api_url, json=parameters, headers=headers)
+
+        if response.status_code == 200:
+            return TspClientResponse(Configuration(json.loads(response.content.decode('utf-8'))), 
+                                     response.status_code, response.text)
+        else:  # pragma: no cover
+            print("put extension failed: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    def delete_configuration(self, type_id, config_id):
         '''
         Delete an extension
         '''
-        api_url = '{0}xml/{1}'.format(self.base_url, name)
+        api_url = '{0}config/types/{1}/configs/{2}'.format(self.base_url, type_id, config_id)
 
         response = requests.delete(api_url, headers=headers_form)
 
         if response.status_code == 200:
-            return TspClientResponse("Deleted", response.status_code, response.text)
+            return TspClientResponse(Configuration(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
         else:  # pragma: no cover
             print("post extension failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)

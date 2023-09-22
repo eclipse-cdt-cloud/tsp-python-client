@@ -59,18 +59,28 @@ To use the **tsp_cli_client** script, type the following command in the root dir
 ```python
 ./tsp_cli_client -h
 
-usage: tsp_cli_client [-h] [--ip IP] [--port PORT] [--open-trace TRACE_PATH]
+usage: tsp_cli_client [-h] [--ip IP] [--port PORT] 
+                      [--open-trace TRACE_PATH]
                       [--name NAME] [--list-trace UUID] [--list-traces]
                       [--delete-trace UUID] [--open-experiment EXP_NAME]
                       [--list-experiment UUID] [--list-experiments]
                       [--delete-experiment UUID] [--list-outputs UUID]
                       [--list-output OUTPUT_ID] [--get-tree OUTPUT_ID]
+                      [--get-timegraph-tree OUTPUT_ID] 
                       [--get-xy-tree OUTPUT_ID] [--get-xy OUTPUT_ID]
                       [--items [ITEMS ...]] [--times [TIMES ...]]
                       [--uuid UUID] [--uuids [UUIDS ...]] [--do-delete-traces]
-                      [--paths [PATHS ...]] [--list-extensions]
-                      [--load-extension EXTENSION_PATH]
-                      [--delete-extension EXTENSION_NAME]
+                      [--paths [PATHS ...]]
+                      [--list-configuration-sources] 
+                      [--list-configuration-source TYPE_ID] 
+                      [--list-configurations TYPE_ID]
+                      [--list-configuration CONFIG_ID] 
+                      [--load-configuration] 
+                      [--update-configuration] 
+                      [--delete-configuration CONFIGURATION_ID]
+                      [--type-id TYPE_ID] 
+                      [--config-id CONFIG_ID] 
+                      [--params PARAMS]
 
 CLI client to send Trace Server Protocol commands to a Trace Server.
 
@@ -94,9 +104,11 @@ optional arguments:
   --list-outputs UUID   Get details on the given trace
   --list-output OUTPUT_ID
                         Get details on the given output of a trace
-  --get-tree OUTPUT_ID  Get the timegraph tree of an output
+  --get-tree OUTPUT_ID  Get the tree of an output of type DATA_TREE
+  --get-timegraph-tree OUTPUT_ID
+                        Get the tree of an output of type TIME_GRAPH
   --get-xy-tree OUTPUT_ID
-                        Get the XY tree of an output
+                        Get the tree of an output of type TREE_TIME_XY
   --get-xy OUTPUT_ID    Get the XY data of an output
   --items [ITEMS ...]   The list of XY items requested
   --times [TIMES ...]   The list of XY times requested
@@ -104,11 +116,50 @@ optional arguments:
   --uuids [UUIDS ...]   The list of UUIDs
   --do-delete-traces    Also delete traces when deleting experiment
   --paths [PATHS ...]   List of trace paths to be part of an experiment
-  --list-extensions     Get the extensions loaded
-  --load-extension EXTENSION_PATH
-                        Load an extension
-  --delete-extension EXTENSION_NAME
-                        Delete an extension
+  --list-configuration-sources
+                        Get the available configuration sources
+  --list-configuration-source TYPE_ID
+                        Get a available configuration source
+  --list-configurations TYPE_ID
+                        Get the configurations loaded for given type
+  --list-configuration CONFIG_ID
+                        Get a configuration loaded for given type and config id
+  --load-configuration  Load an configuration using paramemeters provided by --params
+  --update-configuration
+                        Update an configuration using paramemeters provided by --params
+  --delete-configuration CONFIGURATION_ID
+                        Delete a configuration
+  --type-id TYPE_ID     id of configuration source type
+  --config-id CONFIG_ID
+                        id of configuration
+  --params PARAMS       comma separated key value pairs (key1=val1,key2=val2)
+```
+
+Examples:
+```python
+  '''Open trace ''' 
+  ./tsp_cli_client --open-trace TRACE_PATH [--name NAME]
+  ./tsp_cli_client --list-traces
+  ./tsp_cli_client --list-trace UUID
+  ./tsp_cli_client --list-trace UUID
+  ./tsp_cli_client --delete-trace UUID
+  ./tsp_cli_client --open-experiment EXP_NAME --uuids UUIDS 
+  ./tsp_cli_client --open-experiment EXP_NAME --paths PATHS
+  ./tsp_cli_client --list-experiments
+  ./tsp_cli_client --list-experiment UUID
+  ./tsp_cli_client --delete-experiment UUID [--do-delete-traces]
+  ./tsp_cli_client --list-outputs UUID
+  ./tsp_cli_client --get-tree OUTPUT_ID --uuid UUID
+  ./tsp_cli_client --get-timegraph-tree OUTPUT_ID --uuid UUID
+  ./tsp_cli_client --get-xy-tree OUTPUT_ID --uuid UUID
+  ./tsp_cli_client --get-xy OUTPUT_ID --uuid UUID --items ITEMS --times TIMES
+  ./tsp_cli_client --list-configuration-sources
+  ./tsp_cli_client --list-configuration-source TYPE_ID
+  ./tsp_cli_client --list-configurations TYPE_ID
+  ./tsp_cli_client --list-configuration CONFIG_ID --type-id TYPE_ID
+  ./tsp_cli_client --load-configuration --type-id TYPE_ID --params key1:value1
+  ./tsp_cli_client --update-configuration --type-id TYPE_ID --config-id CONFIG_ID --params key1=value1,key2=value2
+  ./tsp_cli_client --delete-configuration CONFIGURATION_ID --type-id TYPE_ID
 ```
 
 [agc]: https://kislyuk.github.io/argcomplete/#activating-global-completion

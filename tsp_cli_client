@@ -4,7 +4,7 @@
 #
 # The MIT License (MIT)
 #
-# Copyright (C) 2020, 2022 - Ericsson
+# Copyright (C) 2020, 2023 - Ericsson
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,7 @@ import sys
 
 from os.path import os
 
+import re
 import argcomplete
 import requests
 
@@ -60,6 +61,8 @@ def __print_experiment(elem):
     print('------')
     for elem_trace in elem.traces.traces:
         __print_trace(elem_trace)
+    
+    print('')
 
 
 def __print_trace(elem):
@@ -139,6 +142,18 @@ def __get_tree(uuid, outputid, treetype):
         sys.exit(1)
     return None
 
+def __parse_params (parameters_string):
+    pairs = re.split(',', parameters_string)
+    _params = {}
+    for pair in pairs:
+        pair_list = re.split('=', pair)
+        if len(pair_list) < 2:
+            return None
+
+        _params[pair_list[0]] = pair_list[1]
+
+    return _params
+
 
 DESCRIPTION = """CLI client to send Trace Server Protocol commands to a Trace Server."""
 
@@ -190,12 +205,23 @@ if __name__ == "__main__":
                         action='store_true', help="Also delete traces when deleting experiment")
     parser.add_argument("--paths", dest="paths",
                         help="List of trace paths to be part of an experiment", nargs="*")
-    parser.add_argument("--list-extensions", dest="extensions",
-                        action='store_true', help="Get the extensions loaded")
-    parser.add_argument("--load-extension", dest="load_extension",
-                        help="Load an extension", metavar="EXTENSION_PATH")
-    parser.add_argument("--delete-extension", dest="delete_extension",
-                        help="Delete an extension", metavar="EXTENSION_NAME")
+    parser.add_argument("--list-configuration-sources", dest="list_configuration_sources",
+                        action='store_true', help="Get the available configuration sources")
+    parser.add_argument("--list-configuration-source", dest="list_configuration_source",
+                        help="Get a available configuration source", metavar="TYPE_ID")
+    parser.add_argument("--list-configurations", dest="list_configurations",
+                        help="Get the configurations loaded for given type", metavar="TYPE_ID")
+    parser.add_argument("--list-configuration", dest="list_configuration",
+                        help="Get a configuration loaded for given type and config id", metavar="CONFIG_ID")
+    parser.add_argument("--load-configuration", dest="load_configuration",
+                        action='store_true', help="Load an configuration using paramemeters provided by --params")
+    parser.add_argument("--update-configuration", dest="update_configuration",
+                        action='store_true', help="Update an configuration using paramemeters provided by --params")
+    parser.add_argument("--delete-configuration", dest="delete_configuration",
+                        help="Delete a configuration", metavar="CONFIGURATION_ID")
+    parser.add_argument("--type-id", dest="type_id", help="id of configuration source type")
+    parser.add_argument("--config-id", dest="config_id", help="id of configuration")
+    parser.add_argument("--params", dest="params", help="comma separated key value pairs (key1=val1,key2=val2)")
 
     argcomplete.autocomplete(parser)
     options = parser.parse_args()
@@ -365,31 +391,111 @@ if __name__ == "__main__":
                 print(TRACE_MISSING)
                 sys.exit(1)
 
-        if options.extensions:
-            response = tsp_client.fetch_extensions()
+        if options.list_configuration_sources:
+            response = tsp_client.fetch_configuration_sources()
             if response.status_code == 200:
-                extension_set = response.model
-                if not extension_set:
-                    print('No extensions loaded')
-                for e in extension_set.extension_set:
-                    print('  {0}'.format(e.extension))
+                configuration_source_set = response.model
+                if not configuration_source_set or len(configuration_source_set.configuration_source_set) == 0:
+                    print('No configuration sources available')
+                else:
+                    print('  {0}'.format(configuration_source_set.to_string()))
                 sys.exit(0)
             else:
                 sys.exit(1)
 
-        if options.load_extension:
-            response = tsp_client.post_extension(options.load_extension)
+        if options.list_configuration_source:
+            response = tsp_client.fetch_configuration_source(options.list_configuration_source)
             if response.status_code == 200:
+                print('  {0}'.format(response.model.to_string()))
                 sys.exit(0)
             else:
                 sys.exit(1)
 
-        if options.delete_extension:
-            response = tsp_client.delete_extension(options.delete_extension)
+        if options.list_configurations:
+            response = tsp_client.fetch_configurations(options.list_configurations)
             if response.status_code == 200:
+                configuration_set = response.model
+                if not configuration_set or len(configuration_set.configuration_set) == 0:
+                    print('No configurations loaded')
+                else:
+                    print('  {0}'.format(configuration_set.to_string()))
                 sys.exit(0)
             else:
                 sys.exit(1)
+
+
+        if options.list_configuration:
+            if options.type_id is not None:
+                response = tsp_client.fetch_configuration(options.type_id, options.list_configuration)
+                if response.status_code == 200:
+                    print('  {0}'.format(response.model.to_string()))
+                    sys.exit(0)
+                else:
+                    sys.exit(1)
+            else:
+                print("No type id of configuration provided")
+                sys.exit(1)
+
+
+
+        if options.load_configuration:
+            if options.type_id is not None:
+                if options.params is not None:
+                    params = __parse_params(options.params)
+                    if (params is not None):
+                        response = tsp_client.post_configuration(options.type_id, params)
+                        if response.status_code == 200:
+                            print('  {0}'.format(response.model.to_string()))
+                            sys.exit(0)
+                        else:
+                            sys.exit(1)
+                    else:
+                        print("Invalid params provided")
+                        sys.exit(1)
+                else:
+                    print("No params provided")
+                    sys.exit(1)
+            else:
+                print("No type id of configuration provided")
+                sys.exit(1)
+
+        if options.update_configuration:
+            if options.type_id is not None:
+                if (options.config_id is not None):
+                    if options.params is not None:
+                        params = __parse_params(options.params);
+                        if (params is not None):
+                            response = tsp_client.put_configuration(options.type_id, options.config_id, params)
+                            if response.status_code == 200:
+                                print('  {0}'.format(response.model.to_string()))
+                                sys.exit(0)
+                            else:
+                                sys.exit(1)
+                        else:
+                            print("Invalid params provided")
+                            sys.exit(1)
+                    else:
+                        print("No params provided")
+                        sys.exit(1)
+                else:
+                    print("No config id if configuration provided")
+                    sys.exit(1)
+            else:
+                print("No type id of configuration provided")
+                sys.exit(1)
+
+        if options.delete_configuration:
+            if options.type_id is not None:
+                response = tsp_client.delete_configuration(options.type_id, options.delete_configuration)
+                if response.status_code == 200:
+                    print('  {0}'.format(response.model.to_string()))
+                    sys.exit(0)
+                else:
+                    sys.exit(1)
+            else:
+                print("No source typeId provided to delete this configuration")
+
+
     except requests.exceptions.ConnectionError as e:
         print('Unexpected error: {0}'.format(e))
         sys.exit(1)

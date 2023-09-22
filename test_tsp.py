@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (C) 2021 - Ericsson
+# Copyright (C) 2021, 2023 - Ericsson
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -42,6 +42,8 @@ REQUESTED_TIME_LENGTH = 10
 REQUESTED_TIME_STEP = (REQUESTED_TIME_END -
                        REQUESTED_TIME_START) / REQUESTED_TIME_LENGTH
 
+
+CONFIG_SOURCE_TYPE = 'org.eclipse.tracecompass.tmf.core.config.xmlsourcetype'
 
 # pylint: disable=too-many-public-methods
 class TestTspClient:
@@ -405,31 +407,73 @@ class TestTspClient:
         self._delete_experiments()
         self._delete_traces()
 
-    def test_fetch_extensions_none(self):
-        """Expect no extensions without posting any."""
-        response = self.tsp_client.fetch_extensions()
+    def test_fetch_configuration_sources(self):
+        """Expect at least configuration source ."""
+        response = self.tsp_client.fetch_configuration_sources()
         assert response.status_code == 200
-        assert not response.model.extension_set
+        assert response.model.configuration_source_set
 
-    def test_post_extension(self, extension):
-        """Expect extension after posting it."""
-        response = self.tsp_client.post_extension(extension)
+        response = self.tsp_client.fetch_configuration_source(CONFIG_SOURCE_TYPE)
+        assert response.status_code == 200
+        assert response.model
+
+    def test_fetch_configurations_none(self):
+        """Expect no configurations without posting any."""
+        response = self.tsp_client.fetch_configurations(CONFIG_SOURCE_TYPE)
+        assert response.status_code == 200
+        assert response.model.configuration_set
+
+        response = self.tsp_client.fetch_configuration(CONFIG_SOURCE_TYPE, self.name)
+        assert response.status_code == 404
+
+    def test_post_configuration(self, extension):
+        """Expect configuration after posting it."""
+        params = {}
+        params['path'] = extension
+        response = self.tsp_client.post_configuration(CONFIG_SOURCE_TYPE, params)
         assert response.status_code == 200
 
-        response = self.tsp_client.fetch_extensions()
-        assert len(response.model.extension_set) == 1
+        response = self.tsp_client.fetch_configurations(CONFIG_SOURCE_TYPE)
+        assert len(response.model.configuration_set) > 0
+        found = False
+        for config in response.model.configuration_set:
+            if config.id == self.name:
+                found = True
+        assert found
 
-        response = self.tsp_client.delete_extension(self.name)
+        response = self.tsp_client.fetch_configuration(CONFIG_SOURCE_TYPE, self.name)
+        assert response.status_code == 200
+        assert response.model
+        assert response.model.id == self.name
+
+        response = self.tsp_client.delete_configuration(CONFIG_SOURCE_TYPE, self.name)
+        assert response.status_code == 200
+        assert response.model
+        assert response.model.id == self.name
+
+    def test_posted_configuration_deleted(self, extension):
+        """Expect no configuration after deletion."""
+        params = {}
+        params['path'] = extension
+        self.tsp_client.post_configuration(CONFIG_SOURCE_TYPE, params)
+        response = self.tsp_client.delete_configuration(CONFIG_SOURCE_TYPE, self.name)
         assert response.status_code == 200
 
-    def test_posted_extension_deleted(self, extension):
-        """Expect no extension after deletion."""
-        self.tsp_client.post_extension(extension)
-        response = self.tsp_client.delete_extension(self.name)
-        assert response.status_code == 200
+        response = self.tsp_client.fetch_configurations(CONFIG_SOURCE_TYPE)
+        assert response.model.configuration_set
 
-        response = self.tsp_client.fetch_extensions()
-        assert not response.model.extension_set
+    def test_put_configuration(self, extension):
+        """Expect successful update of configuartion."""
+        params = {}
+        params['path'] = extension
+        self.tsp_client.post_configuration(CONFIG_SOURCE_TYPE, params)
+
+        response = self.tsp_client.put_configuration(CONFIG_SOURCE_TYPE, self.name, params)
+        assert response.status_code == 200
+        assert response.model
+        assert response.model.id == self.name
+
+        self.tsp_client.delete_configuration(CONFIG_SOURCE_TYPE, self.name)
 
     @staticmethod
     def __requested_parameters(response):

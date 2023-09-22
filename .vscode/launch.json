@@ -5,10 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "Python: Test",
             "type": "python",
             "request": "launch",
             "program": ".venv/bin/pytest",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: CLI",
+            "type": "python",
+            "request": "launch",
+            "program": "tsp_cli_client",
+            "args": ["--list-experiments"],
             "console": "integratedTerminal"
         }
     ]
