@@ -398,7 +398,7 @@ if __name__ == "__main__":
                 if not configuration_source_set or len(configuration_source_set.configuration_source_set) == 0:
                     print('No configuration sources available')
                 else:
-                    print('  {0}'.format(configuration_source_set.to_string()))
+                    print(f'  {configuration_source_set}')
                 sys.exit(0)
             else:
                 sys.exit(1)
@@ -406,7 +406,7 @@ if __name__ == "__main__":
         if options.list_configuration_source:
             response = tsp_client.fetch_configuration_source(options.list_configuration_source)
             if response.status_code == 200:
-                print('  {0}'.format(response.model.to_string()))
+                print(f'  {response.model}')
                 sys.exit(0)
             else:
                 sys.exit(1)
@@ -418,7 +418,7 @@ if __name__ == "__main__":
                 if not configuration_set or len(configuration_set.configuration_set) == 0:
                     print('No configurations loaded')
                 else:
-                    print('  {0}'.format(configuration_set.to_string()))
+                    print(f'  {configuration_set}')
                 sys.exit(0)
             else:
                 sys.exit(1)
@@ -428,7 +428,7 @@ if __name__ == "__main__":
             if options.type_id is not None:
                 response = tsp_client.fetch_configuration(options.type_id, options.list_configuration)
                 if response.status_code == 200:
-                    print('  {0}'.format(response.model.to_string()))
+                    print(f'  {response.model}
                     sys.exit(0)
                 else:
                     sys.exit(1)

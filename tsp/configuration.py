@@ -72,10 +72,8 @@ class Configuration:
             self.parameters = {}
 
 
-    # pylint: disable=consider-using-f-string
-    def to_string(self):
+    def __str__(self):
         '''
         to_string method
         '''
-        return 'Configuration[name={0}, description={1}, id={2}, source_type_id={3}, parameters={4}]'.format(self.name,
-          self.description, self.id, self.source_type_id, self.parameters)
+        return f'Configuration[name={self.name}, description={self.description}, id={self.id}, source_type_id={self.source_type_id}, parameters={self.parameters}]'
