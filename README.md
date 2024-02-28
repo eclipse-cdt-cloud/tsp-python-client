@@ -99,6 +99,8 @@ optional arguments:
   --list-experiment UUID
                         Get details on the given experiment
   --list-experiments    List all open experiments on the server
+  --close-experiment UUID
+                        Close an experiment on the server
   --delete-experiment UUID
                         Delete an experiment on the server
   --list-outputs UUID   Get details on the given trace
@@ -147,6 +149,7 @@ Examples:
   ./tsp_cli_client --open-experiment EXP_NAME --paths PATHS
   ./tsp_cli_client --list-experiments
   ./tsp_cli_client --list-experiment UUID
+  ./tsp_cli_client --close-experiment UUID
   ./tsp_cli_client --delete-experiment UUID [--do-delete-traces]
   ./tsp_cli_client --list-outputs UUID
   ./tsp_cli_client --get-tree OUTPUT_ID --uuid UUID
