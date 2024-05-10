@@ -400,7 +400,7 @@ if __name__ == "__main__":
                     options.uuid, options.get_xy, params)
                 if response.status_code == 200:
                     xyModel = response.model.model
-                    xyModel.print()
+                    xyModel.print(array_print=True if options.time_range else False)
                     sys.exit(0)
                 else:
                     sys.exit(1)
