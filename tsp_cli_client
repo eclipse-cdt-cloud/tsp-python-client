@@ -197,7 +197,7 @@ if __name__ == "__main__":
     parser.add_argument("--items", dest="items",
                         help="The list of XY items requested", nargs="*")
     parser.add_argument("--time-range", dest="time_range",
-                        help="The time range requested", nargs=3)
+                        help="The time range requested", nargs=3, metavar=("START", "END", "NUM_TIMES"))
     parser.add_argument("--uuid", dest="uuid", help="The UUID of a trace")
     parser.add_argument("--uuids", dest="uuids",
                         help="The list of UUIDs", nargs="*")
