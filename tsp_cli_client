@@ -196,8 +196,6 @@ if __name__ == "__main__":
                         help="Get the XY data of an output", metavar="OUTPUT_ID")
     parser.add_argument("--items", dest="items",
                         help="The list of XY items requested", nargs="*")
-    parser.add_argument("--times", dest="times",
-                        help="The list of XY times requested", nargs="*")
     parser.add_argument("--time-range", dest="time_range",
                         help="The time range requested", nargs=3)
     parser.add_argument("--uuid", dest="uuid", help="The UUID of a trace")
@@ -376,23 +374,23 @@ if __name__ == "__main__":
                 print("Provide requested --items for the XY data")
                 sys.exit(1)
 
-            if not options.times and not options.time_range:
-                print("Provide either requested --times or --time-range for the XY data")
+            if not options.time_range:
+                print("Provide requested --time-range for the XY data")
                 sys.exit(1)
 
             if options.uuid is not None:
-                parameters = {TspClient.REQUESTED_ITEM_KEY: list(map(int, options.items))}
-                if options.times:
-                    parameters[TspClient.REQUESTED_TIME_KEY] = list(map(int, options.times))
-                elif options.time_range:
-                    start_time = int(options.time_range[0])
-                    end_time = int(options.time_range[1])
-                    nb_times = int(options.time_range[2])
-                    parameters[TspClient.REQUESTED_TIME_RANGE_KEY] = {
+                start_time = int(options.time_range[0])
+                end_time = int(options.time_range[1])
+                nb_times = int(options.time_range[2])
+
+                parameters = {
+                    TspClient.REQUESTED_ITEM_KEY: list(map(int, options.items)),
+                    TspClient.REQUESTED_TIME_RANGE_KEY: {
                         TspClient.REQUESTED_TIME_RANGE_START_KEY: start_time,
                         TspClient.REQUESTED_TIME_RANGE_END_KEY: end_time,
                         TspClient.REQUESTED_TIME_RANGE_NUM_TIMES_KEY: nb_times
                     }
+                }
                 
                 params = {TspClient.PARAMETERS_KEY: parameters}
 
@@ -400,7 +398,7 @@ if __name__ == "__main__":
                     options.uuid, options.get_xy, params)
                 if response.status_code == 200:
                     xyModel = response.model.model
-                    xyModel.print(array_print=True if options.time_range else False)
+                    xyModel.print(array_print=True)
                     sys.exit(0)
                 else:
                     sys.exit(1)
