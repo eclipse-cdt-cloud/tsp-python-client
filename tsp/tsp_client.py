@@ -64,6 +64,12 @@ class TspClient:
     REQUESTED_TIME_RANGE_END_KEY = 'end'
     REQUESTED_TIME_RANGE_NUM_TIMES_KEY = 'nbTimes'
 
+    REQUESTED_TABLE_LINE_INDEX_KEY = 'requested_table_index'
+    REQUESTED_TABLE_LINE_COUNT_KEY = 'requested_table_count'
+    REQUESTED_TABLE_LINE_COLUMN_IDS_KEY = 'requested_table_column_ids'
+    REQUESTED_TABLE_LINE_SEACH_DIRECTION_KEY = 'table_search_direction'
+    REQUESTED_TABLE_LINE_SEARCH_EXPRESSION_KEY = 'table_search_expressions'
+
     def __init__(self, base_url):
         '''
         Constructor
@@ -276,6 +282,34 @@ class TspClient:
         if response.status_code == 200:
             return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')),
                                                      ModelType.DATA_TREE),
+                                     response.status_code, response.text)
+        else:  # pragma: no cover
+            print(GET_TREE_FAILED.format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+        
+    def fetch_virtual_table_lines(self, exp_uuid, output_id, parameters=None):
+        '''
+        Fetch Virtual Table lines, Model extends VirtualTableModel
+        :param exp_uuid: Experiment UUID
+        :param output_id: Output ID
+        :param parameters: Query object
+        :returns: :class:  `TspClientResponse <GenericResponse>` object Virtual Table lines response
+        :rtype: TspClientResponse
+        '''
+        api_url = '{0}experiments/{1}/outputs/table/{2}/lines'.format(
+            self.base_url, exp_uuid, output_id)
+
+        params = parameters
+        if parameters is None:
+            params = {
+                TspClient.PARAMETERS_KEY: {}
+            }
+
+        response = requests.post(api_url, json=params, headers=headers)
+
+        if response.status_code == 200:
+            return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')),
+                                                     ModelType.VIRTUAL_TABLE),
                                      response.status_code, response.text)
         else:  # pragma: no cover
             print(GET_TREE_FAILED.format(response.status_code))

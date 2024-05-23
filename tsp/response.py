@@ -28,6 +28,7 @@ from tsp.model_type import ModelType
 from tsp.output_descriptor import OutputDescriptor
 from tsp.entry_model import EntryModel
 from tsp.xy_model import XYModel
+from tsp.virtual_table_model import VirtualTableModel
 
 MODEL_KEY = "model"
 OUTPUT_DESCRIPTOR_KEY = "output"
@@ -87,6 +88,8 @@ class GenericResponse:
                 self.model = XYModel(params.get(MODEL_KEY))
             elif self.model_type == ModelType.DATA_TREE:
                 self.model = EntryModel(params.get(MODEL_KEY), self.model_type)
+            elif self.model_type == ModelType.VIRTUAL_TABLE: 
+                self.model = VirtualTableModel(params.get(MODEL_KEY))
 
         # Output descriptor
         if OUTPUT_DESCRIPTOR_KEY in params:
