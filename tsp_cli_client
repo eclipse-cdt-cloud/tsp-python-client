@@ -188,6 +188,20 @@ if __name__ == "__main__":
                         help="Get details on the given output of a trace", metavar="OUTPUT_ID")
     parser.add_argument("--get-tree", dest="get_tree",
                         help="Get the tree of an output of type DATA_TREE", metavar="OUTPUT_ID")
+    parser.add_argument("--get-virtual-table-lines", dest="get_virtual_table_lines",
+                        help="Get the tree lines of an output of type DATA_TREE", metavar="OUTPUT_ID")
+    parser.add_argument("--table-line-index", dest="table_line_index",
+                        help="The index of the table line to start fetching", metavar="TABLE_LINE_INDEX")
+    parser.add_argument("--table-line-count", dest="table_line_count",
+                        help="The number of table lines to fetch", metavar="TABLE_LINE_COUNT")
+    parser.add_argument("--table-times", dest="table_times",
+                        help="The list of times to fetch from table", nargs="*")
+    parser.add_argument("--table-column-ids", dest="table_column_ids",
+                        help="The list of column ids to fetch", nargs="*")
+    parser.add_argument("--table-search-direction", dest="table_search_direction",
+                        help="The direction to search for the table lines", metavar="TABLE_LINE_SEARCH_DIRECTION")
+    parser.add_argument("--table-search-expression", action="append", nargs=2, metavar=("COLUMN_ID", "EXPRESSION"), dest="table_search_expression",
+                        help="The column's expression to search for the table lines")
     parser.add_argument("--get-timegraph-tree", dest="get_timegraph_tree",
                         help="Get the tree of an output of type TIME_GRAPH", metavar="OUTPUT_ID")
     parser.add_argument("--get-xy-tree", dest="get_xy_tree",
@@ -400,6 +414,46 @@ if __name__ == "__main__":
                 if response.status_code == 200:
                     xyModel = response.model.model
                     xyModel.print(array_print=True)
+                    sys.exit(0)
+                else:
+                    sys.exit(1)
+            else:
+                print(TRACE_MISSING)
+                sys.exit(1)
+
+        if options.get_virtual_table_lines:
+            if options.uuid is not None:
+                if options.table_line_index is None and options.table_times is None:
+                    print("Provide at least one of requested --table-line-index or --table-times for the virtual table data")
+                    sys.exit(1)
+
+                if options.table_line_count is None:
+                    print("Provide requested --table-line-count for the virtual table data")
+                    sys.exit(1)
+
+                parameters = {
+                    TspClient.PARAMETERS_KEY: {
+                        TspClient.REQUESTED_TABLE_LINE_COUNT_KEY: int(options.table_line_count),
+                        TspClient.REQUESTED_TABLE_LINE_COLUMN_IDS_KEY: list(map(int, options.table_column_ids)) if options.table_column_ids is not None else [],
+                        TspClient.REQUESTED_TABLE_LINE_SEACH_DIRECTION_KEY: options.table_search_direction if options.table_search_direction is not None else "NEXT"
+                    }
+                }
+
+                if options.table_times is not None:
+                    parameters[TspClient.PARAMETERS_KEY][TspClient.REQUESTED_TIME_KEY] = list(map(int, options.table_times))
+                else:
+                    parameters[TspClient.PARAMETERS_KEY][TspClient.REQUESTED_TABLE_LINE_INDEX_KEY] = int(options.table_line_index)
+
+                if options.table_search_expression is not None:
+                    parameters[TspClient.PARAMETERS_KEY][TspClient.REQUESTED_TABLE_LINE_SEARCH_EXPRESSION_KEY] = {}
+                    for column_id, expression in options.table_search_expression:
+                        for column_id, expression in options.table_search_expression:
+                            parameters[TspClient.PARAMETERS_KEY][TspClient.REQUESTED_TABLE_LINE_SEARCH_EXPRESSION_KEY][str(column_id)] = str(expression)
+
+                response = tsp_client.fetch_virtual_table_lines(options.uuid, options.get_virtual_table_lines, parameters)
+                if response.status_code == 200:
+                    model = response.model.model
+                    model.print()
                     sys.exit(0)
                 else:
                     sys.exit(1)
