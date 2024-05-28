@@ -68,7 +68,7 @@ usage: tsp_cli_client [-h] [--ip IP] [--port PORT]
                       [--list-output OUTPUT_ID] [--get-tree OUTPUT_ID]
                       [--get-timegraph-tree OUTPUT_ID] 
                       [--get-xy-tree OUTPUT_ID] [--get-xy OUTPUT_ID]
-                      [--items [ITEMS ...]] [--times [TIMES ...]]
+                      [--items [ITEMS ...]] [--time-range START END NUM_TIMES]
                       [--uuid UUID] [--uuids [UUIDS ...]] [--do-delete-traces]
                       [--paths [PATHS ...]]
                       [--list-configuration-sources] 
@@ -111,7 +111,8 @@ optional arguments:
                         Get the tree of an output of type TREE_TIME_XY
   --get-xy OUTPUT_ID    Get the XY data of an output
   --items [ITEMS ...]   The list of XY items requested
-  --times [TIMES ...]   The list of XY times requested
+  --time-range START END NUM_TIMES
+                        The time range requested
   --uuid UUID           The UUID of a trace
   --uuids [UUIDS ...]   The list of UUIDs
   --do-delete-traces    Also delete traces when deleting experiment
@@ -152,7 +153,7 @@ Examples:
   ./tsp_cli_client --get-tree OUTPUT_ID --uuid UUID
   ./tsp_cli_client --get-timegraph-tree OUTPUT_ID --uuid UUID
   ./tsp_cli_client --get-xy-tree OUTPUT_ID --uuid UUID
-  ./tsp_cli_client --get-xy OUTPUT_ID --uuid UUID --items ITEMS --times TIMES
+  ./tsp_cli_client --get-xy OUTPUT_ID --uuid UUID --items ITEMS --time-range START END NUM_TIMES
   ./tsp_cli_client --list-configuration-sources
   ./tsp_cli_client --list-configuration-source TYPE_ID
   ./tsp_cli_client --list-configurations TYPE_ID

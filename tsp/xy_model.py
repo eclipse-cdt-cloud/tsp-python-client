@@ -58,7 +58,7 @@ class XYModel:
                 self.series.append(XYSeries(series))
             del params[SERIES_KEY]
 
-    def print(self):  # pragma: no cover
+    def print(self, array_print=False):  # pragma: no cover
         '''
         XY model rendering below
         '''
@@ -70,7 +70,7 @@ class XYModel:
         print(f'XY has common X axis: {common_x_axis}')
 
         for series in self.series:
-            series.print()
+            series.print(array_print)
 
 
 class XYSeries:
@@ -122,7 +122,7 @@ class XYSeries:
                 self.tags.append(tag)
             del params[TAGS_KEY]
 
-    def print(self):  # pragma: no cover
+    def print(self, array_print=False):  # pragma: no cover
         '''
         XY series rendering below
         '''
@@ -132,13 +132,18 @@ class XYSeries:
         if hasattr(self, 'x_axis'):
             print(f' Series X-axis:\n{self.x_axis.print()}')
             print(f' Series Y-axis:\n{self.y_axis.print()}')
-        for value in self.x_values:
-            print(f' Series X-value: {value}')
-        for value in self.y_values:
-            print(f' Series Y-value: {value}')
-        for tag in self.tags:
-            print(f' Series tag: {tag}')
-
+            
+        if not array_print:    
+            for value in self.x_values:
+                print(f' Series X-value: {value}')
+            for value in self.y_values:
+                print(f' Series Y-value: {value}')
+            for tag in self.tags:
+                print(f' Series tag: {tag}')
+        else:
+            print(f' Series X-values: {self.x_values}')
+            print(f' Series Y-values: {self.y_values}')
+            print(f' Series tags: {self.tags}')
 
 class XYAxis:
     '''

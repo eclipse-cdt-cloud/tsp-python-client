@@ -57,6 +57,11 @@ class TspClient:
     PARAMETERS_KEY = 'parameters'
     REQUESTED_TIME_KEY = 'requested_times'
     REQUESTED_ITEM_KEY = 'requested_items'
+    
+    REQUESTED_TIME_RANGE_KEY = 'requested_timerange'
+    REQUESTED_TIME_RANGE_START_KEY = 'start'
+    REQUESTED_TIME_RANGE_END_KEY = 'end'
+    REQUESTED_TIME_RANGE_NUM_TIMES_KEY = 'nbTimes'
 
     def __init__(self, base_url):
         '''
