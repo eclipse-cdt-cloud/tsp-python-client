@@ -188,6 +188,8 @@ if __name__ == "__main__":
                         help="Get details on the given output of a trace", metavar="OUTPUT_ID")
     parser.add_argument("--get-tree", dest="get_tree",
                         help="Get the tree of an output of type DATA_TREE", metavar="OUTPUT_ID")
+    parser.add_argument("--get-virtual-table-columns", dest="get_virtual_table_columns",
+                        help="Get the columns of an output of type DATA_TREE", metavar="OUTPUT_ID")
     parser.add_argument("--get-virtual-table-lines", dest="get_virtual_table_lines",
                         help="Get the tree lines of an output of type DATA_TREE", metavar="OUTPUT_ID")
     parser.add_argument("--table-line-index", dest="table_line_index",
@@ -414,6 +416,21 @@ if __name__ == "__main__":
                 if response.status_code == 200:
                     xyModel = response.model.model
                     xyModel.print(array_print=True)
+                    sys.exit(0)
+                else:
+                    sys.exit(1)
+            else:
+                print(TRACE_MISSING)
+                sys.exit(1)
+
+        if options.get_virtual_table_columns:
+            if options.uuid is not None:
+                response = tsp_client.fetch_virtual_table_columns(
+                    options.uuid, options.get_virtual_table_columns)
+
+                if response.status_code == 200:
+                    model = response.model.model
+                    model.print()
                     sys.exit(0)
                 else:
                     sys.exit(1)

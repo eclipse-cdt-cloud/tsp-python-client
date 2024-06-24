@@ -35,4 +35,5 @@ class ModelType(Enum):
     STATES = "states"
     XY = "xy"
     DATA_TREE = "data_tree"
+    VIRTUAL_TABLE_HEADER = "virtual_table_header"
     VIRTUAL_TABLE = "virtual_table"
