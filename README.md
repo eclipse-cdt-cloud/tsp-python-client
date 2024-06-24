@@ -66,6 +66,12 @@ usage: tsp_cli_client [-h] [--ip IP] [--port PORT]
                       [--list-experiment UUID] [--list-experiments]
                       [--delete-experiment UUID] [--list-outputs UUID]
                       [--list-output OUTPUT_ID] [--get-tree OUTPUT_ID]
+                      [--get-virtual-table-columns OUTPUT_ID]
+                      [--get-virtual-table-lines OUTPUT_ID] 
+                      [--table-line-index INDEX] [--table-line-count COUNT]
+                      [--table-times [TIMES ...]] [--table-column-ids [IDs ...]]
+                      [--table-search-direction DIRECTION]
+                      [--table-search-expression COLUMN_ID EXPRESSION]
                       [--get-timegraph-tree OUTPUT_ID] 
                       [--get-xy-tree OUTPUT_ID] [--get-xy OUTPUT_ID]
                       [--items [ITEMS ...]] [--time-range START END NUM_TIMES]
@@ -106,6 +112,22 @@ optional arguments:
   --list-output OUTPUT_ID
                         Get details on the given output of a trace
   --get-tree OUTPUT_ID  Get the tree of an output of type DATA_TREE
+  --get-virtual-table-columns OUTPUT_ID
+                        Get the columns of an output of type DATA_TREE
+  --get-virtual-table-lines OUTPUT_ID
+                        Get the tree lines of an output of type DATA_TREE
+  --table-line-index TABLE_LINE_INDEX
+                        The index of the table line to start fetching
+  --table-line-count TABLE_LINE_COUNT
+                        The number of table lines to fetch
+  --table-times [TABLE_TIMES ...]
+                        The list of times to fetch from table
+  --table-column-ids [TABLE_COLUMN_IDS ...]
+                        The list of column ids to fetch
+  --table-search-direction TABLE_LINE_SEARCH_DIRECTION
+                        The direction to search for the table lines
+  --table-search-expression COLUMN_ID EXPRESSION
+                        The columns expression to search for the table lines
   --get-timegraph-tree OUTPUT_ID
                         Get the tree of an output of type TIME_GRAPH
   --get-xy-tree OUTPUT_ID
@@ -153,6 +175,8 @@ Examples:
   ./tsp_cli_client --delete-experiment UUID [--do-delete-traces]
   ./tsp_cli_client --list-outputs UUID
   ./tsp_cli_client --get-tree OUTPUT_ID --uuid UUID
+  ./tsp_cli_client --get-virtual-table-columns OUTPUT_ID --uuid UUID
+  ./tsp_cli_client --get-virtual-table-lines --table-line-index INDEX --table-line-count COUNT --table-column-ids IDs --table-search-direction DIRECTION --table-search-expression COLUMN_ID EXPRESSION
   ./tsp_cli_client --get-timegraph-tree OUTPUT_ID --uuid UUID
   ./tsp_cli_client --get-xy-tree OUTPUT_ID --uuid UUID
   ./tsp_cli_client --get-xy OUTPUT_ID --uuid UUID --items ITEMS --time-range START END NUM_TIMES

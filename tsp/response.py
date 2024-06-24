@@ -27,7 +27,7 @@ from enum import Enum
 from tsp.model_type import ModelType
 from tsp.output_descriptor import OutputDescriptor
 from tsp.entry_model import EntryModel
-from tsp.virtual_tabel_header_model import VirtualTableHeaderModel
+from tsp.virtual_table_header_model import VirtualTableHeaderModel
 from tsp.xy_model import XYModel
 from tsp.virtual_table_model import VirtualTableModel
 
