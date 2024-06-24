@@ -58,7 +58,7 @@ class TspClient:
     PARAMETERS_KEY = 'parameters'
     REQUESTED_TIME_KEY = 'requested_times'
     REQUESTED_ITEM_KEY = 'requested_items'
-    
+
     REQUESTED_TIME_RANGE_KEY = 'requested_timerange'
     REQUESTED_TIME_RANGE_START_KEY = 'start'
     REQUESTED_TIME_RANGE_END_KEY = 'end'
@@ -286,7 +286,28 @@ class TspClient:
         else:  # pragma: no cover
             print(GET_TREE_FAILED.format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
-        
+
+    def fetch_virtual_table_columns(self, exp_uuid, output_id):
+        '''
+        Fetch Virtual Table columns, Model extends VirtualTableModel
+        :param exp_uuid: Experiment UUID
+        :param output_id: Output ID
+        :returns: :class:  `TspClientResponse <GenericResponse>` object Virtual Table columns response
+        :rtype: TspClientResponse
+        '''
+        api_url = '{0}experiments/{1}/outputs/table/{2}/columns'.format(
+            self.base_url, exp_uuid, output_id)
+
+        response = requests.post(api_url, json={}, headers=headers)
+
+        if response.status_code == 200:
+            return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')),
+                                                     ModelType.VIRTUAL_TABLE_HEADER),
+                                     response.status_code, response.text)
+        else:
+            print(GET_TREE_FAILED.format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
     def fetch_virtual_table_lines(self, exp_uuid, output_id, parameters=None):
         '''
         Fetch Virtual Table lines, Model extends VirtualTableModel
@@ -451,7 +472,6 @@ class TspClient:
             print("failed to get configuration: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-
     def post_configuration(self, type_id, params):
         '''
         Load an extension
@@ -480,7 +500,7 @@ class TspClient:
         response = requests.put(api_url, json=parameters, headers=headers)
 
         if response.status_code == 200:
-            return TspClientResponse(Configuration(json.loads(response.content.decode('utf-8'))), 
+            return TspClientResponse(Configuration(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
             print("put extension failed: {0}".format(response.status_code))
