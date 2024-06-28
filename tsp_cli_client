@@ -143,7 +143,7 @@ def __get_tree(uuid, outputid, treetype):
     return None
 
 def __parse_params (parameters_string):
-    pairs = re.split(',', parameters_string)
+    pairs = re.split(';', parameters_string)
     _params = {}
     for pair in pairs:
         pair_list = re.split('=', pair)
@@ -221,7 +221,7 @@ if __name__ == "__main__":
                         help="Delete a configuration", metavar="CONFIGURATION_ID")
     parser.add_argument("--type-id", dest="type_id", help="id of configuration source type")
     parser.add_argument("--config-id", dest="config_id", help="id of configuration")
-    parser.add_argument("--params", dest="params", help="comma separated key value pairs (key1=val1,key2=val2)")
+    parser.add_argument("--params", dest="params", help="semicolon separated key value pairs (key1=val1;key2=val2)")
 
     argcomplete.autocomplete(parser)
     options = parser.parse_args()
