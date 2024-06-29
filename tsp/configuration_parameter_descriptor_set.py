@@ -40,15 +40,14 @@ class ConfigurationParameterDescriptorSet:
             self.configuration_parameter_set.append(ConfigurationParameterDescriptor(obj))
 
 
-    # pylint: disable=consider-using-f-string
-    def to_string(self):
+    def __str__(self):
         '''
         to string method
         '''
         sep = ''
         my_str = ''
         for desc in self.configuration_parameter_set:
-            my_str = my_str + '{0}{1}\n'.format(sep, desc.to_string())
+            my_str = my_str + f'{sep}{desc}\n'
             sep = ', '
 
         return my_str

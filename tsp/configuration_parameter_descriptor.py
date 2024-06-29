@@ -64,10 +64,8 @@ class ConfigurationParameterDescriptor:
             self.is_required = "unknown_source_type_id"
 
 
-    # pylint: disable=consider-using-f-string
-    def to_string(self):
+    def __str__(self):
         '''
         to_string method
         '''
-        return 'ConfigurationParameterDescriptor[key_name={0}, description={1}, data_type={2}, is_required={3}]'.format(self.key_name,
-          self.description, self.data_type, self.is_required)
+        return f'ConfigurationParameterDescriptor[key_name={self.key_name}, description={self.description}, data_type={self.data_type}, is_required={self.is_required}]'
