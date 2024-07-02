@@ -38,37 +38,8 @@ class VirtualTableHeaderModel:
         self.columns = []
         if params is not None:
             for column in params:
-                # Column ID
-                column_id = None
-                if COLUMN_ID_KEY in column:
-                    column_id = column.get(COLUMN_ID_KEY)
-                    del column[COLUMN_ID_KEY]
-
-                # Column name
-                column_name = None
-                if COLUMN_NAME_KEY in column:
-                    column_name = column.get(COLUMN_NAME_KEY)
-                    del column[COLUMN_NAME_KEY]
-
-                # Column description
-                column_description = None
-                if COLUMN_DESCRIPTION_KEY in column:
-                    column_description = column.get(COLUMN_DESCRIPTION_KEY)
-                    del column[COLUMN_DESCRIPTION_KEY]
-
-                # Column type
-                column_type = None
-                if COLUMN_TYPE_KEY in column:
-                    column_type = column.get(COLUMN_TYPE_KEY)
-                    del column[COLUMN_TYPE_KEY]
-
-                # Add column to the list
-                self.columns.append({
-                    COLUMN_ID_KEY: column_id,
-                    COLUMN_NAME_KEY: column_name,
-                    COLUMN_DESCRIPTION_KEY: column_description,
-                    COLUMN_TYPE_KEY: column_type
-                })
+                # Create a new virtual table header column model
+                self.columns.append(VirtualTableHeaderColumnModel(column))
 
     def print(self):
         '''
@@ -76,8 +47,44 @@ class VirtualTableHeaderModel:
         '''
         print("Virtual Table Columns:")
         for column in self.columns:
-            print("  id: " + str(column.get(COLUMN_ID_KEY)))
-            print("  name: " + str(column.get(COLUMN_NAME_KEY)))
-            print("  description: " + str(column.get(COLUMN_DESCRIPTION_KEY)))
-            print("  type: " + str(column.get(COLUMN_TYPE_KEY)))
-            print("-" * 50)
+            column.print()
+
+class VirtualTableHeaderColumnModel:
+    '''
+    Virtual table header column model that will be returned by the server
+    '''
+
+    def __init__(self, params):
+        # Column ID
+        self.id = None
+        if COLUMN_ID_KEY in params:
+            self.id = params.get(COLUMN_ID_KEY)
+            del params[COLUMN_ID_KEY]
+
+        # Column name
+        self.name = None
+        if COLUMN_NAME_KEY in params:
+            self.name = params.get(COLUMN_NAME_KEY)
+            del params[COLUMN_NAME_KEY]
+
+        # Column description
+        self.description = None
+        if COLUMN_DESCRIPTION_KEY in params:
+            self.description = params.get(COLUMN_DESCRIPTION_KEY)
+            del params[COLUMN_DESCRIPTION_KEY]
+
+        # Column type
+        self.type = None
+        if COLUMN_TYPE_KEY in params:
+            self.type = params.get(COLUMN_TYPE_KEY)
+            del params[COLUMN_TYPE_KEY]
+
+    def print(self):
+        '''
+        Print the virtual table header column model
+        '''
+        print("  id: " + str(self.id))
+        print("  name: " + str(self.name))
+        print("  description: " + str(self.description))
+        print("  type: " + str(self.type))
+        print("-" * 50)
