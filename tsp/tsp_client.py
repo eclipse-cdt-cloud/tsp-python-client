@@ -37,6 +37,7 @@ from tsp.configuration_set import ConfigurationSet
 from tsp.experiment_set import ExperimentSet
 from tsp.experiment import Experiment
 from tsp.output_descriptor import OutputDescriptor
+from tsp.health import Health
 
 APPLICATION_JSON = 'application/json'
 
@@ -464,4 +465,19 @@ class TspClient:
                                      response.status_code, response.text)
         else:  # pragma: no cover
             print("post extension failed: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    def fetch_health(self):
+        '''
+        Fetch the health status of the server
+        :return: :class:`TspClientResponse <Health>` object
+        :rtype: TspClientResponse
+        '''
+        api_url = '{0}health'.format(self.base_url)
+        response = requests.get(api_url, headers=headers)
+        if response.status_code == 200:
+            return TspClientResponse(Health(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
+        else:  # pragma: no cover
+            print("get health failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)

@@ -222,6 +222,7 @@ if __name__ == "__main__":
     parser.add_argument("--type-id", dest="type_id", help="id of configuration source type")
     parser.add_argument("--config-id", dest="config_id", help="id of configuration")
     parser.add_argument("--params", dest="params", help="semicolon separated key value pairs (key1=val1;key2=val2)")
+    parser.add_argument("--get-health", dest="get_health", action='store_true', help="Get the health status of the server")
 
     argcomplete.autocomplete(parser)
     options = parser.parse_args()
@@ -510,6 +511,13 @@ if __name__ == "__main__":
             else:
                 print("No source typeId provided to delete this configuration")
 
+        if options.get_health:
+            response = tsp_client.fetch_health()
+            if response.status_code == 200:
+                print('  {0}'.format(response.model.to_string()))
+                sys.exit(0)
+            else:
+                sys.exit(1)
 
     except requests.exceptions.ConnectionError as e:
         print('Unexpected error: {0}'.format(e))

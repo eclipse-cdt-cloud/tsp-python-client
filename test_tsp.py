@@ -29,6 +29,7 @@ import uuid
 import pytest
 import requests
 
+from tsp.health import HealthStatus
 from tsp.response import ResponseStatus
 from tsp.tsp_client import TspClient
 
@@ -474,6 +475,13 @@ class TestTspClient:
         assert response.model.id == self.name
 
         self.tsp_client.delete_configuration(CONFIG_SOURCE_TYPE, self.name)
+
+    def test_fetch_health(self):
+        """Expect a successful health response"""
+        response = self.tsp_client.fetch_health()
+        assert response.status_code == 200
+        assert response.model
+        assert response.model.status == HealthStatus.UP
 
     @staticmethod
     def __requested_parameters(response):
