@@ -188,8 +188,14 @@ class TestTspClient:
             os.path.basename(kernel), traces)
         assert response.status_code == 200
 
+        exp_uuid = response.model.UUID
+
         response = self.tsp_client.fetch_experiments()
         assert len(response.model.experiments) == 1
+
+        response = self.tsp_client.close_experiment(exp_uuid)
+        assert response.model.indexin_status == "CLOSED"
+
         self._delete_experiments()
         self._delete_traces()
 
