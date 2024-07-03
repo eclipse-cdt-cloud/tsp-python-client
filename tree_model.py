@@ -54,7 +54,7 @@ class TreeModel:
         if self._headers is not None:
             headers = []
             for header in self._headers:
-                headers.append(header.name["name"])
+                headers.append(header.name)
             for child in self._root.get_children():
                 data = child.print(data, 0)
             frame = {}
