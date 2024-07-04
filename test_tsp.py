@@ -121,6 +121,13 @@ class TestTspClient:
         self._delete_experiments()
         self._delete_traces()
 
+    def test_fetch_with_other_client(self):
+        """Expect client without end slash to respond with no traces"""
+        tsp_client = TspClient('http://localhost:8080/tsp/api')
+        response = tsp_client.fetch_traces()
+        assert response.status_code == 200
+        assert not response.model.traces
+
     def test_fetch_traces_none(self):
         """Expect no traces without opening any."""
         response = self.tsp_client.fetch_traces()

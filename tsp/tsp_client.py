@@ -68,7 +68,7 @@ class TspClient:
         '''
         Constructor
         '''
-        self.base_url = base_url
+        self.base_url = base_url if base_url.endswith('/') else base_url + '/'
 
     def fetch_traces(self):
         '''
