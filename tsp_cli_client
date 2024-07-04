@@ -56,7 +56,7 @@ def __print_experiment(elem):
     print('----------')
     print('  {0}: ({1}) start={2} end={3} nbEvents={4} indexing={5}'.format(
         elem.name, __print_uuid(elem), elem.start, elem.end,
-        elem.number_of_events, elem.indexin_status))
+        elem.number_of_events, elem.indexing_status))
     print('Trace(s):')
     print('------')
     for elem_trace in elem.traces.traces:
@@ -68,7 +68,7 @@ def __print_experiment(elem):
 def __print_trace(elem):
     print('    {0}: {1} ({2}) start={3} end={4} nbEvents={5} indexing={6}'.format(
         elem.name, elem.path, __print_uuid(elem), elem.start, elem.end,
-        elem.number_of_events, elem.indexin_status))
+        elem.number_of_events, elem.indexing_status))
 
 
 def __print_output(output):
