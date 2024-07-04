@@ -22,6 +22,9 @@
 
 """Trace class file."""
 
+from tsp.indexing_status import IndexingStatus
+
+
 NA = "N/A"
 UUID_KEY = "UUID"
 NAME_KEY = "name"
@@ -91,7 +94,7 @@ class Trace:
         # Indicate if the indexing of the trace is completed or still running.
         # If it still running, the end time and number of events are not final
         if INDEXING_STATUS_KEY in params:
-            self.indexin_status = params.get(INDEXING_STATUS_KEY)
+            self.indexing_status = IndexingStatus[params.get(INDEXING_STATUS_KEY)]
             del params[INDEXING_STATUS_KEY]
         else:  # pragma: no cover
-            self.indexin_status = 0
+            self.indexing_status = 0
