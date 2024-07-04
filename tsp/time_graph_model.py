@@ -25,19 +25,19 @@
 from tsp.entry import Entry
 
 TYPE_KEY = "type"
-START_TIME_KEY = "startTime"
-END_TIME_KEY = "endTime"
-HAS_ROW_MODEL_KEY = "hasRowModel"
+START_TIME_KEY = "start"
+END_TIME_KEY = "end"
+HAS_ROW_MODEL_KEY = "hasData"
 ROWS_KEY = "rows"
-ENTRY_ID_KEY = "entryID"
+ENTRY_ID_KEY = "entryId"
 STATES_KEY = "states"
 DURATION_KEY = "duration"
 LABEL_KEY = "label"
-VALUE_KEY = "value"
+VALUE_KEY = "values"
 TAGS_KEY = "tags"
 STYLE_KEY = "style"
 SOURCE_ID_TAG = "sourceId"
-DESTINATION_ID_TAG = "destinationId"
+TARGET_ID_TAG = "targetId"
 
 # pylint: disable=too-few-public-methods
 
@@ -119,9 +119,9 @@ class TimeGraphState:
             del params[START_TIME_KEY]
 
         # Duration of the state
-        if DURATION_KEY in params:
-            self.duration = params.get(DURATION_KEY)
-            del params[DURATION_KEY]
+        if END_TIME_KEY in params:
+            self.end_time = params.get(END_TIME_KEY)
+            del params[END_TIME_KEY]
 
         # Label to apply to the state
         if LABEL_KEY in params:
@@ -158,14 +158,19 @@ class TimeGraphArrow:
             del params[SOURCE_ID_TAG]
 
         # Destination entry Id for the arrow
-        if DESTINATION_ID_TAG in params:
-            self.destination_id = params.get(DESTINATION_ID_TAG)
-            del params[DESTINATION_ID_TAG]
+        if TARGET_ID_TAG in params:
+            self.target_id = params.get(TARGET_ID_TAG)
+            del params[TARGET_ID_TAG]
 
         # Start time of the arrow
         if START_TIME_KEY in params:
-            self.start_time = params.get(START_TIME_KEY)
+            self.start = params.get(START_TIME_KEY)
             del params[START_TIME_KEY]
+
+        # Duration of the state
+        if END_TIME_KEY in params:
+            self.end = params.get(END_TIME_KEY)
+            del params[END_TIME_KEY]
 
         # Duration of the arrow
         if DURATION_KEY in params:
