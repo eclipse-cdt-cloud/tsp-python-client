@@ -42,6 +42,7 @@ TABLE_DP_ID = (
     "org.eclipse.tracecompass.analysis.timing.core.segmentstore.SegmentStoreTableDataProvider:"
     "org.eclipse.linuxtools.lttng2.ust.analysis.callstack"
 )
+TIMEGRAPH_DP_ID = "org.eclipse.tracecompass.internal.analysis.os.linux.core.threadstatus.ThreadStatusDataProvider"
 
 REQUESTED_TIME_START = 1332170682440133097
 REQUESTED_TIME_END = 1332170692664579801
@@ -537,6 +538,87 @@ class TestTspClient:
                 assert cell.content is not None
                 assert cell.tags == VirtualTableTag.NO_TAGS
 
+    def test_fetch_timegraph_states(self, kernel):
+        """Expect having states after tree is complete"""
+        traces = []
+        response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
+        traces.append(response.model.UUID)
+        response = self.tsp_client.open_experiment(
+            os.path.basename(kernel), traces)
+        assert response.status_code == 200
+        experiment_uuid = response.model.UUID
+
+        response = self.tsp_client.fetch_experiment_outputs(experiment_uuid)
+        output_id = TIMEGRAPH_DP_ID
+        status = ResponseStatus.RUNNING
+        while status == ResponseStatus.RUNNING:
+            time.sleep(1)
+            response = self.tsp_client.fetch_timegraph_tree(
+                experiment_uuid, output_id)
+            assert response.model is not None
+            status = response.model.status
+        entries = [entry.id for entry in response.model.model.entries if entry.has_row_model]
+        params = {
+            TspClient.REQUESTED_TIME_RANGE_KEY: {
+                TspClient.REQUESTED_TIME_RANGE_NUM_TIMES_KEY: 100,
+                TspClient.REQUESTED_TIME_RANGE_START_KEY: REQUESTED_TIME_START,
+                TspClient.REQUESTED_TIME_RANGE_END_KEY: REQUESTED_TIME_END
+            },
+            TspClient.REQUESTED_ITEM_KEY: entries
+        }
+        response = self.tsp_client.fetch_timegraph_states(
+            experiment_uuid, output_id,  { TspClient.PARAMETERS_KEY: params })
+        assert response.status_code == 200
+        assert len(response.model.model.rows) > 0
+        assert len(response.model.model.rows[0].states) != 0
+        row = response.model.model.rows[0].states[0]
+        assert row.start_time is not None
+        assert row.end_time is not None
+        self._delete_experiments()
+        self._delete_traces()
+
+    def test_fetch_timegraph_arrows(self, kernel):
+        """Expect having arrows after tree is complete"""
+        traces = []
+        response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
+        traces.append(response.model.UUID)
+        response = self.tsp_client.open_experiment(
+            os.path.basename(kernel), traces)
+        assert response.status_code == 200
+        experiment_uuid = response.model.UUID
+
+        response = self.tsp_client.fetch_experiment_outputs(experiment_uuid)
+        output_id = TIMEGRAPH_DP_ID
+        status = ResponseStatus.RUNNING
+        while status == ResponseStatus.RUNNING:
+            time.sleep(1)
+            response = self.tsp_client.fetch_timegraph_tree(
+                experiment_uuid, output_id)
+            assert response.model is not None
+            status = response.model.status
+
+        entries = [entry.id for entry in response.model.model.entries if entry.has_row_model]
+        params = {
+            TspClient.REQUESTED_TIME_RANGE_KEY: {
+                TspClient.REQUESTED_TIME_RANGE_NUM_TIMES_KEY: 5000,
+                TspClient.REQUESTED_TIME_RANGE_START_KEY: REQUESTED_TIME_START,
+                TspClient.REQUESTED_TIME_RANGE_END_KEY: REQUESTED_TIME_END
+            },
+            TspClient.REQUESTED_ITEM_KEY: entries
+        }
+        response = self.tsp_client.fetch_timegraph_arrows(
+            experiment_uuid, output_id, { TspClient.PARAMETERS_KEY: params })
+        assert response.status_code == 200
+        assert len(response.model.model) != 0
+        arrow = response.model.model[0]
+        assert arrow.source_id is not None
+        assert arrow.target_id is not None
+        if arrow.start is None or arrow.end is None:
+            assert arrow.duration
+        else:
+            assert arrow.start is not None
+            assert arrow.end is not None
+        assert arrow.style is not None
         self._delete_experiments()
         self._delete_traces()
 

@@ -30,6 +30,7 @@ from tsp.entry_model import EntryModel
 from tsp.virtual_table_header_model import VirtualTableHeaderModel
 from tsp.xy_model import XYModel
 from tsp.virtual_table_model import VirtualTableModel
+from tsp.time_graph_model import TimeGraphModel, TimeGraphArrow
 
 MODEL_KEY = "model"
 OUTPUT_DESCRIPTOR_KEY = "output"
@@ -81,10 +82,15 @@ class GenericResponse:
         if MODEL_KEY in params and params.get(MODEL_KEY) is not None:
             if self.model_type == ModelType.TIME_GRAPH_TREE:
                 self.model = EntryModel(params.get(MODEL_KEY), self.model_type)
+            elif self.model_type == ModelType.TIME_GRAPH_STATE:
+                self.model = TimeGraphModel(params.get(MODEL_KEY))
+            elif self.model_type == ModelType.TIME_GRAPH_ARROW:
+                arrows = []
+                for arrow in params.get(MODEL_KEY):
+                    arrows.append(TimeGraphArrow(arrow))
+                self.model = arrows
             elif self.model_type == ModelType.XY_TREE:
                 self.model = EntryModel(params.get(MODEL_KEY))
-            elif self.model_type == ModelType.STATES:  # pragma: no cover
-                print("not implemented")
             elif self.model_type == ModelType.XY:
                 self.model = XYModel(params.get(MODEL_KEY))
             elif self.model_type == ModelType.DATA_TREE:
