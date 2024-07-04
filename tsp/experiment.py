@@ -95,3 +95,8 @@ class Experiment:
         # Array of all the traces contained in the experiment
         if TRACES_TIME_KEY in params:
             self.traces = TraceSet(params.get(TRACES_TIME_KEY))
+
+    def __repr__(self):
+        return 'Experiment({}: UUID={}, start={}, end={}, nevent={}, traces={}, indexing={})'.format(
+            self.name, self.UUID, self.start, self.end, self.number_of_events, self.traces, self.indexing_status
+        )
