@@ -118,8 +118,9 @@ class XYSeries:
         # Array of tags for each XY value, used when a value passes a filter
         self.tags = []
         if TAGS_KEY in params:
-            for tag in params.get(TAGS_KEY):
-                self.tags.append(tag)
+            if params.get(TAGS_KEY) != None:
+                for tag in params.get(TAGS_KEY):
+                    self.tags.append(tag)
             del params[TAGS_KEY]
 
     def print(self, array_print=False):  # pragma: no cover
