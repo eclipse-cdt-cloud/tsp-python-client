@@ -21,10 +21,11 @@
 # SOFTWARE.
 
 """EntryModel class file."""
+import json
 
 from tsp.model_type import ModelType
-from tsp.time_graph_model import TimeGraphEntry
-from tsp.entry import EntryHeader, Entry
+from tsp.time_graph_model import TimeGraphEntry, TimeGraphEntryEncoder
+from tsp.entry import EntryHeader, Entry, EntryHeaderEncoder, EntryEncoder
 
 HEADER_KEY = "headers"
 ENTRIES_KEY = "entries"
@@ -56,3 +57,15 @@ class EntryModel:
                 else:
                     self.entries.append(Entry(entry))
             del params[ENTRIES_KEY]
+
+    def __repr__(self) -> str:
+        return 'EntryModel({})'.format(', '.join(str(entry) for entry in self.entries))
+
+class EntryModelEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, EntryModel):
+            return {
+                'headers': [EntryHeaderEncoder().default(header) for header in obj.headers],
+                'entries': [TimeGraphEntryEncoder().default(entry) if isinstance(entry, TimeGraphEntry) else EntryEncoder().default(entry) for entry in obj.entries]
+            }
+        return super().default(obj)

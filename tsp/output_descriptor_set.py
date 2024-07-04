@@ -38,3 +38,6 @@ class OutputDescriptorSet:
         self.descriptors = []
         for obj in params:
             self.descriptors.append(OutputDescriptor(obj))
+
+    def __repr__(self):
+        return ', '.join([str(descriptor) for descriptor in self.descriptors])

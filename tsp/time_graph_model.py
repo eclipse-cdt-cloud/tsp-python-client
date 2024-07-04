@@ -21,8 +21,8 @@
 # SOFTWARE.
 
 """TimeGraph classes file."""
-
-from tsp.entry import Entry
+import json
+from tsp.entry import Entry, EntryElementStyleEncoder
 
 TYPE_KEY = "type"
 START_TIME_KEY = "start"
@@ -70,6 +70,8 @@ class TimeGraphEntry(Entry):
             self.has_row_model = params.get(HAS_ROW_MODEL_KEY)
             del params[HAS_ROW_MODEL_KEY]
 
+    def __repr__(self) -> str:
+        return 'TimeGraphEntry(start={}, end={})'.format(self.start_time, self.end_time)
 
 class TimeGraphModel:
     '''
@@ -83,6 +85,8 @@ class TimeGraphModel:
                 self.rows.append(TimeGraphRow(row))
             del params[ROWS_KEY]
 
+    def __repr__(self) -> str:
+        return 'TimeGraphModel({})'.format(', '.join(str(row) for row in self.rows))
 
 class TimeGraphRow:
     '''
@@ -103,6 +107,9 @@ class TimeGraphRow:
             for state in params.get(STATES_KEY):
                 self.states.append(TimeGraphState(state))
             del params[STATES_KEY]
+
+    def __repr__(self) -> str:
+        return 'TimeGraphRow({})'.format(', '.join([str(state) for state in self.states]))
 
 
 class TimeGraphState:
@@ -142,6 +149,9 @@ class TimeGraphState:
         if STYLE_KEY in params:
             self.style = params.get(STYLE_KEY)
             del params[STYLE_KEY]
+
+    def __repr__(self) -> str:
+        return 'TimeGraphState({}start={}, end={})'.format(f'label={self.label}, ',self.start_time, self.end_time)
 
 
 class TimeGraphArrow:
@@ -186,3 +196,59 @@ class TimeGraphArrow:
         if STYLE_KEY in params:
             self.style = params.get(STYLE_KEY)
             del params[STYLE_KEY]
+
+class TimeGraphEntryEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, TimeGraphEntry):
+            return {
+                'id': obj.id,
+                'parent_id': obj.parent_id,
+                'labels': obj.labels,
+                'style': EntryElementStyleEncoder().default(obj.style) if obj.style else None,
+                'start': obj.start_time if obj.start_time else None,
+                'end': obj.end_time if obj.end_time else None,
+                'hasData': obj.has_row_model
+            }
+        return super().default(obj)
+
+class TimeGraphModelEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, TimeGraphModel):
+            return {
+                'rows': [TimeGraphRowEncoder().default(row) for row in obj.rows]
+            }
+        return super().default(obj)
+
+class TimeGraphRowEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, TimeGraphRow):
+            return {
+                'entry_id': obj.entry_id,
+                'states': [TimeGraphStateEncoder().default(state) for state in obj.states]
+            }
+        return super().default(obj)
+
+class TimeGraphStateEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, TimeGraphState):
+            return {
+                'start': obj.start_time,
+                'end': obj.end_time,
+                # 'duration': obj.duration,
+                # 'values': obj.value,
+                # 'tags': obj.tags,
+                'style': obj.style
+            }
+        return super().default(obj)
+
+class TimeGraphArrowEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, TimeGraphArrow):
+            return {
+                'sourceId': obj.source_id,
+                'targetId': obj.target_id,
+                'start': obj.start,
+                'end': obj.end,
+                'style': obj.style
+            }
+        return super().default(obj)

@@ -22,6 +22,9 @@
 
 """XY classes file."""
 
+import json
+
+
 TITLE_KEY = "title"
 SERIES_KEY = "series"
 SERIES_NAME_KEY = "seriesName"
@@ -58,20 +61,8 @@ class XYModel:
                 self.series.append(XYSeries(series))
             del params[SERIES_KEY]
 
-    def print(self, array_print=False):  # pragma: no cover
-        '''
-        XY model rendering below
-        '''
-        print(f'XY title: {self.title}')
-
-        common_x_axis = False
-        if hasattr(self, 'common_x_axis'):
-            common_x_axis = self.common_x_axis
-        print(f'XY has common X axis: {common_x_axis}')
-
-        for series in self.series:
-            series.print(array_print)
-
+    def __repr__(self):
+        return f'XYModel(title={self.title}, series={self.series})'
 
 class XYSeries:
     '''
@@ -115,35 +106,12 @@ class XYSeries:
                 self.y_values.append(y_value)
             del params[Y_VALUES_KEY]
 
-        # Array of tags for each XY value, used when a value passes a filter
-        self.tags = []
-        if TAGS_KEY in params:
-            for tag in params.get(TAGS_KEY):
-                self.tags.append(tag)
-            del params[TAGS_KEY]
-
-    def print(self, array_print=False):  # pragma: no cover
-        '''
-        XY series rendering below
-        '''
-        print(f' Series name: {self.series_name}')
-        print(f' Series id: {self.series_id}')
-
-        if hasattr(self, 'x_axis'):
-            print(f' Series X-axis:\n{self.x_axis.print()}')
-            print(f' Series Y-axis:\n{self.y_axis.print()}')
-            
-        if not array_print:    
-            for value in self.x_values:
-                print(f' Series X-value: {value}')
-            for value in self.y_values:
-                print(f' Series Y-value: {value}')
-            for tag in self.tags:
-                print(f' Series tag: {tag}')
-        else:
-            print(f' Series X-values: {self.x_values}')
-            print(f' Series Y-values: {self.y_values}')
-            print(f' Series tags: {self.tags}')
+    def __repr__(self):
+        return 'XYSeries(name={}, id={}{}{}{}{})'.format(self.series_name, self.series_id,
+           f', x_axis={self.x_axis}' if hasattr(self, 'x_axis') else '',
+           f', y_axis={self.y_axis}' if hasattr(self, 'y_axis') else '',
+           f', x_values={self.x_values}' if hasattr(self, 'x_values') else '',
+           f', y_values={self.y_values}' if hasattr(self, 'y_values') else '')
 
 class XYAxis:
     '''
@@ -168,10 +136,39 @@ class XYAxis:
             self.data_type = params.get(DATA_TYPE_KEY)
             del params[DATA_TYPE_KEY]
 
-    def print(self):  # pragma: no cover
-        '''
-        XY axis rendering
-        '''
-        print(f'  Axis label: {self.label}')
-        print(f'  Axis unit: {self.unit}')
-        print(f'  Axis data type: {self.data_type}')
+    def __repr__(self):
+        return f'XYAxis(label={self.label}, unit={self.unit}, data_type={self.data_type})'
+
+class XYModelEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, XYModel):
+            return {
+                'title': obj.title,
+                'common_x_axis': getattr(obj, 'common_x_axis', False),
+                'series': [XYSeriesEncoder().default(series) for series in obj.series]
+            }
+        return super().default(obj)
+
+class XYSeriesEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, XYSeries):
+            return {
+                'series_name': obj.series_name,
+                'series_id': obj.series_id,
+                'x_axis': XYAxisEncoder().default(obj.x_axis) if hasattr(obj, 'x_axis') else None,
+                'y_axis': XYAxisEncoder().default(obj.y_axis) if hasattr(obj, 'y_axis') else None,
+                'x_values': obj.x_values,
+                'y_values': obj.y_values,
+                'tags': obj.tags
+            }
+        return super().default(obj)
+
+class XYAxisEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, XYAxis):
+            return {
+                # 'label': obj.label,
+                # 'unit': obj.unit,
+                # 'data_type': obj.data_type
+            }
+        return super().default(obj)
