@@ -40,14 +40,13 @@ class ConfigurationSet:
             self.configuration_set.append(Configuration(obj))
 
 
-    # pylint: disable=consider-using-f-string
-    def to_string(self):
+    def __str__(self):
         '''
         to string method
         '''
         my_str = ''
         sep = ''
         for desc in self.configuration_set:
-            my_str = my_str + '{0}{1}\n'.format(sep, desc.to_string())
+            my_str += f'{sep}{desc}\n'
             sep = ', '
         return my_str

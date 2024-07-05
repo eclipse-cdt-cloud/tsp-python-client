@@ -64,15 +64,13 @@ class ConfigurationSource:
             self.parameter_descriptors = ConfigurationParameterDescriptorSet(params.get(PARAM_DESC_KEY))
 
 
-    # pylint: disable=consider-using-f-string
-    def to_string(self):
+    def __str__(self):
         '''
         to_string 
         '''
         my_str = "no parameter descriptor"
         if self.parameter_descriptors is not None:
-            my_str = self.parameter_descriptors.to_string()
+            my_str = str(self.parameter_descriptors)
 
-        return'Configuration Source[id={0}, name={1}, description: {2}, parameter_descriptor={3}]'.format(self.id,
-              self.name, self.description, my_str)
+        return f'Configuration Source[id={self.id}, name={self.name}, description: {self.description}, parameter_descriptor={my_str}]'
 
