@@ -37,6 +37,11 @@ STATISTICS_DP_ID = (
     "org.eclipse.tracecompass.analysis.timing.core.segmentstore.SegmentStoreStatisticsDataProvider:"
     "org.eclipse.linuxtools.lttng2.ust.analysis.callstack"
 )
+TABLE_DP_ID = (
+    "org.eclipse.tracecompass.analysis.timing.core.segmentstore.SegmentStoreTableDataProvider:"
+    "org.eclipse.linuxtools.lttng2.ust.analysis.callstack"
+)
+
 REQUESTED_TIME_START = 1332170682440133097
 REQUESTED_TIME_END = 1332170692664579801
 REQUESTED_TIME_LENGTH = 10
@@ -47,6 +52,8 @@ REQUESTED_TIME_STEP = (REQUESTED_TIME_END -
 CONFIG_SOURCE_TYPE = 'org.eclipse.tracecompass.tmf.core.config.xmlsourcetype'
 
 # pylint: disable=too-many-public-methods
+
+
 class TestTspClient:
     """TspClient test methods.
 
@@ -81,34 +88,34 @@ class TestTspClient:
     @pytest.fixture(scope='module')
     def extension(self):
         """Absolute xml analysis file path."""
-        return (f'{os.getcwd()}/org.eclipse.tracecompass.incubator/tracetypes/'
-                f'org.eclipse.tracecompass.incubator.ftrace.core/xml_analyses/{self.name}')
+        return os.path.join(os.getcwd(), 'org.eclipse.tracecompass.incubator', 'tracetypes',
+                            'org.eclipse.tracecompass.incubator.ftrace.core', 'xml_analyses', self.name)
 
     @staticmethod
     @pytest.fixture(scope='module')
     def kernel():
         """Absolute kernel test trace path."""
-        return f'{os.getcwd()}/tracecompass-test-traces/ctf/src/main/resources/kernel'
+        return os.path.join(os.getcwd(), 'tracecompass-test-traces', 'ctf', 'src', 'main', 'resources', 'kernel')
 
     @staticmethod
     @pytest.fixture(scope='module')
     def other():
         """Absolute kernel-vm test trace path."""
-        return f'{os.getcwd()}/tracecompass-test-traces/ctf/src/main/resources/kernel_vm'
+        return os.path.join(os.getcwd(), 'tracecompass-test-traces', 'ctf', 'src', 'main', 'resources', 'kernel_vm')
 
     @staticmethod
     @pytest.fixture(scope='module')
     def switches():
         """Absolute switches test trace path."""
-        return (f'{os.getcwd()}/tracecompass-test-traces/ctf/src/main/resources/context-switches/'
-                f'context-switches-kernel')
+        return os.path.join(os.getcwd(), 'tracecompass-test-traces', 'ctf', 'src', 'main', 'resources', 'context-switches',
+                            'context-switches-kernel')
 
     @staticmethod
     @pytest.fixture(scope='module')
     def ust():
         """Absolute ust test trace path."""
-        return (f'{os.getcwd()}/tracecompass-test-traces/ctf/src/main/resources/context-switches/'
-                f'context-switches-ust')
+        return os.path.join(os.getcwd(), 'tracecompass-test-traces', 'ctf', 'src', 'main', 'resources', 'context-switches',
+                            'context-switches-ust')
 
     @pytest.fixture(scope="module", autouse=True)
     def test_fetch_traces(self):
@@ -405,6 +412,88 @@ class TestTspClient:
         response = self.tsp_client.fetch_timegraph_tree(
             experiment_uuid, output_id, params)
         assert response.status_code == 200
+        self._delete_experiments()
+        self._delete_traces()
+
+    def test_fetch_virtual_table_columns(self, ust):
+        """Expect virtual table columns out of opened trace experiment."""
+        traces = []
+        response = self.tsp_client.open_trace(os.path.basename(ust), ust)
+        traces.append(response.model.UUID)
+        response = self.tsp_client.open_experiment(
+            os.path.basename(ust), traces)
+        assert response.status_code == 200
+        experiment_uuid = response.model.UUID
+
+        status = ResponseStatus.RUNNING.name
+        while status == ResponseStatus.RUNNING.name:
+            time.sleep(1)
+            response = self.tsp_client.fetch_virtual_table_columns(
+                exp_uuid=experiment_uuid, output_id=TABLE_DP_ID)
+            assert response.model is not None
+            status = response.model.status.upper()
+
+        output_id = TABLE_DP_ID
+        response = self.tsp_client.fetch_virtual_table_columns(exp_uuid=experiment_uuid, output_id=output_id)
+        assert response.status_code == 200
+        assert response.model.model_type == response.model.model_type.VIRTUAL_TABLE_HEADER
+        assert len(response.model.model.columns) > 0
+        for column in response.model.model.columns:
+            assert column.id is not None
+            assert column.name is not None
+        
+        self._delete_experiments()
+        self._delete_traces()
+
+    def test_fetch_virtual_table_lines(self, ust):
+        """Expect virtual table out of opened trace experiment."""
+        traces = []
+        response = self.tsp_client.open_trace(os.path.basename(ust), ust)
+        traces.append(response.model.UUID)
+        response = self.tsp_client.open_experiment(
+            os.path.basename(ust), traces)
+        assert response.status_code == 200
+        experiment_uuid = response.model.UUID
+
+        status = ResponseStatus.RUNNING.name
+        while status == ResponseStatus.RUNNING.name:
+            time.sleep(1)
+            response = self.tsp_client.fetch_virtual_table_columns(
+                exp_uuid=experiment_uuid, output_id=TABLE_DP_ID)
+            assert response.model is not None
+            status = response.model.status.upper()
+
+        output_id = TABLE_DP_ID
+        response = self.tsp_client.fetch_virtual_table_columns(exp_uuid=experiment_uuid, output_id=output_id)
+        assert response.status_code == 200
+        assert response.model.model_type == response.model.model_type.VIRTUAL_TABLE_HEADER
+        assert len(response.model.model.columns) > 0
+        for column in response.model.model.columns:
+            assert column.id is not None
+            assert column.name is not None
+
+        LOW_INDEX = 0
+        LINE_COUNT = 10
+
+        params = {
+            TspClient.PARAMETERS_KEY: {
+                TspClient.REQUESTED_TABLE_LINE_INDEX_KEY: LOW_INDEX,
+                TspClient.REQUESTED_TABLE_LINE_COUNT_KEY: LINE_COUNT
+            }
+        }
+        response = self.tsp_client.fetch_virtual_table_lines(exp_uuid=experiment_uuid, output_id=output_id, parameters=params)
+        assert response.status_code == 200
+        assert response.model.model_type == response.model.model_type.VIRTUAL_TABLE
+        assert len(response.model.model.lines) == 10
+        for i, line in enumerate(response.model.model.lines):
+            assert line.index is not None
+            if i == 0:
+                assert line.index == LOW_INDEX
+
+            assert len(line.cells) > 0
+            for cell in line.cells:
+                assert cell.content is not None
+
         self._delete_experiments()
         self._delete_traces()
 
