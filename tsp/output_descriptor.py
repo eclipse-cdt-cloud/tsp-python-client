@@ -22,6 +22,8 @@
 
 """OutputDescriptor class file."""
 
+import json
+
 NA = "N/A"
 UNKOWN = "UNKNOWN"
 ID_KEY = "id"
@@ -113,3 +115,22 @@ class OutputDescriptor:
             del params[COMPATIBLE_PROVIDERS_KEY]
         else:
             self.compatible_providers = []
+
+    def __repr__(self):
+        return 'OutputDescriptor(id={}, name={}, description={})'.format(self.id, self.name, self.description)
+
+class OutputDescriptorEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, OutputDescriptor):
+            return {
+                'id': obj.id,
+                'name': obj.name,
+                'description': obj.description,
+                'type': obj.type,
+                'query_parameters': obj.query_parameters,
+                'start': obj.start,
+                'end': obj.end,
+                'final': obj.final,
+                'compatible_providers': obj.compatible_providers
+            }
+        return super().default(obj)

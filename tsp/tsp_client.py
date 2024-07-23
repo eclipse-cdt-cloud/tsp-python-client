@@ -107,7 +107,7 @@ class TspClient:
             print("get trace failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    def open_trace(self, name, path):
+    def open_trace(self, path, name) -> TspClientResponse:
         '''
         Open a trace on the server
         parameters: Query object
@@ -120,10 +120,32 @@ class TspClient:
         parameters = {'parameters': my_parameters}
 
         response = requests.post(api_url, json=parameters, headers=headers)
+        response.raise_for_status()
+        return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))),
+                                 response.status_code, response.text)
+
+    def open_traces(self, path, name, max_depth, filter):
+        '''
+        Open a trace on the server
+        parameters: Query object
+        :return: :class:`TspClientResponse <Trace>` object
+        :rtype: TspClientResponse
+        '''
+        api_url = '{0}traces'.format(self.base_url)
+
+        my_parameters = {'name': name, 'uri': path, 'maxDepth': max_depth}
+        parameters = {'parameters': my_parameters}
+
+        response = requests.post(api_url, json=parameters, headers=headers)
 
         if response.status_code == 200:
-            return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))),
-                                     response.status_code, response.text)
+            response_size = len(bytes(response.text, 'utf-8'))
+            content = json.loads(response.content.decode('utf-8'))
+            traces = []
+            for trace in content:
+                traces.append(Trace(trace))
+            return TspClientResponse(traces,
+                                     response.status_code, response.text, response_size)
         else:  # pragma: no cover
             print("post trace failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
@@ -336,7 +358,7 @@ class TspClient:
             print(GET_TREE_FAILED.format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    def fetch_timegraph_tree(self, exp_uuid, output_id, parameters=None):
+    def fetch_timegraph_tree(self, exp_uuid, output_id, parameters=None) -> TspClientResponse:
         '''
         Fetch Time Graph tree, Model extends TimeGraphEntry
         :param exp_uuid: Experiment UUID
@@ -355,9 +377,10 @@ class TspClient:
         response = requests.post(api_url, json=params, headers=headers)
 
         if response.status_code == 200:
+            response_size = len(bytes(response.text, 'utf-8'))
             return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')),
                                                      ModelType.TIME_GRAPH_TREE),
-                                     response.status_code, response.text)
+                                     response.status_code, response.text, response_size)
         else:  # pragma: no cover
             print(GET_TREE_FAILED.format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)

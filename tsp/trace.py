@@ -98,3 +98,8 @@ class Trace:
             del params[INDEXING_STATUS_KEY]
         else:  # pragma: no cover
             self.indexing_status = 0
+
+    def __repr__(self):
+        return 'Trace({}: UUID={}, start={}, end={}, nevent={}, path={}, indexing={})'.format(
+            self.name, self.UUID, self.start, self.end, self.number_of_events, self.path, self.indexing_status
+        )

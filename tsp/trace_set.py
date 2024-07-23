@@ -38,3 +38,6 @@ class TraceSet:
         self.traces = []
         for obj in params:
             self.traces.append(Trace(obj))
+
+    def __repr__(self) -> str:
+        return 'TraceSet({})'.format(', '.join(str(trace) for trace in self.traces))
