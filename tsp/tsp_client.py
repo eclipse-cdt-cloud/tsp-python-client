@@ -46,6 +46,9 @@ headers_form = {'content-type': 'application/x-www-form-urlencoded',
                 'Accept': APPLICATION_JSON}
 
 GET_TREE_FAILED = "failed to get tree: {0}"
+GET_STATES_FAILED = "failed to get states: {0}"
+GET_ARROWS_FAILED = "failed to get arrows: {0}"
+
 
 # pylint: disable=consider-using-f-string,missing-timeout
 
@@ -345,21 +348,81 @@ class TspClient:
         :returns: :class:  `TspClientResponse <GenericResponse>` object Timegraph entries response
         :rtype: TspClientResponse
         '''
-        api_url = '{0}experiments/{1}/outputs/timeGraph/{2}/tree'.format(
-            self.base_url, exp_uuid, output_id)
+        api_url = f'{self.base_url}experiments/{exp_uuid}/outputs/timeGraph/{output_id}/tree'
 
         params = parameters
         if parameters is None:
-            params = {}
+            params = {
+                "parameters": { }
+            }
 
         response = requests.post(api_url, json=params, headers=headers)
 
         if response.status_code == 200:
+            response_size = len(bytes(response.text, 'utf-8'))
             return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')),
                                                      ModelType.TIME_GRAPH_TREE),
                                      response.status_code, response.text)
         else:  # pragma: no cover
             print(GET_TREE_FAILED.format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+
+    def fetch_timegraph_states(self, exp_uuid, output_id, parameters=None):
+        '''
+        Fetch Time Graph States
+        :param exp_uuid: Experiment UUID
+        :param output_id: Output ID
+        :param parameters: Query object
+        :returns: :class:  `TspClientResponse <GenericResponse>` object Timegraph Model response
+        :rtype: TspClientResponse
+        '''
+        api_url = f'{self.base_url}experiments/{exp_uuid}/outputs/timeGraph/{output_id}/states'
+
+        params = parameters
+        if parameters is None:
+            params = {
+                "parameters": { }
+            }
+
+        response = requests.post(api_url, json=params, headers=headers)
+
+        if response.status_code == 200:
+            response_size = len(bytes(response.text, 'utf-8'))
+            return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')),
+                                                     ModelType.TIME_GRAPH_STATE),
+                                     response.status_code, response_size)
+        else:  # pragma: no cover
+            print(GET_STATES_FAILED.format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+
+    def fetch_timegraph_arrows(self, exp_uuid, output_id, parameters=None):
+        '''
+        Fetch Time Graph Arrows
+        :param exp_uuid: Experiment UUID
+        :param output_id: Output ID
+        :param parameters: Query object
+        :returns: :class:  `TspClientResponse <GenericResponse>` list of object Timegraph arrows response
+        :rtype: TspClientResponse
+        '''
+        api_url = f'{self.base_url}experiments/{exp_uuid}/outputs/timeGraph/{output_id}/arrows'
+
+        params = parameters
+        if parameters is None:
+            params = {
+                "parameters": { }
+            }
+
+        response = requests.post(api_url, json=params, headers=headers)
+
+        if response.status_code == 200:
+            response_size = len(bytes(response.text, 'utf-8'))
+            return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')),
+                                                     ModelType.TIME_GRAPH_ARROW),
+                                     response.status_code, response_size)
+        else:  # pragma: no cover
+            print(GET_ARROWS_FAILED.format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_xy_tree(self, exp_uuid, output_id, parameters=None):
@@ -376,7 +439,9 @@ class TspClient:
 
         params = parameters
         if parameters is None:
-            params = {}
+            params = {
+                "parameters": { }
+            }
 
         response = requests.post(api_url, json=params, headers=headers)
 
@@ -400,7 +465,12 @@ class TspClient:
         api_url = '{0}experiments/{1}/outputs/XY/{2}/xy'.format(
             self.base_url, exp_uuid, output_id)
 
-        response = requests.post(api_url, json=parameters, headers=headers)
+        params = parameters
+        if parameters is None:
+            params = {
+                "parameters": { }
+            }
+        response = requests.post(api_url, json=params, headers=headers)
 
         if response.status_code == 200:
             return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')),
