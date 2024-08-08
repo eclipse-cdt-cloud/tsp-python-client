@@ -579,6 +579,20 @@ class TestTspClient:
         assert response.model
         assert response.model.status == HealthStatus.UP
 
+    def test_fetch_identifier(self):
+        """Expect a successful identifier response"""
+        response = self.tsp_client.fetch_identifier()
+        assert response.status_code == 200
+        assert response.model
+        assert response.model.server_version
+        assert response.model.build_time
+        assert response.model.os_name
+        assert response.model.os_arch
+        assert response.model.os_version
+        assert response.model.cpu_count
+        assert response.model.max_memory
+        assert response.model.product_id
+
     @staticmethod
     def __requested_parameters(response):
         parameters = {}
