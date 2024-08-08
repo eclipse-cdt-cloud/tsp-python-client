@@ -38,6 +38,7 @@ from tsp.experiment_set import ExperimentSet
 from tsp.experiment import Experiment
 from tsp.output_descriptor import OutputDescriptor
 from tsp.health import Health
+from tsp.identifier import Identifier
 
 APPLICATION_JSON = 'application/json'
 
@@ -534,4 +535,21 @@ class TspClient:
                                      response.status_code, response.text)
         else:  # pragma: no cover
             print("get health failed: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    def fetch_identifier(self):
+        '''
+        Fetch the identifier service to obtain important information regarding the trace server
+        and the system it is running on.
+
+        :return: :class:`TspClientResponse <Identifier> object
+        :rtype: TspClientResponse
+        '''
+        api_url = '{0}identifier'.format(self.base_url)
+        response = requests.get(api_url, headers=headers)
+        if response.status_code == 200:
+            return TspClientResponse(Identifier(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
+        else:  # pragma: no cover
+            print("get identifiers failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)

@@ -88,6 +88,7 @@ usage: tsp_cli_client [-h] [--ip IP] [--port PORT]
                       [--config-id CONFIG_ID] 
                       [--params PARAMS]
                       [--get-health]
+		                  [--get-identifier]
 
 CLI client to send Trace Server Protocol commands to a Trace Server.
 
@@ -158,6 +159,7 @@ optional arguments:
                         id of configuration
   --params PARAMS       comma separated key value pairs (key1=val1,key2=val2)
   --get-health          Get the health status of the server
+  --get-identifier      Identify important information regarding the server and the system
 ```
 
 Examples:
@@ -188,6 +190,7 @@ Examples:
   ./tsp_cli_client --update-configuration --type-id TYPE_ID --config-id CONFIG_ID --params key1=value1,key2=value2
   ./tsp_cli_client --delete-configuration CONFIGURATION_ID --type-id TYPE_ID
   ./tsp_cli_client --get-health
+  ./tsp_cli_client --get-identifier
 ```
 
 [agc]: https://kislyuk.github.io/argcomplete/#activating-global-completion

@@ -239,6 +239,7 @@ if __name__ == "__main__":
     parser.add_argument("--config-id", dest="config_id", help="id of configuration")
     parser.add_argument("--params", dest="params", help="semicolon separated key value pairs (key1=val1;key2=val2)")
     parser.add_argument("--get-health", dest="get_health", action='store_true', help="Get the health status of the server")
+    parser.add_argument("--get-identifier", dest="get_identifier", action='store_true', help="Get important information regarding the trace server and the system")
 
     argcomplete.autocomplete(parser)
     options = parser.parse_args()
@@ -584,6 +585,14 @@ if __name__ == "__main__":
 
         if options.get_health:
             response = tsp_client.fetch_health()
+            if response.status_code == 200:
+                print('  {0}'.format(response.model.to_string()))
+                sys.exit(0)
+            else:
+                sys.exit(1)
+
+        if options.get_identifier:
+            response = tsp_client.fetch_identifier()
             if response.status_code == 200:
                 print('  {0}'.format(response.model.to_string()))
                 sys.exit(0)
