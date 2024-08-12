@@ -88,7 +88,7 @@ usage: tsp_cli_client [-h] [--ip IP] [--port PORT]
                       [--config-id CONFIG_ID] 
                       [--params PARAMS]
                       [--get-health]
-		                  [--get-identifier]
+                      [--get-identifier]
 
 CLI client to send Trace Server Protocol commands to a Trace Server.
 
