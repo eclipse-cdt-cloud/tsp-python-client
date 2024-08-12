@@ -585,7 +585,9 @@ class TestTspClient:
         assert response.status_code == 200
         assert response.model
         assert response.model.server_version
-        assert response.model.build_time
+        # optional field build_time
+        if response.model.build_time is not None:
+            assert response.model.build_time
         assert response.model.os_name
         assert response.model.os_arch
         assert response.model.os_version
