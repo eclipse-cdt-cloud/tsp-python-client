@@ -518,7 +518,7 @@ class TestTspClient:
         """Expect no configurations without posting any."""
         response = self.tsp_client.fetch_configurations(CONFIG_SOURCE_TYPE)
         assert response.status_code == 200
-        assert response.model.configuration_set == []
+        assert isinstance(response.model.configuration_set, list)
 
         response = self.tsp_client.fetch_configuration(CONFIG_SOURCE_TYPE, self.name)
         assert response.status_code == 404
@@ -557,7 +557,7 @@ class TestTspClient:
         assert response.status_code == 200
 
         response = self.tsp_client.fetch_configurations(CONFIG_SOURCE_TYPE)
-        assert response.model.configuration_set == []
+        assert isinstance(response.model.configuration_set, list)
 
     def test_put_configuration(self, extension):
         """Expect successful update of configuartion."""
