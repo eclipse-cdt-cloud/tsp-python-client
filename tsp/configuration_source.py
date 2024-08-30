@@ -28,6 +28,7 @@ NAME_KEY = "name"
 DESCTIPION_KEY = "description"
 ID_KEY = "id"
 PARAM_DESC_KEY = "parameterDescriptors"
+SCHEMA_KEY = "schema"
 
 
 # pylint: disable=too-few-public-methods
@@ -59,10 +60,16 @@ class ConfigurationSource:
         else:
             self.id = "unknown-id"
 
+        self.parameter_descriptors = None
         if PARAM_DESC_KEY in params:
             # pylint: disable=invalid-name
             self.parameter_descriptors = ConfigurationParameterDescriptorSet(params.get(PARAM_DESC_KEY))
+            params[PARAM_DESC_KEY]
 
+        self.schema = None
+        if SCHEMA_KEY in params:
+            self.schema = params.get(SCHEMA_KEY)
+            del params[SCHEMA_KEY]
 
     # pylint: disable=consider-using-f-string
     def to_string(self):
@@ -73,6 +80,10 @@ class ConfigurationSource:
         if self.parameter_descriptors is not None:
             my_str = self.parameter_descriptors.to_string()
 
-        return'Configuration Source[id={0}, name={1}, description: {2}, parameter_descriptor={3}]'.format(self.id,
-              self.name, self.description, my_str)
+        my_schema = "no schema"
+        if self.schema is not None:
+            my_schema = self.schema
+
+        return'Configuration Source[id={0}, name={1}, description: {2}, parameter_descriptor={3}, schema={4}]'.format(self.id,
+              self.name, self.description, my_str, my_schema)
 

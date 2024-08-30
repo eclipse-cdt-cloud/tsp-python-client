@@ -632,6 +632,9 @@ class TestTspClient:
         assert response.status_code == 200
         assert response.model
 
+        assert response.model.parameter_descriptors != None
+        assert response.model.schema == None
+
     def test_fetch_configurations_none(self):
         """Expect no configurations without posting any."""
         response = self.tsp_client.fetch_configurations(CONFIG_SOURCE_TYPE)
