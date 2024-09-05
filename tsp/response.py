@@ -108,6 +108,6 @@ class GenericResponse:
 
         # Message associated with the response
         if STATUS_MESSAGE_KEY in params:
-            self.status = params.get(STATUS_MESSAGE_KEY)
+            self.status_text = params.get(STATUS_MESSAGE_KEY)
         else:  # pragma: no cover
-            self.status = ""
+            self.status_text = ""
