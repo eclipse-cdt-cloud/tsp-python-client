@@ -32,6 +32,7 @@ import requests
 from tsp.health import HealthStatus
 from tsp.response import ResponseStatus
 from tsp.tsp_client import TspClient
+from tsp.virtual_table_tag import VirtualTableTag
 
 STATISTICS_DP_ID = (
     "org.eclipse.tracecompass.analysis.timing.core.segmentstore.SegmentStoreStatisticsDataProvider:"
@@ -496,10 +497,12 @@ class TestTspClient:
             assert line.index is not None
             if i == 0:
                 assert line.index == LOW_INDEX
+            assert line.tags is VirtualTableTag.NO_TAGS
 
             assert len(line.cells) > 0
             for cell in line.cells:
                 assert cell.content is not None
+                assert cell.tags is VirtualTableTag.NO_TAGS
 
         self._delete_experiments()
         self._delete_traces()

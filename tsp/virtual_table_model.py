@@ -22,10 +22,13 @@
 
 """VirtualTableModel class file."""
 
+from tsp.virtual_table_tag import VirtualTableTag
+
 SIZE_KEY = "size"
 LOW_INDEX_KEY = "lowIndex"
 COLUMN_IDS_KEY = "columnIds"
 LINES_KEY = "lines"
+TAGS_KEY = "tags"
 
 TABLE_LINE_INDEX_KEY = "index"
 TABLE_LINE_CELLS_KEY = "cells"
@@ -99,13 +102,32 @@ class VirtualTableLine:
                     self.cells.append(VirtualTableLineCell(cell))
             del params[TABLE_LINE_CELLS_KEY]
 
+        self.tags = VirtualTableTag.NO_TAGS
+        if TAGS_KEY in params:
+            if params.get(TAGS_KEY) is not None and type(params.get(TAGS_KEY)) is int:
+                tags = int(params.get(TAGS_KEY))
+
+                match tags:
+                    case 0: # Tag 0 is used for no tags
+                        self.tags = VirtualTableTag.NO_TAGS
+                    case 1 | 2: # Tags 1 and 2 are reserved
+                        self.tags = VirtualTableTag.RESERVED
+                    case 4: # Tag 4 is used for border
+                        self.tags = VirtualTableTag.BORDER
+                    case 8: # Tag 8 is used for highlight
+                        self.tags = VirtualTableTag.HIGHLIGHT
+                    case _: # Other tags are not supported
+                        self.tags = VirtualTableTag.NO_TAGS
+            del params[TAGS_KEY]
+
     def print(self):
 
         print(f"    index: {self.index}")
+        print(f"    tags: {self.tags.name}")
         print("    cells:")
         for i, cell in enumerate(self.cells):
             cell.print()
-        print(f"    {'-' * 10}")
+        print(f"    {'-' * 30}")
 
 class VirtualTableLineCell:
     '''
@@ -120,5 +142,25 @@ class VirtualTableLineCell:
                 self.content = params.get(TABLE_LINE_CELL_CONTENT_KEY)
             del params[TABLE_LINE_CELL_CONTENT_KEY]
 
+        self.tags = VirtualTableTag.NO_TAGS
+        if TAGS_KEY in params:
+            if params.get(TAGS_KEY) is not None and type(params.get(TAGS_KEY)) is int:
+                tags = int(params.get(TAGS_KEY))
+
+                match tags:
+                    case 0: # Tag 0 is used for no tags
+                        self.tags = VirtualTableTag.NO_TAGS
+                    case 1 | 2: # Tags 1 and 2 are reserved
+                        self.tags = VirtualTableTag.RESERVED
+                    case 4: # Tag 4 is used for border
+                        self.tags = VirtualTableTag.BORDER
+                    case 8: # Tag 8 is used for highlight
+                        self.tags = VirtualTableTag.HIGHLIGHT
+                    case _: # Other tags are not supported
+                        self.tags = VirtualTableTag.NO_TAGS
+            del params[TAGS_KEY]
+
     def print(self):
         print(f"      \"{TABLE_LINE_CELL_CONTENT_KEY}\": \"{self.content}\"")
+        print(f"      \"tags\": {self.tags.name}")
+        print(f"    {'-' * 10}")
