@@ -380,13 +380,13 @@ class TestTspClient:
 
         response = self.tsp_client.fetch_experiment_outputs(experiment_uuid)
         output_id = response.model.descriptors[0].id
-        status = ResponseStatus.RUNNING.name
-        while status == ResponseStatus.RUNNING.name:
+        status = ResponseStatus.RUNNING
+        while status == ResponseStatus.RUNNING:
             time.sleep(1)
             response = self.tsp_client.fetch_xy_tree(
                 experiment_uuid, output_id)
             assert response.model is not None
-            status = response.model.status.upper()
+            status = response.model.status
 
         params = self.__requested_parameters(response)
         response = self.tsp_client.fetch_xy(experiment_uuid, output_id, params)
@@ -407,13 +407,13 @@ class TestTspClient:
 
         response = self.tsp_client.fetch_experiment_outputs(experiment_uuid)
         output_id = response.model.descriptors[0].id
-        status = ResponseStatus.RUNNING.name
-        while status == ResponseStatus.RUNNING.name:
+        status = ResponseStatus.RUNNING
+        while status == ResponseStatus.RUNNING:
             time.sleep(1)
             response = self.tsp_client.fetch_timegraph_tree(
                 experiment_uuid, output_id)
             assert response.model is not None
-            status = response.model.status.upper()
+            status = response.model.status
 
         params = self.__requested_parameters(response)
         response = self.tsp_client.fetch_timegraph_tree(
@@ -432,13 +432,13 @@ class TestTspClient:
         assert response.status_code == 200
         experiment_uuid = response.model.UUID
 
-        status = ResponseStatus.RUNNING.name
-        while status == ResponseStatus.RUNNING.name:
+        status = ResponseStatus.RUNNING
+        while status == ResponseStatus.RUNNING:
             time.sleep(1)
             response = self.tsp_client.fetch_virtual_table_columns(
                 exp_uuid=experiment_uuid, output_id=TABLE_DP_ID)
             assert response.model is not None
-            status = response.model.status.upper()
+            status = response.model.status
 
         output_id = TABLE_DP_ID
         response = self.tsp_client.fetch_virtual_table_columns(exp_uuid=experiment_uuid, output_id=output_id)
@@ -462,13 +462,13 @@ class TestTspClient:
         assert response.status_code == 200
         experiment_uuid = response.model.UUID
 
-        status = ResponseStatus.RUNNING.name
-        while status == ResponseStatus.RUNNING.name:
+        status = ResponseStatus.RUNNING
+        while status == ResponseStatus.RUNNING:
             time.sleep(1)
             response = self.tsp_client.fetch_virtual_table_columns(
                 exp_uuid=experiment_uuid, output_id=TABLE_DP_ID)
             assert response.model is not None
-            status = response.model.status.upper()
+            status = response.model.status
 
         output_id = TABLE_DP_ID
         response = self.tsp_client.fetch_virtual_table_columns(exp_uuid=experiment_uuid, output_id=output_id)
