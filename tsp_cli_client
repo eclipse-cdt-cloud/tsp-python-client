@@ -180,6 +180,8 @@ if __name__ == "__main__":
                         help="Get details on the given experiment", metavar="UUID")
     parser.add_argument("--list-experiments", dest="list_experiments",
                         action='store_true',  help="List all open experiments on the server")
+    parser.add_argument("--update-experiment", dest="update_experiment",
+                    help="Update experiment on the server", metavar="EXP_NAME")
     parser.add_argument("--delete-experiment", dest="delete_experiment",
                         help="Delete an experiment on the server", metavar="UUID")
     parser.add_argument("--list-outputs", dest="list_outputs",
@@ -240,6 +242,7 @@ if __name__ == "__main__":
     parser.add_argument("--params", dest="params", help="semicolon separated key value pairs (key1=val1;key2=val2)")
     parser.add_argument("--get-health", dest="get_health", action='store_true', help="Get the health status of the server")
     parser.add_argument("--get-identifier", dest="get_identifier", action='store_true', help="Get important information regarding the trace server and the system")
+
 
     argcomplete.autocomplete(parser)
     options = parser.parse_args()
@@ -337,6 +340,28 @@ if __name__ == "__main__":
                     print("No experiments open on the server")
                 for exp in response.model.experiments:
                     __print_experiment(exp)
+                sys.exit(0)
+            else:
+                sys.exit(1)
+
+        trace_uuids = None
+        name = None
+        if options.update_experiment:
+
+            if ((options.uuids is None) and (options.name is None)):
+                print("Provide at least one of the follwing options: --name, --uuids")
+                sys.exit(1)
+
+            if options.uuids is not None:
+                trace_uuids = options.uuids
+            elif options.name is not None:
+                name = options.name
+
+            response = tsp_client.update_experiment(
+                options.update_experiment, name, trace_uuids)
+            if response.status_code == 200:
+                res = response.model
+                __print_experiment(res)
                 sys.exit(0)
             else:
                 sys.exit(1)
