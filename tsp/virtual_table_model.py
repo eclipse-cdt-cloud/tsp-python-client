@@ -104,26 +104,35 @@ class VirtualTableLine:
 
         self.tags = VirtualTableTag.NO_TAGS
         if TAGS_KEY in params:
-            if params.get(TAGS_KEY) is not None and type(params.get(TAGS_KEY)) is int:
+            if params.get(TAGS_KEY) is not None and isinstance(params.get(TAGS_KEY), int):
                 tags = int(params.get(TAGS_KEY))
-
-                match tags:
-                    case 0: # Tag 0 is used for no tags
-                        self.tags = VirtualTableTag.NO_TAGS
-                    case 1 | 2: # Tags 1 and 2 are reserved
-                        self.tags = VirtualTableTag.RESERVED
-                    case 4: # Tag 4 is used for border
-                        self.tags = VirtualTableTag.BORDER
-                    case 8: # Tag 8 is used for highlight
-                        self.tags = VirtualTableTag.HIGHLIGHT
-                    case _: # Other tags are not supported
-                        self.tags = VirtualTableTag.NO_TAGS
+                
+                self.tags = VirtualTableTag.NO_TAGS # Tag 0 is used for no tags
+                if tags & 0x1: # Tags 1 and 2 are reserved
+                    self.tags |= VirtualTableTag.RESERVED_1
+                if tags & 0x2: # Tags 1 and 2 are reserved
+                    self.tags |= VirtualTableTag.RESERVED_2
+                if tags & 0x4: # Tag 4 is used for border
+                    self.tags |= VirtualTableTag.BORDER
+                if tags & 0x8: # Tag 8 is used for highlight
+                    self.tags |= VirtualTableTag.HIGHLIGHT
+                
             del params[TAGS_KEY]
+
+    def has_tag(self, tag):
+        return bool(self.tags & tag)
 
     def print(self):
 
         print(f"    index: {self.index}")
-        print(f"    tags: {self.tags.name}")
+        if self.tags == VirtualTableTag.NO_TAGS:
+            print("    tags: NO_TAGS")
+        else:
+            active_tags = []
+            for tag in VirtualTableTag:
+                if tag != VirtualTableTag.NO_TAGS and self.has_tag(tag):
+                    active_tags.append(tag.name)
+            print(f"    tags: {' | '.join(active_tags)}")
         print("    cells:")
         for i, cell in enumerate(self.cells):
             cell.print()
@@ -144,23 +153,31 @@ class VirtualTableLineCell:
 
         self.tags = VirtualTableTag.NO_TAGS
         if TAGS_KEY in params:
-            if params.get(TAGS_KEY) is not None and type(params.get(TAGS_KEY)) is int:
+            if params.get(TAGS_KEY) is not None and isinstance(params.get(TAGS_KEY), int):
                 tags = int(params.get(TAGS_KEY))
+                
+                self.tags = VirtualTableTag.NO_TAGS # Tag 0 is used for no tags
+                if tags & 0x1: # Tags 1 and 2 are reserved
+                    self.tags |= VirtualTableTag.RESERVED_1
+                if tags & 0x2: # Tags 1 and 2 are reserved
+                    self.tags |= VirtualTableTag.RESERVED_2
+                if tags & 0x4: # Tag 4 is used for border
+                    self.tags |= VirtualTableTag.BORDER
+                if tags & 0x8: # Tag 8 is used for highlight
+                    self.tags |= VirtualTableTag.HIGHLIGHT
 
-                match tags:
-                    case 0: # Tag 0 is used for no tags
-                        self.tags = VirtualTableTag.NO_TAGS
-                    case 1 | 2: # Tags 1 and 2 are reserved
-                        self.tags = VirtualTableTag.RESERVED
-                    case 4: # Tag 4 is used for border
-                        self.tags = VirtualTableTag.BORDER
-                    case 8: # Tag 8 is used for highlight
-                        self.tags = VirtualTableTag.HIGHLIGHT
-                    case _: # Other tags are not supported
-                        self.tags = VirtualTableTag.NO_TAGS
             del params[TAGS_KEY]
+
+    def has_tag(self, tag):
+        return bool(self.tags & tag)
 
     def print(self):
         print(f"      \"{TABLE_LINE_CELL_CONTENT_KEY}\": \"{self.content}\"")
-        print(f"      \"tags\": {self.tags.name}")
+        if self.tags == VirtualTableTag.NO_TAGS:
+            tags_str = "NO_TAGS"
+        else:
+            active_tags = [tag.name for tag in VirtualTableTag if tag != VirtualTableTag.NO_TAGS and self.has_tag(tag)]
+            tags_str = " | ".join(active_tags)
+        
+        print(f"    \"tags\": \"{tags_str}\"")
         print(f"    {'-' * 10}")

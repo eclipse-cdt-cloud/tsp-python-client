@@ -1,6 +1,6 @@
-from enum import Enum
+from enum import Flag, auto
 
-class VirtualTableTag(Enum):
+class VirtualTableTag(Flag):
     '''
     Tag is a bit mask to apply for tagging elements (e.g. table lines, states).
     This can be used by the server to indicate if a filter matches and what action to apply.
@@ -9,19 +9,20 @@ class VirtualTableTag(Enum):
     '''
     Simply no tags
     '''
-    NO_TAGS = 'NO_TAGS'
+    NO_TAGS = 0
 
     '''
     Some tags are reserved for the server
     '''
-    RESERVED = 'RESERVED'
+    RESERVED_1 = auto()
+    RESERVED_2 = auto()
 
     '''
     Border tag
     '''
-    BORDER = 'BORDER'
+    BORDER = auto()
 
     '''
     Highlight tag
     '''
-    HIGHLIGHT = 'HIGHLIGHT'
+    HIGHLIGHT = auto()
