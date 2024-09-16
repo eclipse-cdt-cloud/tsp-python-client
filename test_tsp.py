@@ -497,12 +497,12 @@ class TestTspClient:
             assert line.index is not None
             if i == 0:
                 assert line.index == LOW_INDEX
-            assert line.tags is VirtualTableTag.NO_TAGS
+            assert line.tags == VirtualTableTag.NO_TAGS
 
             assert len(line.cells) > 0
             for cell in line.cells:
                 assert cell.content is not None
-                assert cell.tags is VirtualTableTag.NO_TAGS
+                assert cell.tags == VirtualTableTag.NO_TAGS
 
         self._delete_experiments()
         self._delete_traces()
