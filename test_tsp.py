@@ -208,6 +208,39 @@ class TestTspClient:
         self._delete_experiments()
         self._delete_traces()
 
+    def test_opened_trace_info(self, kernel, other):
+        """Expect the info of the trace correctly set."""
+        traces = []
+        response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
+        traces.append(response.model.UUID)
+
+        # The trace info in read after it is opened in an
+        # experiment, so open the experiment here.
+        response = self.tsp_client.open_experiment(
+            os.path.basename(kernel), traces)
+        assert response.status_code == 200
+
+        trace = response.model.traces.traces[0]
+        assert trace.start == 1332170682440133097
+        assert trace.end == 1332170682702071857
+        assert trace.path.endswith('/tracecompass-test-traces/ctf/src/main/resources/kernel')
+        assert isinstance(trace.properties, dict)
+        assert len(trace.properties) == 11
+        assert trace.properties["clock_offset"] == '1332166405241713987'
+        assert trace.properties["clock_scale"] == '1.0'
+        assert trace.properties["domain"] == '"kernel"'
+        assert trace.properties["host ID"] == '"84db105b-b3f4-4821-b662-efc51455106a"'
+        assert trace.properties['tracer_name'] == '"lttng-modules"'
+        assert trace.properties['tracer_major'] == '2'
+        assert trace.properties['tracer_minor'] == '0'
+        assert trace.properties['kernel_release'] == '"3.0.0-16-generic-pae"'
+        assert trace.properties['sysname'] == '"Linux"'
+        assert trace.properties['tracer_patchlevel'] == '0'
+        assert trace.properties['kernel_version'] == '"#29-Ubuntu SMP Tue Feb 14 13:56:31 UTC 2012"'
+
+        self._delete_experiments()
+        self._delete_traces()
+
     def test_open_experiment_unopened_trace(self, kernel):
         """Expect 204 after opening experiment with unopened trace."""
         traces = []

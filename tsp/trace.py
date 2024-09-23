@@ -33,6 +33,7 @@ END_TIME_KEY = "end"
 PATH_KEY = "path"
 NB_EVENT_KEY = "nbEvents"
 PATH_TIME_KEY = "path"
+PROPERTIES_KEY = "properties"
 INDEXING_STATUS_KEY = "indexingStatus"
 
 
@@ -90,6 +91,13 @@ class Trace:
             del params[NB_EVENT_KEY]
         else:  # pragma: no cover
             self.number_of_events = 0
+
+        # Properties of the trace
+        if PROPERTIES_KEY in params:
+            self.properties = params.get(PROPERTIES_KEY)
+            del params[PROPERTIES_KEY]
+        else:  # pragma: no cover
+            self.properties = {}
 
         # Indicate if the indexing of the trace is completed or still running.
         # If it still running, the end time and number of events are not final
