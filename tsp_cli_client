@@ -66,9 +66,9 @@ def __print_experiment(elem):
 
 
 def __print_trace(elem):
-    print('    {0}: {1} ({2}) start={3} end={4} nbEvents={5} indexing={6}'.format(
+    print('    {0}: {1} ({2}) start={3} end={4} nbEvents={5} properties={6} indexing={7}'.format(
         elem.name, elem.path, __print_uuid(elem), elem.start, elem.end,
-        elem.number_of_events, elem.indexing_status))
+        elem.number_of_events, elem.properties, elem.indexing_status))
 
 
 def __print_output(output):
