@@ -22,15 +22,18 @@
 
 """Response classes file."""
 
+import json
+
 from enum import Enum
 
 from tsp.model_type import ModelType
 from tsp.output_descriptor import OutputDescriptor
-from tsp.entry_model import EntryModel
 from tsp.virtual_table_header_model import VirtualTableHeaderModel
-from tsp.xy_model import XYModel
 from tsp.virtual_table_model import VirtualTableModel
-from tsp.time_graph_model import TimeGraphModel, TimeGraphArrow
+from tsp.time_graph_model import TimeGraphModel, TimeGraphArrow, TimeGraphModelEncoder, TimeGraphArrowEncoder
+from tsp.xy_model import XYModel
+from tsp.entry_model import EntryModel, EntryModelEncoder
+from tsp.xy_model import XYModel, XYModelEncoder
 
 MODEL_KEY = "model"
 OUTPUT_DESCRIPTOR_KEY = "output"
@@ -117,3 +120,29 @@ class GenericResponse:
             self.status_text = params.get(STATUS_MESSAGE_KEY)
         else:  # pragma: no cover
             self.status_text = ""
+
+    def __repr__(self) -> str:
+        return 'GenericResponse(model_type={}, model={}, output_descriptor={}, status={}, status_text={})'.format(
+            self.model_type, self.model, self.output, self.status, self.status_text
+        )
+
+
+class GenericResponseEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, GenericResponse):
+            model = obj.model
+            if model is None:
+                return None
+            if obj.model_type ==  ModelType.TIME_GRAPH_TREE \
+                or obj.model_type == ModelType.XY_TREE \
+                or obj.model_type == ModelType.DATA_TREE:
+                model = EntryModelEncoder().default(obj.model)
+            elif obj.model_type == ModelType.TIME_GRAPH_STATE:
+                model = TimeGraphModelEncoder().default(obj.model)
+            elif obj.model_type == ModelType.TIME_GRAPH_ARROW:
+                model = [TimeGraphArrowEncoder().default(arrow) for arrow in obj.model]
+            elif obj.model_type == ModelType.XY:
+                model = XYModelEncoder().default(obj.model)
+            return model
+
+        return super().default(obj)
