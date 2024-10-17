@@ -22,8 +22,8 @@
 
 """ExperimentSet class file."""
 
-from tsp.experiment import Experiment
-
+import json
+from tsp.experiment import Experiment, ExperimentEncoder
 
 # pylint: disable=too-few-public-methods
 class ExperimentSet:
@@ -38,3 +38,11 @@ class ExperimentSet:
         self.experiments = []
         for obj in params:
             self.experiments.append(Experiment(obj))
+
+class ExperimentSetEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, ExperimentSet):
+            return [
+                ExperimentEncoder().default(experiment) for experiment in obj.experiments
+            ]
+        return super().default(obj)

@@ -111,7 +111,7 @@ class TspClient:
             print("get trace failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    def open_trace(self, name, path):
+    def open_trace(self, name, path) -> TspClientResponse:
         '''
         Open a trace on the server
         parameters: Query object
@@ -124,13 +124,9 @@ class TspClient:
         parameters = {'parameters': my_parameters}
 
         response = requests.post(api_url, json=parameters, headers=headers)
-
-        if response.status_code == 200:
-            return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))),
-                                     response.status_code, response.text)
-        else:  # pragma: no cover
-            print("post trace failed: {0}".format(response.status_code))
-            return TspClientResponse(None, response.status_code, response.text)
+        response.raise_for_status()
+        return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))),
+                                 response.status_code, response.text)
 
     def delete_trace(self, uuid, delete_trace, remove_cache=False):
         '''
@@ -340,7 +336,7 @@ class TspClient:
             print(GET_TREE_FAILED.format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
-    def fetch_timegraph_tree(self, exp_uuid, output_id, parameters=None):
+    def fetch_timegraph_tree(self, exp_uuid, output_id, parameters=None) -> TspClientResponse:
         '''
         Fetch Time Graph tree, Model extends TimeGraphEntry
         :param exp_uuid: Experiment UUID

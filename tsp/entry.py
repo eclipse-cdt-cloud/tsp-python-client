@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 """Entry classes file."""
+import json
 
 from enum import Enum
 
@@ -115,3 +116,27 @@ class Entry:
             if params.get(STYLE_KEY) is not None:
                 self.style = OutputElementStyle(params.get(STYLE_KEY))
             del params[STYLE_KEY]
+
+class EntryHeaderEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, EntryHeader):
+            return {'name': obj.name}
+        return super().default(obj)
+
+class EntryEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Entry):
+            return {
+                'id': obj.id,
+                'parent_id': obj.parent_id,
+                'labels': obj.labels,
+                'style': EntryElementStyleEncoder().default(obj.style) if obj.style else None
+            }
+        return super().default(obj)
+
+class EntryElementStyleEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, OutputElementStyle):
+            # Assuming OutputElementStyle has a to_dict method
+            return obj.to_dict()
+        return super().default(obj)
