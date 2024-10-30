@@ -712,6 +712,7 @@ class TestTspClient:
         assert response.model.cpu_count
         assert response.model.max_memory
         assert response.model.product_id
+        assert response.model.tsp_version
 
     @staticmethod
     def __requested_parameters(response):
