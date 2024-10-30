@@ -31,6 +31,7 @@ CPU_COUNT = "cpuCount"
 MAX_MEMORY = "maxMemory"
 LAUNCHER_NAME = "launcherName"
 PRODUCT_ID = "productId"
+TSP_VERSION = "tspVersion"
 
 
 class Identifier:
@@ -106,8 +107,14 @@ class Identifier:
         else:
             self.launcher_name = None
 
+        # TSP Version
+        if TSP_VERSION in params:
+            self.tsp_version = params.get(TSP_VERSION)
+        else:
+            self.tsp_version = None
+
     def to_string(self):
         '''
         to_string method
         '''
-        return f"Identifier[version={self.server_version}, buildTime={self.build_time}, os={self.os_name}, osArch={self.os_arch}, osVersion={self.os_version}, cpuCount={self.cpu_count}, maxMemory={self.max_memory}, productId={self.product_id}, launcherName={self.launcher_name}]"
+        return f"Identifier[version={self.server_version}, buildTime={self.build_time}, os={self.os_name}, osArch={self.os_arch}, osVersion={self.os_version}, cpuCount={self.cpu_count}, maxMemory={self.max_memory}, productId={self.product_id}, launcherName={self.launcher_name}, tspVersion={self.tsp_version}]"
