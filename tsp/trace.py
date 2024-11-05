@@ -108,20 +108,25 @@ class Trace:
             self.indexing_status = 0
 
     def __repr__(self):
-        return 'Trace({}: UUID={}, start={}, end={}, nevent={}, path={}, indexing={})'.format(
-            self.name, self.UUID, self.start, self.end, self.number_of_events, self.path, self.indexing_status
+        return 'Trace({}: UUID={}, start={}, end={}, nevent={}, path={}, properties={} indexing={})'.format(
+            self.name, self.UUID, self.start, self.end, self.number_of_events, self.path, self.properties, self.indexing_status
         )
+    
+    def to_json(self):
+        return json.dumps(self, cls=TraceEncoder, indent=4)
+
 
 class TraceEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, Trace):
             return {
-                'name': obj.name,
-                'UUID': obj.UUID,
-                'start': obj.start,
-                'end': obj.end,
-                'nbEvents': obj.number_of_events,
-                'path': obj.path,
-                'indexing': obj.indexing_status.name
+                NAME_KEY: obj.name,
+                UUID_KEY: obj.UUID,
+                START_TIME_KEY: obj.start,
+                END_TIME_KEY: obj.end,
+                NB_EVENT_KEY: obj.number_of_events,
+                PATH_KEY: obj.path,
+                PROPERTIES_KEY: obj.properties,
+                INDEXING_STATUS_KEY: obj.indexing_status.name
             }
         return super().default(obj)

@@ -47,27 +47,6 @@ TRACE_MISSING = "Trace UUID is missing"
 def __print_uuid(elem):
     return colored(elem.UUID, 'yellow')
 
-
-def __print_experiment(elem):
-    print('Experiment:')
-    print('----------')
-    print('  {0}: ({1}) start={2} end={3} nbEvents={4} indexing={5}'.format(
-        elem.name, __print_uuid(elem), elem.start, elem.end,
-        elem.number_of_events, elem.indexing_status))
-    print('Trace(s):')
-    print('------')
-    for elem_trace in elem.traces.traces:
-        __print_trace(elem_trace)
-    
-    print('')
-
-
-def __print_trace(elem):
-    print('    {0}: {1} ({2}) start={3} end={4} nbEvents={5} properties={6} indexing={7}'.format(
-        elem.name, elem.path, __print_uuid(elem), elem.start, elem.end,
-        elem.number_of_events, elem.properties, elem.indexing_status))
-
-
 def __print_output(output):
     print('  {0}: {1} {2} ({3})'.format(output.name,
           output.description, output.type, output.id))
@@ -256,7 +235,9 @@ if __name__ == "__main__":
                 response = tsp_client.open_trace(options.name, options.trace)
                 if response.status_code == 200:
                     res = response.model
-                    __print_trace(res)
+                    print('Successfully opened trace')
+                    print('-------------------------')
+                    res.print()
                     sys.exit(0)
                 else:
                     sys.exit(1)
@@ -268,7 +249,9 @@ if __name__ == "__main__":
             response = tsp_client.fetch_trace(options.list_trace)
             if response.status_code == 200:
                 res = response.model
-                __print_trace(res)
+                print('Successfully listed trace')
+                print('-------------------------')
+                res.print()
                 sys.exit(0)
             else:
                 sys.exit(1)
@@ -278,8 +261,10 @@ if __name__ == "__main__":
             if response.status_code == 200:
                 if not response.model.traces:
                     print("No traces open on the server")
-                for t in response.model.traces:
-                    __print_trace(t)
+                else:
+                    print('Successfully listed traces')
+                    print('--------------------------')
+                    print(response.model.to_json())
                 sys.exit(0)
             else:
                 sys.exit(1)
@@ -287,7 +272,9 @@ if __name__ == "__main__":
         if options.delete_trace:
             response = tsp_client.delete_trace(options.delete_trace, False)
             if response.status_code == 200:
-                print("Successfully deleted trace")
+                print('Successfully deleted trace')
+                print('--------------------------')
+                print(response.model.to_json())
                 sys.exit(0)
             else:
                 sys.exit(1)
@@ -312,8 +299,9 @@ if __name__ == "__main__":
             response = tsp_client.open_experiment(
                 options.experiment, trace_uuids)
             if response.status_code == 200:
-                res = response.model
-                __print_experiment(res)
+                print('Successfully opened experiment')
+                print('------------------------------')
+                print(response.model.to_json())
                 sys.exit(0)
             else:
                 sys.exit(1)
@@ -321,8 +309,9 @@ if __name__ == "__main__":
         if options.list_experiment:
             response = tsp_client.fetch_experiment(options.list_experiment)
             if response.status_code == 200:
-                res = response.model
-                __print_experiment(res)
+                print('Successfully listed experiment')
+                print('------------------------------')
+                print(response.model.to_json())
                 sys.exit(0)
             else:
                 sys.exit(1)
@@ -332,8 +321,10 @@ if __name__ == "__main__":
             if response.status_code == 200:
                 if not response.model.experiments:
                     print("No experiments open on the server")
-                for exp in response.model.experiments:
-                    __print_experiment(exp)
+                else: 
+                    print('Successfully listed experiments')
+                    print('-------------------------------')
+                    print(response.model.to_json())
                 sys.exit(0)
             else:
                 sys.exit(1)
@@ -341,7 +332,9 @@ if __name__ == "__main__":
         if options.delete_experiment:
             response = tsp_client.delete_experiment(options.delete_experiment)
             if response.status_code == 200:
-                print("Successfully deleted experiment")
+                print('Successfully deleted experiment')
+                print('-------------------------------')
+                print(response.model.to_json())
                 if options.do_delete_traces:
                     for trace in response.model.traces.traces:
                         del_response = tsp_client.delete_trace(

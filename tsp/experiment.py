@@ -102,16 +102,20 @@ class Experiment:
             self.name, self.UUID, self.start, self.end, self.number_of_events, self.traces, self.indexing_status
         )
 
+    def to_json(self):
+        return json.dumps(self, cls=ExperimentEncoder, indent=4)
+
+
 class ExperimentEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, Experiment):
             return {
-                'name': obj.name,
-                'UUID': obj.UUID,
-                'start': obj.start,
-                'end': obj.end,
-                'nbEvents': obj.number_of_events,
-                'indexing': obj.indexing_status.name,
-                'traces': TraceSetEncoder().default(obj.traces)
+                NAME_KEY: obj.name,
+                UUID_KEY: obj.UUID,
+                START_TIME_KEY: obj.start,
+                END_TIME_KEY: obj.end,
+                NB_EVENT_KEY: obj.number_of_events,
+                INDEXING_STATUS_KEY: obj.indexing_status.name,
+                TRACES_TIME_KEY: TraceSetEncoder().default(obj.traces)
             }
         return super().default(obj)

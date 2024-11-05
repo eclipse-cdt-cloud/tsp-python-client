@@ -39,6 +39,12 @@ class ExperimentSet:
         for obj in params:
             self.experiments.append(Experiment(obj))
 
+    def __repr__(self) -> str:
+        return 'ExperimentSet({})'.format(', '.join(str(trace) for trace in self.traces))
+
+    def to_json(self):
+        return json.dumps(self, cls=ExperimentSetEncoder, indent=4)
+
 class ExperimentSetEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, ExperimentSet):
