@@ -27,6 +27,7 @@ from tsp.configuration import Configuration, ConfigurationEncoder
 
 NA = "N/A"
 UNKOWN = "UNKNOWN"
+PARENT_ID_KEY = "parentId"
 ID_KEY = "id"
 NAME_KEY = "name"
 DESCRIPTION_KEY = "description"
@@ -36,6 +37,7 @@ START_TIME_KEY = "start"
 END_TIME_KEY = "end"
 IS_FINAL_KEY = "final"
 COMPATIBLE_PROVIDERS_KEY = "compatibleProviders"
+CONFIGURATION_KEY = "configuration"
 
 
 # pylint: disable=too-few-public-methods,too-many-instance-attributes
@@ -49,6 +51,14 @@ class OutputDescriptor:
         '''
         Constructor
         '''
+
+        # Output provider's parent ID
+        if PARENT_ID_KEY in params:
+            # pylint: disable=invalid-name
+            self.parent_id = params.get(PARENT_ID_KEY)
+            del params[PARENT_ID_KEY]
+        else:  # pragma: no cover
+            self.parent_id = None
 
         # Output provider's ID
         if ID_KEY in params:
@@ -117,6 +127,14 @@ class OutputDescriptor:
         else:
             self.compatible_providers = []
 
+        # Configuration used to create this data provider.
+        if CONFIGURATION_KEY in params:
+            self.configuration = Configuration(params.get(CONFIGURATION_KEY))
+            del params[CONFIGURATION_KEY]
+        else:
+            self.configuration = []
+
+
     def __repr__(self):
         return 'OutputDescriptor(id={}, name={}, description={}, type={})'.format(self.id, self.name, self.description, obj.type)
 
@@ -126,16 +144,24 @@ class OutputDescriptor:
 class OutputDescriptorEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, OutputDescriptor):
-            return {
-                ID_KEY: obj.id,
-                NAME_KEY: obj.name,
-                DESCRIPTION_KEY: obj.description,
-                TYPE_KEY: obj.type,
-                # Hide non-TSP fields
-                # QUERY_PARAMETERS_KEY: obj.query_parameters,
-                # START_TIME_KEY: obj.start,
-                # END_TIME_KEY: obj.end,
-                # IS_FINAL_KEY: obj.final,
-                # COMPATIBLE_PROVIDERS_KEY: obj.compatible_providers
-            }
+            result = {}
+            # optional parent_id
+            if obj.parent_id is not None:
+                result[PARENT_ID_KEY] = obj.parent_id
+
+            result[ID_KEY] = obj.id
+            result[NAME_KEY] = obj.name
+            result[DESCRIPTION_KEY] = obj.description
+            result[TYPE_KEY] = obj.type
+            # Hide non-TSP fields
+            # result[QUERY_PARAMETERS_KEY] = obj.query_parameters
+            # result[START_TIME_KEY] = obj.start
+            # result[END_TIME_KEY] = obj.end
+            # result[IS_FINAL_KEY] = obj.final
+            # result[COMPATIBLE_PROVIDERS_KEY] = obj.compatible_providers
+
+            # optional configuration
+            if isinstance(obj.configuration, Configuration):
+                result[CONFIGURATION_KEY] = ConfigurationEncoder().default(obj.configuration)
+            return result
         return super().default(obj)

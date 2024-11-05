@@ -41,6 +41,7 @@ from tsp.tsp_client import TspClient
 
 TRACE_MISSING = "Trace UUID is missing"
 
+
 def __get_descriptor(uuid, output_id):
     resp = tsp_client.fetch_experiment_output(uuid, output_id)
     if resp.status_code == 200:
