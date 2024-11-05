@@ -41,30 +41,6 @@ from tsp.tsp_client import TspClient
 
 TRACE_MISSING = "Trace UUID is missing"
 
-# pylint: disable=consider-using-f-string
-
-
-def __print_uuid(elem):
-    return colored(elem.UUID, 'yellow')
-
-def __print_output(output):
-    print('  {0}: {1} {2} ({3})'.format(output.name,
-          output.description, output.type, output.id))
-
-
-# pylint: disable=fixme,line-too-long,undefined-loop-variable
-def __print_outputs(descriptors):
-    if not descriptors:
-        print('No output descriptors for trace {0} ({1}))'.format(
-            t.name, __print_uuid(t)))
-    for descriptor in output_descriptors.descriptors:
-        __print_output(descriptor)
-        # TODO remove when available
-        # if o.id == "org.eclipse.tracecompass.internal.analysis.profiling.callstack.provider.CallStackDataProvider"):
-        #    print('  {0}: {1} ({2})'.format("Function Duration Statistics", "Function Duration Statistics",
-        #          "org.eclipse.tracecompass.internal.analysis.profiling.core.callgraph.callgraphanalysis.statistics"))
-
-
 def __get_descriptor(uuid, output_id):
     resp = tsp_client.fetch_experiment_output(uuid, output_id)
     if resp.status_code == 200:
@@ -352,7 +328,12 @@ if __name__ == "__main__":
                 options.list_outputs)
             if response.status_code == 200:
                 output_descriptors = response.model
-                __print_outputs(output_descriptors.descriptors)
+                if not output_descriptors:
+                    print('No output descriptors for this trace')
+                else:
+                    print('Successfully listed outputs')
+                    print('---------------------------')
+                    print(output_descriptors.to_json())
                 sys.exit(0)
             else:
                 print("List outputs failed")
@@ -363,7 +344,9 @@ if __name__ == "__main__":
                 output_descriptor = __get_descriptor(
                     options.uuid, options.list_output)
                 if output_descriptor is not None:
-                    print(output_descriptor)
+                    print('Successfully listed output')
+                    print('--------------------------')
+                    print(output_descriptor.to_json())
             else:
                 print(TRACE_MISSING)
                 sys.exit(1)

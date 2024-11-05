@@ -23,6 +23,7 @@
 """OutputDescriptor class file."""
 
 import json
+from tsp.configuration import Configuration, ConfigurationEncoder
 
 NA = "N/A"
 UNKOWN = "UNKNOWN"
@@ -117,20 +118,24 @@ class OutputDescriptor:
             self.compatible_providers = []
 
     def __repr__(self):
-        return 'OutputDescriptor(id={}, name={}, description={})'.format(self.id, self.name, self.description)
+        return 'OutputDescriptor(id={}, name={}, description={}, type={})'.format(self.id, self.name, self.description, obj.type)
+
+    def to_json(self):
+        return json.dumps(self, cls=OutputDescriptorEncoder, indent=4)
 
 class OutputDescriptorEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, OutputDescriptor):
             return {
-                'id': obj.id,
-                'name': obj.name,
-                'description': obj.description,
-                'type': obj.type,
-                'query_parameters': obj.query_parameters,
-                'start': obj.start,
-                'end': obj.end,
-                'final': obj.final,
-                'compatible_providers': obj.compatible_providers
+                ID_KEY: obj.id,
+                NAME_KEY: obj.name,
+                DESCRIPTION_KEY: obj.description,
+                TYPE_KEY: obj.type,
+                # Hide non-TSP fields
+                # QUERY_PARAMETERS_KEY: obj.query_parameters,
+                # START_TIME_KEY: obj.start,
+                # END_TIME_KEY: obj.end,
+                # IS_FINAL_KEY: obj.final,
+                # COMPATIBLE_PROVIDERS_KEY: obj.compatible_providers
             }
         return super().default(obj)
