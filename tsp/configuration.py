@@ -22,8 +22,10 @@
 
 """Configuration class file."""
 
+import json
+
 NAME_KEY = "name"
-DESCTIPION_KEY = "description"
+DESCRIPTION_KEY = "description"
 ID_KEY = "id"
 SOURCE_TYPE_ID = "sourceTypeId"
 PARAMETER_KEY = "parameters"
@@ -44,9 +46,9 @@ class Configuration:
         else:
             self.name = ""
 
-        if DESCTIPION_KEY in params:
-            self.description = params.get(DESCTIPION_KEY)
-            del params[DESCTIPION_KEY]
+        if DESCRIPTION_KEY in params:
+            self.description = params.get(DESCRIPTION_KEY)
+            del params[DESCRIPTION_KEY]
         else:
             self.description = ""
 
@@ -71,11 +73,23 @@ class Configuration:
         else:
             self.parameters = {}
 
+    def __repr__(self):
+        return 'Configuration(name={}, description={}, id={}, source_type_id={}, parameters={})'.format(
+            self.name, self.description, self.id, self.source_type_id, self.parameters)
 
-    # pylint: disable=consider-using-f-string
-    def to_string(self):
-        '''
-        to_string method
-        '''
-        return 'Configuration[name={0}, description={1}, id={2}, source_type_id={3}, parameters={4}]'.format(self.name,
-          self.description, self.id, self.source_type_id, self.parameters)
+    def to_json(self):
+        return json.dumps(self, cls=ConfigurationEncoder, indent=4)
+
+
+class ConfigurationEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Configuration):
+            return {
+                ID_KEY: obj.id,
+                NAME_KEY: obj.name,
+                DESCRIPTION_KEY: obj.description,
+                SOURCE_TYPE_ID: obj.source_type_id,
+                PARAMETER_KEY: obj.parameters
+            }
+        return super().default(obj)
+

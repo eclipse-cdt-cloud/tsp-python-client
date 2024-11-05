@@ -22,7 +22,8 @@
 
 """ConfigurationSet class file."""
 
-from tsp.configuration_parameter_descriptor import ConfigurationParameterDescriptor
+import json
+from tsp.configuration_parameter_descriptor import ConfigurationParameterDescriptor, ConfigurationParameterDescriptorEncoder
 
 
 # pylint: disable=too-few-public-methods
@@ -39,16 +40,17 @@ class ConfigurationParameterDescriptorSet:
         for obj in params:
             self.configuration_parameter_set.append(ConfigurationParameterDescriptor(obj))
 
+    def __repr__(self) -> str:
+        return 'ConfigurationParameterDescriptorSet({})'.format(', '.join(str(source) for source in self.configuration_parameter_set))
 
-    # pylint: disable=consider-using-f-string
-    def to_string(self):
-        '''
-        to string method
-        '''
-        sep = ''
-        my_str = ''
-        for desc in self.configuration_parameter_set:
-            my_str = my_str + '{0}{1}\n'.format(sep, desc.to_string())
-            sep = ', '
+    def to_json(self):
+        return (json.dumps(self, cls=ConfigurationParameterDescriptorSetEncoder, indent=4))
 
-        return my_str
+
+class ConfigurationParameterDescriptorSetEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, ConfigurationParameterDescriptorSet):
+            return [
+                ConfigurationParameterDescriptorEncoder().default(configuration_parameter) for configuration_parameter in obj.configuration_parameter_set
+            ]
+        return super().default(obj)
