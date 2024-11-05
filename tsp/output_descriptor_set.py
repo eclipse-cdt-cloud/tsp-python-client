@@ -22,7 +22,8 @@
 
 """OutputDescriptorSet class file."""
 
-from tsp.output_descriptor import OutputDescriptor
+import json
+from tsp.output_descriptor import OutputDescriptor, OutputDescriptorEncoder
 
 
 # pylint: disable=too-few-public-methods
@@ -40,4 +41,16 @@ class OutputDescriptorSet:
             self.descriptors.append(OutputDescriptor(obj))
 
     def __repr__(self):
-        return ', '.join([str(descriptor) for descriptor in self.descriptors])
+        return 'OutputDescriptorSet({})'.format(', '.join(str(descriptor) for descriptor in self.descriptors))
+
+    def to_json(self):
+        return json.dumps(self, cls=OutputDescriptorSetEncoder, indent=4)
+
+
+class OutputDescriptorSetEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, OutputDescriptorSet):
+            return [
+                OutputDescriptorEncoder().default(descriptor) for descriptor in obj.descriptors
+            ]
+        return super().default(obj)
