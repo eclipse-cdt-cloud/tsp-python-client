@@ -22,7 +22,8 @@
 
 """ConfigurationSource class file."""
 
-from tsp.configuration_parameter_descriptor_set import ConfigurationParameterDescriptorSet
+import json
+from tsp.configuration_parameter_descriptor_set import ConfigurationParameterDescriptorSet, ConfigurationParameterDescriptorSetEncoder
 
 NAME_KEY = "name"
 DESCTIPION_KEY = "description"
@@ -71,19 +72,27 @@ class ConfigurationSource:
             self.schema = params.get(SCHEMA_KEY)
             del params[SCHEMA_KEY]
 
-    # pylint: disable=consider-using-f-string
-    def to_string(self):
-        '''
-        to_string 
-        '''
-        my_str = "no parameter descriptor"
-        if self.parameter_descriptors is not None:
-            my_str = self.parameter_descriptors.to_string()
+    def __repr__(self):
+        return 'ConfigurationSource(id={}, name={}, description={}, parameter_descriptors={}, schema={})'.format(
+            self.id,
+            self.name,
+            self.description,
+            self.parameter_descriptors if self.parameter_descriptors is not None else 'None',
+            obj.schema if obj.schema is not None else 'None')
 
-        my_schema = "no schema"
-        if self.schema is not None:
-            my_schema = self.schema
+    def to_json(self):
+        return json.dumps(self, cls=ConfigurationSourceEncoder, indent=4)
 
-        return'Configuration Source[id={0}, name={1}, description: {2}, parameter_descriptor={3}, schema={4}]'.format(self.id,
-              self.name, self.description, my_str, my_schema)
+
+class ConfigurationSourceEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, ConfigurationSource):
+            return {
+                ID_KEY: obj.id,
+                NAME_KEY: obj.name,
+                DESCTIPION_KEY: obj.description,
+                PARAM_DESC_KEY: ConfigurationParameterDescriptorSetEncoder().default(obj.parameter_descriptors) if isinstance(obj.parameter_descriptors, ConfigurationParameterDescriptorSet) else "None",
+                SCHEMA_KEY: obj.schema if obj.schema is not None else 'None'
+            }
+        return super().default(obj)
 

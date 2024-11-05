@@ -22,6 +22,8 @@
 
 """Configuration parameter descriptors class file."""
 
+import json
+
 KEY_NAME_KEY = "keyName"
 DESCTIPION_KEY = "description"
 DATA_TYPE_KEY = "dataType"
@@ -61,13 +63,23 @@ class ConfigurationParameterDescriptor:
             self.is_required = params.get(REQUIRED_KEY)
             del params[REQUIRED_KEY]
         else:
-            self.is_required = "unknown_source_type_id"
+            self.is_required = "false"
+
+    def __repr__(self):
+        return 'ConfigurationParameterDescriptor[key_name={}, description={}, data_type={}, is_required={}])'.format(
+            self.key_name,self.description, self.data_type, self.is_required)
+
+    def to_json(self):
+        return (json.dumps(self, cls=ConfigurationParameterDescriptorEncoder, indent=4))
 
 
-    # pylint: disable=consider-using-f-string
-    def to_string(self):
-        '''
-        to_string method
-        '''
-        return 'ConfigurationParameterDescriptor[key_name={0}, description={1}, data_type={2}, is_required={3}]'.format(self.key_name,
-          self.description, self.data_type, self.is_required)
+class ConfigurationParameterDescriptorEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, ConfigurationParameterDescriptor):
+            return {
+                KEY_NAME_KEY: obj.key_name,
+                DESCTIPION_KEY: obj.description,
+                DATA_TYPE_KEY: obj.data_type,
+                REQUIRED_KEY: obj.is_required
+            }
+        return super().default(obj)

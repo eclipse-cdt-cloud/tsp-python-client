@@ -22,7 +22,8 @@
 
 """ConfigurationSet class file."""
 
-from tsp.configuration import Configuration
+import json
+from tsp.configuration import Configuration, ConfigurationEncoder
 
 
 # pylint: disable=too-few-public-methods
@@ -39,15 +40,17 @@ class ConfigurationSet:
         for obj in params:
             self.configuration_set.append(Configuration(obj))
 
+    def __repr__(self) -> str:
+        return 'ConfigurationSet({})'.format(', '.join(str(config) for config in self.configuration_set))
 
-    # pylint: disable=consider-using-f-string
-    def to_string(self):
-        '''
-        to string method
-        '''
-        my_str = ''
-        sep = ''
-        for desc in self.configuration_set:
-            my_str = my_str + '{0}{1}\n'.format(sep, desc.to_string())
-            sep = ', '
-        return my_str
+    def to_json(self):
+        return json.dumps(self, cls=ConfigurationSetEncoder, indent=4)
+
+
+class ConfigurationSetEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, ConfigurationSet):
+            return [
+                ConfigurationEncoder().default(configuration) for configuration in obj.configuration_set
+            ]
+        return super().default(obj)
