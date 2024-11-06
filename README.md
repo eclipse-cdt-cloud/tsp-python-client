@@ -176,6 +176,7 @@ Examples:
   ./tsp_cli_client --list-experiment UUID
   ./tsp_cli_client --delete-experiment UUID [--do-delete-traces]
   ./tsp_cli_client --list-outputs UUID
+  ./tsp_cli_client --list-output OUTPUT_ID --uuid UUID
   ./tsp_cli_client --get-tree OUTPUT_ID --uuid UUID
   ./tsp_cli_client --get-virtual-table-columns OUTPUT_ID --uuid UUID
   ./tsp_cli_client --get-virtual-table-lines --table-line-index INDEX --table-line-count COUNT --table-column-ids IDs --table-search-direction DIRECTION --table-search-expression COLUMN_ID EXPRESSION
