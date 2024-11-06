@@ -55,8 +55,6 @@ class Health:
         else:
             self.status = None
 
-    def to_string(self):
-        '''
-        to_string method
-        '''
-        return f"Health[status={self.status}]"
+
+    def __repr__(self):
+        return f"Health(status={self.status})"
