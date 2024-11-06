@@ -89,6 +89,12 @@ usage: tsp_cli_client [-h] [--ip IP] [--port PORT]
                       [--params PARAMS]
                       [--get-health]
                       [--get-identifier]
+                      [--list-output-configuration-sources OUTPUT_ID]
+                      [--list-output-configuration-source TYPE_ID]
+                      [--create-output OUTPUT_ID]
+                      [--delete-output DERIVED_OUTPUT_ID]
+                      [--output-id OUTPUT_ID]
+                      [--json-file JSON_FILE]
 
 CLI client to send Trace Server Protocol commands to a Trace Server.
 
@@ -160,6 +166,18 @@ optional arguments:
   --params PARAMS       comma separated key value pairs (key1=val1,key2=val2)
   --get-health          Get the health status of the server
   --get-identifier      Identify important information regarding the server and the system
+  --list-output-configuration-sources OUTPUT_ID
+                        Get available configuration sources for a given experiment and output
+  --list-output-configuration-source TYPE_ID
+                        Get configuration source for a given experiment, output and type
+  --create-output OUTPUT_ID
+                        Create derived output provided by --param or --json-file
+  --delete-output DERIVED_OUTPUT_ID
+                        Delete derived output
+  --output-id OUTPUT_ID
+                        The output ID
+  --json-file JSON_FILE
+                        JSON file with parameter
 ```
 
 Examples:
@@ -190,6 +208,10 @@ Examples:
   ./tsp_cli_client --load-configuration --type-id TYPE_ID --params key1:value1
   ./tsp_cli_client --update-configuration --type-id TYPE_ID --config-id CONFIG_ID --params key1=value1,key2=value2
   ./tsp_cli_client --delete-configuration CONFIGURATION_ID --type-id TYPE_ID
+  ./tsp_cli_client --list-output-configuration-sources OUTPUT_ID --uuid UUID
+  ./tsp_cli_client --list-output-configuration-source TYPE_ID --output-id OUTPUT_ID --uuid UUID
+  ./tsp_cli_client --create-output OUTPUT_ID --uuid UUID --json-file absolute-path-to-json-file
+  ./tsp_cli_client --delete-output DERIVED_OUTPUT_ID --output-id  OUTPUT_ID --uuid UUID
   ./tsp_cli_client --get-health
   ./tsp_cli_client --get-identifier
 ```

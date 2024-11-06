@@ -49,6 +49,7 @@ headers_form = {'content-type': 'application/x-www-form-urlencoded',
 GET_TREE_FAILED = "failed to get tree: {0}"
 GET_STATES_FAILED = "failed to get states: {0}"
 GET_ARROWS_FAILED = "failed to get arrows: {0}"
+GET_CONFIG_SOURCE_TYPES = "failed to get config source type(s): {} {}"
 
 
 # pylint: disable=consider-using-f-string,missing-timeout
@@ -472,6 +473,86 @@ class TspClient:
                                      response.status_code, response.text)
         else:  # pragma: no cover
             print("failed to get xy: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
+
+    def fetch_output_configuration_sources(self, exp_uuid, output_id):
+        '''
+        Fetch all configuration source types for a given experiment and output
+        :param exp_uuid Experiment UUID
+        :param output_id Output ID
+        :returns :class:`TspClientResponse <ConfigurationSourceSet>` object
+        :rtype: TspClientResponse
+        '''
+        api_url = '{0}experiments/{1}/outputs/{2}/configTypes'.format(
+            self.base_url, exp_uuid, output_id)
+        response = requests.get(api_url, headers=headers)
+        if response.status_code == 200:
+            return TspClientResponse(ConfigurationSourceSet(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
+        else:  # pragma: no cover
+            print(GET_CONFIG_SOURCE_TYPES.format(response.status_code, response.text))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    def fetch_output_configuration_source(self, exp_uuid, output_id, type_id):
+        '''
+        Fetch a single configuration source type for a given experiment, output and type
+        :param exp_uuid Experiment UUID
+        :param output_id Output ID
+        :param type_id the ID of the configuration source type
+        :returns :class:`TspClientResponse <ConfigurationSource>` object
+        :rtype: TspClientResponse
+        '''
+        api_url = '{0}experiments/{1}/outputs/{2}/configTypes/{3}'.format(
+            self.base_url, exp_uuid, output_id, type_id)
+        response = requests.get(api_url, headers=headers)
+        if response.status_code == 200:
+            return TspClientResponse(ConfigurationSource(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
+        else:  # pragma: no cover
+            print(GET_CONFIG_SOURCE_TYPES.format(response.status_code, response.text))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    def create_derived_output(self, exp_uuid, output_id, params):
+        '''
+        Create a derived output for a given experiment, output and parameters
+        :param exp_uuid Experiment UUID
+        :param output_id Output ID
+        :param params output query params (JSON)
+        :returns :class:`TspClientResponse <OutputDescriptor>` object
+        :rtype: TspClientResponse
+        '''
+        api_url = '{0}experiments/{1}/outputs/{2}'.format(
+            self.base_url, exp_uuid, output_id)
+
+        response = requests.post(api_url, json=params, headers=headers)
+
+        if response.status_code == 200:
+            return TspClientResponse(OutputDescriptor(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
+        else:  # pragma: no cover
+            print("failed to create derived output: {} {}".format(response.status_code, response.text))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    def delete_derived_output(self, exp_uuid, output_id, derived_output_id):
+        '''
+        Create a derived output for a given experiment, output and parameters
+        :param exp_uuid Experiment UUID
+        :param output_id Output ID
+        :param derived_output_id the ID of the derived output
+        :returns :class:`TspClientResponse <OutputDescriptor>` object
+        :rtype: TspClientResponse
+        '''
+        api_url = '{0}experiments/{1}/outputs/{2}/{3}'.format(
+            self.base_url, exp_uuid, output_id, derived_output_id)
+
+        response = requests.delete(api_url, headers=headers_form)
+
+        if response.status_code == 200:
+            return TspClientResponse(OutputDescriptor(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
+        else:  # pragma: no cover
+            print("delete derived output failed: {} {}".format(response.status_code, response.text))
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_configuration_sources(self):
