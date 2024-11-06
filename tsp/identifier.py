@@ -22,6 +22,8 @@
 
 """Identifier Service Class"""
 
+import json
+
 SERVER_VERSION = "version"
 BUILD_TIME = "buildTime"
 OS_NAME = "os"
@@ -113,8 +115,26 @@ class Identifier:
         else:
             self.tsp_version = None
 
-    def to_string(self):
-        '''
-        to_string method
-        '''
-        return f"Identifier[version={self.server_version}, buildTime={self.build_time}, os={self.os_name}, osArch={self.os_arch}, osVersion={self.os_version}, cpuCount={self.cpu_count}, maxMemory={self.max_memory}, productId={self.product_id}, launcherName={self.launcher_name}, tspVersion={self.tsp_version}]"
+    def __repr__(self):
+        return f'Identifier(version={self.server_version}, build_time={self.build_time}, os={self.os_name}, os_arch={self.os_arch}, os_version={self.os_version}, cpu_count={self.cpu_count}, max_memory={self.max_memory}, product_id={self.product_id}, launcher_name={self.launcher_name}, tsp_version={self.tsp_version})'
+
+    def to_json(self):
+        return json.dumps(self, cls=IdentifierEncoder, indent=4)
+
+
+class IdentifierEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Identifier):
+            return {
+                SERVER_VERSION: obj.server_version,
+                BUILD_TIME: obj.build_time,
+                OS_NAME: obj.os_name,
+                OS_ARCH: obj.os_arch,
+                OS_VERSION: obj.os_version,
+                CPU_COUNT: obj.cpu_count,
+                MAX_MEMORY: obj.max_memory,
+                PRODUCT_ID: obj.product_id,
+                LAUNCHER_NAME: obj.launcher_name,
+                TSP_VERSION: obj.tsp_version
+            }
+        return super().default(obj)

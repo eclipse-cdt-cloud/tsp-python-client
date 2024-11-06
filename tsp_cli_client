@@ -591,7 +591,9 @@ if __name__ == "__main__":
         if options.get_identifier:
             response = tsp_client.fetch_identifier()
             if response.status_code == 200:
-                print('  {0}'.format(response.model.to_string()))
+                print('Successfully listed identifier')
+                print('------------------------------')
+                print(response.model.to_json())
                 sys.exit(0)
             else:
                 sys.exit(1)
