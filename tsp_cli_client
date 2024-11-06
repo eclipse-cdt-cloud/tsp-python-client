@@ -27,6 +27,7 @@
 """Manual CLI script file."""
 
 import argparse
+import json
 import sys
 
 from os.path import os
@@ -193,6 +194,14 @@ if __name__ == "__main__":
     parser.add_argument("--params", dest="params", help="semicolon separated key value pairs (key1=val1;key2=val2)")
     parser.add_argument("--get-health", dest="get_health", action='store_true', help="Get the health status of the server")
     parser.add_argument("--get-identifier", dest="get_identifier", action='store_true', help="Get important information regarding the trace server and the system")
+    parser.add_argument("--list-output-configuration-sources", dest="list_output_configuration_sources",
+                        help="Get available configuration sources for a given experiment and output", metavar="OUTPUT_ID")
+    parser.add_argument("--list-output-configuration-source", dest="list_output_configuration_source",
+                        help="Get configuration source for a given experiment, output and type", metavar="TYPE_ID")
+    parser.add_argument("--create-output", dest="create_output", help="Create derived output provided by --param or --json-file", metavar="OUTPUT_ID")
+    parser.add_argument("--delete-output", dest="delete_output", help="Delete derived output", metavar="DERIVED_OUTPUT_ID")
+    parser.add_argument("--output-id", dest="output_id", help="The output ID")
+    parser.add_argument("--json-file", dest="json_file", help="JSON file with parameter")
 
     argcomplete.autocomplete(parser)
     options = parser.parse_args()
@@ -509,7 +518,6 @@ if __name__ == "__main__":
                 sys.exit(1)
 
 
-
         if options.load_configuration:
             if options.type_id is not None:
                 if options.params is not None:
@@ -572,6 +580,94 @@ if __name__ == "__main__":
                     sys.exit(1)
             else:
                 print("No source typeId provided to delete this configuration")
+
+        if options.list_output_configuration_sources:
+            if not options.uuid:
+                print(TRACE_MISSING)
+                sys.exit(1)
+
+            response = tsp_client.fetch_output_configuration_sources(options.uuid, options.list_output_configuration_sources)
+            if response.status_code == 200:
+                configuration_source_set = response.model
+                if not configuration_source_set or len(configuration_source_set.configuration_source_set) == 0:
+                    print('No configuration sources available')
+                else:
+                    print('Successfully listed configuration sources')
+                    print('-----------------------------------------')
+                    print(configuration_source_set.to_json())
+                sys.exit(0)
+            else:
+                sys.exit(1)
+
+        if options.list_output_configuration_source:
+            if not options.uuid:
+                print(TRACE_MISSING)
+                sys.exit(1)
+
+            if not options.output_id:
+                print("No output ID provided")
+                sys.exit(1)
+
+            response = tsp_client.fetch_output_configuration_source(options.uuid, options.output_id, options.list_output_configuration_source)
+            if response.status_code == 200:
+                configuration_source = response.model
+                if not configuration_source:
+                    print('No configuration sources available')
+                else:
+                    print('Successfully listed configuration sources')
+                    print('-----------------------------------------')
+                    print(configuration_source.to_json())
+                sys.exit(0)
+            else:
+                sys.exit(1)
+
+        if options.create_output:
+            if not options.uuid:
+                print(TRACE_MISSING)
+                sys.exit(1)
+
+            if not options.params and not options.json_file:
+                print("No parameters provided with --param or --json-file")
+                sys.exit(1)
+            
+            params = {}
+            if options.params is not None:
+                params = __parse_params(options.params)
+
+            if options.json_file is not None:
+                with open(options.json_file, 'r') as file:
+                    params = json.loads(file.read())
+
+            if (params is not None):
+                response = tsp_client.create_derived_output(options.uuid, options.create_output, params)
+                if response.status_code == 200:
+                    print('Successfully created derived output')
+                    print('-----------------------------------')
+                    print(response.model.to_json())
+                    sys.exit(0)
+                else:
+                    sys.exit(1)
+            else:
+                print("Invalid params provided")
+                sys.exit(1)
+
+        if options.delete_output:
+            if not options.uuid:
+                print(TRACE_MISSING)
+                sys.exit(1)
+
+            if not options.output_id:
+                print("No parent output ID provided")
+                sys.exit(1)
+            
+            response = tsp_client.delete_derived_output(options.uuid, options.output_id, options.delete_output)
+            if response.status_code == 200:
+                print('Successfully deleted derived output')
+                print('-----------------------------------')
+                print(response.model.to_json())
+                sys.exit(0)
+            else:
+                sys.exit(1)
 
         if options.get_health:
             response = tsp_client.fetch_health()

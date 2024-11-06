@@ -33,6 +33,9 @@ from tsp.health import HealthStatus
 from tsp.response import ResponseStatus
 from tsp.tsp_client import TspClient
 from tsp.virtual_table_tag import VirtualTableTag
+from tsp.configuration_source import ConfigurationSource
+from tsp.configuration_source_set import ConfigurationSourceSet
+from tsp.output_descriptor import OutputDescriptor
 
 STATISTICS_DP_ID = (
     "org.eclipse.tracecompass.analysis.timing.core.segmentstore.SegmentStoreStatisticsDataProvider:"
@@ -44,6 +47,8 @@ TABLE_DP_ID = (
 )
 TIMEGRAPH_DP_ID = "org.eclipse.tracecompass.internal.analysis.os.linux.core.threadstatus.ThreadStatusDataProvider"
 
+INANDOUT_DP_ID = "org.eclipse.tracecompass.incubator.inandout.core.analysis.inAndOutdataProviderFactory"
+
 REQUESTED_TIME_START = 1332170682440133097
 REQUESTED_TIME_END = 1332170692664579801
 REQUESTED_TIME_LENGTH = 10
@@ -52,6 +57,8 @@ REQUESTED_TIME_STEP = (REQUESTED_TIME_END -
 
 
 CONFIG_SOURCE_TYPE = 'org.eclipse.tracecompass.tmf.core.config.xmlsourcetype'
+
+INANDOUT_CONFIG_SOURCE_TYPE = 'org.eclipse.tracecompass.incubator.internal.inandout.core.config'
 
 # pylint: disable=too-many-public-methods
 
@@ -692,6 +699,81 @@ class TestTspClient:
         assert response.model.id == self.name
 
         self.tsp_client.delete_configuration(CONFIG_SOURCE_TYPE, self.name)
+
+    def test_fetch_output_configuration_sources(self, kernel):
+        """Expect at least one configuration source ."""
+
+        traces = []
+        response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
+        traces.append(response.model.UUID)
+        response = self.tsp_client.open_experiment(
+            os.path.basename(kernel), traces)
+        assert response.status_code == 200
+        experiment_uuid = response.model.UUID
+
+        response = self.tsp_client.fetch_output_configuration_sources(experiment_uuid, INANDOUT_DP_ID)
+        assert response.status_code == 200
+        assert isinstance(response.model, ConfigurationSourceSet)
+        assert response.model.configuration_source_set
+        assert len(response.model.configuration_source_set) > 0
+
+        response = self.tsp_client.fetch_output_configuration_source(experiment_uuid, INANDOUT_DP_ID, INANDOUT_CONFIG_SOURCE_TYPE)
+        assert response.status_code == 200
+        assert response.model
+        assert isinstance(response.model, ConfigurationSource)
+
+        assert response.model.schema != None
+
+    def test_create_delete_derived_output(self, kernel):
+        """Expect a data provider descriptor after creating it."""
+
+        traces = []
+        response = self.tsp_client.open_trace(os.path.basename(kernel), kernel)
+        traces.append(response.model.UUID)
+        response = self.tsp_client.open_experiment(
+            os.path.basename(kernel), traces)
+        assert response.status_code == 200
+        experiment_uuid = response.model.UUID
+
+        params = {
+            "name": "My new InAndOut",
+            "description": "My special configuration",
+            "sourceTypeId": "org.eclipse.tracecompass.incubator.internal.inandout.core.config",
+            "parameters": {
+                "specifiers": [{
+                    "label": "latency",
+                    "inRegex": "(\\S*)_entry",
+                    "outRegex": "(\\S*)_exit",
+                    "contextInRegex": "(\\S*)_entry",
+                    "contextOutRegex": "(\\S*)_exit",
+                    "classifier": "CPU"
+                }]
+            }
+        }
+        
+        response = self.tsp_client.create_derived_output(experiment_uuid, INANDOUT_DP_ID, params)
+        assert response.status_code == 200
+        assert response.model
+        assert isinstance(response.model, OutputDescriptor)
+        assert response.model.parent_id == INANDOUT_DP_ID
+
+        derived_id = response.model.id
+
+        response = self.tsp_client.fetch_experiment_outputs(experiment_uuid)
+        assert response.status_code == 200
+        assert response.model
+        assert len(response.model.descriptors) > 0
+        assert [desc for desc in response.model.descriptors if desc.id == derived_id]
+
+        response = self.tsp_client.fetch_experiment_output(
+            experiment_uuid, derived_id)
+        assert response.status_code == 200
+        assert response.model.id == derived_id
+
+        response = self.tsp_client.delete_derived_output(experiment_uuid, INANDOUT_DP_ID, derived_id)
+        assert response.status_code == 200
+        assert response.model
+        assert isinstance(response.model, OutputDescriptor)
 
     def test_fetch_health(self):
         """Expect a successful health response"""
