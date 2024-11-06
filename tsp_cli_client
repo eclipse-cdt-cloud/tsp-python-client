@@ -583,7 +583,7 @@ if __name__ == "__main__":
         if options.get_health:
             response = tsp_client.fetch_health()
             if response.status_code == 200:
-                print('  {0}'.format(response.model.to_string()))
+                print(response.model)
                 sys.exit(0)
             else:
                 sys.exit(1)
