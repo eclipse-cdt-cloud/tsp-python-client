@@ -108,6 +108,24 @@ def __parse_params (parameters_string):
 
     return _params
 
+def __get_parameters(options):
+    if not options.params and not options.json_file:
+        print("No parameters provided with --params or --json-file")
+        sys.exit(1)
+
+    _params = {}
+    if options.params is not None:
+        _params = __parse_params(options.params)
+
+    if options.json_file is not None:
+        with open(options.json_file, 'r') as file:
+            _params = json.loads(file.read())
+
+        if not _params:
+            print("Invalid params provided")
+            sys.exit(1)
+    return _params
+
 
 DESCRIPTION = """CLI client to send Trace Server Protocol commands to a Trace Server."""
 
@@ -523,21 +541,7 @@ if __name__ == "__main__":
                 print("No type-id for loading of configuration provided")
                 sys.exit(1)
 
-            if not options.params and not options.json_file:
-                print("No parameters provided with --params or --json-file")
-                sys.exit(1)
-
-            params = {}
-            if options.params is not None:
-                params = __parse_params(options.params)
-
-            if options.json_file is not None:
-                with open(options.json_file, 'r') as file:
-                    params = json.loads(file.read())
-
-            if not params:
-                print("Invalid params provided")
-                sys.exit(1)
+            params = __get_parameters(options)
 
             response = tsp_client.post_configuration(options.type_id, params)
             if response.status_code == 200:
@@ -557,21 +561,7 @@ if __name__ == "__main__":
                 print("No config-id of configuration provided")
                 sys.exit(1)
 
-            if not options.params and not options.json_file:
-                print("No parameters provided with --params or --json-file")
-                sys.exit(1)
-
-            params = {}
-            if options.params is not None:
-                params = __parse_params(options.params)
-
-            if options.json_file is not None:
-                with open(options.json_file, 'r') as file:
-                    params = json.loads(file.read())
-
-            if not params:
-                print("Invalid params provided")
-                sys.exit(1)
+            params = __get_parameters(options)
 
             response = tsp_client.put_configuration(options.type_id, options.config_id, params)
             if response.status_code == 200:
@@ -640,29 +630,15 @@ if __name__ == "__main__":
                 print(TRACE_MISSING)
                 sys.exit(1)
 
-            if not options.params and not options.json_file:
-                print("No parameters provided with --params or --json-file")
-                sys.exit(1)
-            
-            params = {}
-            if options.params is not None:
-                params = __parse_params(options.params)
+            params = __get_parameters(options)
 
-            if options.json_file is not None:
-                with open(options.json_file, 'r') as file:
-                    params = json.loads(file.read())
-
-            if (params is not None):
-                response = tsp_client.create_derived_output(options.uuid, options.create_output, params)
-                if response.status_code == 200:
-                    print('Successfully created derived output')
-                    print('-----------------------------------')
-                    print(response.model.to_json())
-                    sys.exit(0)
-                else:
-                    sys.exit(1)
+            response = tsp_client.create_derived_output(options.uuid, options.create_output, params)
+            if response.status_code == 200:
+                print('Successfully created derived output')
+                print('-----------------------------------')
+                print(response.model.to_json())
+                sys.exit(0)
             else:
-                print("Invalid params provided")
                 sys.exit(1)
 
         if options.delete_output:
