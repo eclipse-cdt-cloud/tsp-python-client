@@ -184,9 +184,9 @@ if __name__ == "__main__":
     parser.add_argument("--list-configuration", dest="list_configuration",
                         help="Get a configuration loaded for given type and config id", metavar="CONFIG_ID")
     parser.add_argument("--load-configuration", dest="load_configuration",
-                        action='store_true', help="Load an configuration using paramemeters provided by --params")
+                        action='store_true', help="Load an configuration using paramemeters provided by --params or --json-file")
     parser.add_argument("--update-configuration", dest="update_configuration",
-                        action='store_true', help="Update an configuration using paramemeters provided by --params")
+                        action='store_true', help="Update an configuration using paramemeters provided by --params or --json-file")
     parser.add_argument("--delete-configuration", dest="delete_configuration",
                         help="Delete a configuration", metavar="CONFIGURATION_ID")
     parser.add_argument("--type-id", dest="type_id", help="id of configuration source type")
@@ -519,53 +519,67 @@ if __name__ == "__main__":
 
 
         if options.load_configuration:
-            if options.type_id is not None:
-                if options.params is not None:
-                    params = __parse_params(options.params)
-                    if (params is not None):
-                        response = tsp_client.post_configuration(options.type_id, params)
-                        if response.status_code == 200:
-                            print('Successfully loaded configuration')
-                            print('---------------------------------')
-                            print(response.model.to_json())
-                            sys.exit(0)
-                        else:
-                            sys.exit(1)
-                    else:
-                        print("Invalid params provided")
-                        sys.exit(1)
-                else:
-                    print("No params provided")
-                    sys.exit(1)
+            if not options.type_id:
+                print("No type-id for loading of configuration provided")
+                sys.exit(1)
+
+            if not options.params and not options.json_file:
+                print("No parameters provided with --params or --json-file")
+                sys.exit(1)
+
+            params = {}
+            if options.params is not None:
+                params = __parse_params(options.params)
+
+            if options.json_file is not None:
+                with open(options.json_file, 'r') as file:
+                    params = json.loads(file.read())
+
+            if not params:
+                print("Invalid params provided")
+                sys.exit(1)
+
+            response = tsp_client.post_configuration(options.type_id, params)
+            if response.status_code == 200:
+                print('Successfully loaded configuration')
+                print('---------------------------------')
+                print(response.model.to_json())
+                sys.exit(0)
             else:
-                print("No type id of configuration provided")
                 sys.exit(1)
 
         if options.update_configuration:
-            if options.type_id is not None:
-                if (options.config_id is not None):
-                    if options.params is not None:
-                        params = __parse_params(options.params);
-                        if (params is not None):
-                            response = tsp_client.put_configuration(options.type_id, options.config_id, params)
-                            if response.status_code == 200:
-                                print('Successfully updated configuration')
-                                print('---------------------------------')
-                                print(response.model.to_json())
-                                sys.exit(0)
-                            else:
-                                sys.exit(1)
-                        else:
-                            print("Invalid params provided")
-                            sys.exit(1)
-                    else:
-                        print("No params provided")
-                        sys.exit(1)
-                else:
-                    print("No config id if configuration provided")
-                    sys.exit(1)
+            if not options.type_id:
+                print("No type-id for updating of configuration provided")
+                sys.exit(1)
+
+            if not options.config_id:
+                print("No config-id of configuration provided")
+                sys.exit(1)
+
+            if not options.params and not options.json_file:
+                print("No parameters provided with --params or --json-file")
+                sys.exit(1)
+
+            params = {}
+            if options.params is not None:
+                params = __parse_params(options.params)
+
+            if options.json_file is not None:
+                with open(options.json_file, 'r') as file:
+                    params = json.loads(file.read())
+
+            if not params:
+                print("Invalid params provided")
+                sys.exit(1)
+
+            response = tsp_client.put_configuration(options.type_id, options.config_id, params)
+            if response.status_code == 200:
+                print('Successfully updated configuration')
+                print('---------------------------------')
+                print(response.model.to_json())
+                sys.exit(0)
             else:
-                print("No type id of configuration provided")
                 sys.exit(1)
 
         if options.delete_configuration:
@@ -627,7 +641,7 @@ if __name__ == "__main__":
                 sys.exit(1)
 
             if not options.params and not options.json_file:
-                print("No parameters provided with --param or --json-file")
+                print("No parameters provided with --params or --json-file")
                 sys.exit(1)
             
             params = {}
