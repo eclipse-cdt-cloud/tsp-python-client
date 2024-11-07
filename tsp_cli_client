@@ -39,9 +39,6 @@ from termcolor import colored
 from tree_model import TreeModel
 from tsp.tsp_client import TspClient
 
-# api_token = 'your_token_goes_here'
-NS_PER_SEC = 1000000000
-
 TRACE_MISSING = "Trace UUID is missing"
 
 # pylint: disable=consider-using-f-string
