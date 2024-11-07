@@ -205,7 +205,9 @@ Examples:
   ./tsp_cli_client --list-configuration-source TYPE_ID
   ./tsp_cli_client --list-configurations TYPE_ID
   ./tsp_cli_client --list-configuration CONFIG_ID --type-id TYPE_ID
+  ./tsp_cli_client --load-configuration --type-id TYPE_ID --json-file absolute-path-to-json-file
   ./tsp_cli_client --load-configuration --type-id TYPE_ID --params key1:value1
+  ./tsp_cli_client --update-configuration --type-id TYPE_ID --config-id CONFIG_ID --json-file absolute-path-to-json-file
   ./tsp_cli_client --update-configuration --type-id TYPE_ID --config-id CONFIG_ID --params key1=value1,key2=value2
   ./tsp_cli_client --delete-configuration CONFIGURATION_ID --type-id TYPE_ID
   ./tsp_cli_client --list-output-configuration-sources OUTPUT_ID --uuid UUID
