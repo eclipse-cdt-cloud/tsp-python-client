@@ -185,6 +185,25 @@ class TspClient:
             print("get trace failed: {0}".format(response.status_code))
             return TspClientResponse(None, response.status_code, response.text)
 
+    def close_experiment(self, uuid):
+        '''
+        Close a specific experiment
+        :param uuid: Experiment UUID to fetch
+        :return: :class:`TspClientResponse <Experiment>` object
+        :rtype: TspClientResponse
+        '''
+        api_url = '{0}experiments/{1}:close'.format(self.base_url, uuid)
+        parameters = {'parameters': {}}
+
+        response = requests.put(api_url, json=parameters, headers=headers)
+
+        if response.status_code == 200:
+            return TspClientResponse(Experiment(json.loads(response.content.decode('utf-8'))),
+                                     response.status_code, response.text)
+        else:  # pragma: no cover
+            print("delete experiment failed: {0}".format(response.status_code))
+            return TspClientResponse(None, response.status_code, response.text)
+
     def delete_experiment(self, uuid):
         '''
         Delete a specific experiment
