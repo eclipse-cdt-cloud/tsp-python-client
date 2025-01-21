@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (C) 2020 - Ericsson
+# Copyright (C) 2020 - 2025 - Ericsson
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@
 
 import json
 from tsp.configuration import Configuration, ConfigurationEncoder
+from tsp.output_capabilities import OutputCapabilities, OutputCapabilitiesEncoder
 
 NA = "N/A"
 UNKOWN = "UNKNOWN"
@@ -38,6 +39,7 @@ END_TIME_KEY = "end"
 IS_FINAL_KEY = "final"
 COMPATIBLE_PROVIDERS_KEY = "compatibleProviders"
 CONFIGURATION_KEY = "configuration"
+CAPABILITES_KEY = "capabilities"
 
 
 # pylint: disable=too-few-public-methods,too-many-instance-attributes
@@ -133,6 +135,13 @@ class OutputDescriptor:
             del params[CONFIGURATION_KEY]
         else:
             self.configuration = []
+        
+        # Capabilites of this data provider.
+        if CAPABILITES_KEY in params:
+            self.capabilities = OutputCapabilities(params.get(CAPABILITES_KEY))
+            del params[CAPABILITES_KEY]
+        else:
+            self.capabilities = None
 
 
     def __repr__(self):
@@ -163,5 +172,9 @@ class OutputDescriptorEncoder(json.JSONEncoder):
             # optional configuration
             if isinstance(obj.configuration, Configuration):
                 result[CONFIGURATION_KEY] = ConfigurationEncoder().default(obj.configuration)
+
+            # optional capabilities
+            if isinstance(obj.capabilities, OutputCapabilities):
+                result[CAPABILITES_KEY] = OutputCapabilitiesEncoder().default(obj.capabilities)
             return result
         return super().default(obj)
