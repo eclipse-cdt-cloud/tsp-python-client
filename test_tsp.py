@@ -36,6 +36,7 @@ from tsp.virtual_table_tag import VirtualTableTag
 from tsp.configuration_source import ConfigurationSource
 from tsp.configuration_source_set import ConfigurationSourceSet
 from tsp.output_descriptor import OutputDescriptor
+from tsp.output_capabilities import OutputCapabilities
 
 STATISTICS_DP_ID = (
     "org.eclipse.tracecompass.analysis.timing.core.segmentstore.SegmentStoreStatisticsDataProvider:"
@@ -756,6 +757,10 @@ class TestTspClient:
         assert response.model
         assert isinstance(response.model, OutputDescriptor)
         assert response.model.parent_id == INANDOUT_DP_ID
+
+        assert isinstance(response.model.capabilities, OutputCapabilities)
+        assert response.model.capabilities.can_create == False
+        assert response.model.capabilities.can_delete == True
 
         derived_id = response.model.id
 
