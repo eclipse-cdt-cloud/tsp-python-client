@@ -1,6 +1,6 @@
 [submodule "tracecompass-test-traces"]
 	path = tracecompass-test-traces
-	url = https://git.eclipse.org/r/tracecompass/tracecompass-test-traces.git
+	url = https://github.com/eclipse-tracecompass/tracecompass-test-traces.git
 [submodule "org.eclipse.tracecompass.incubator"]
 	path = org.eclipse.tracecompass.incubator
-	url = https://git.eclipse.org/r/tracecompass.incubator/org.eclipse.tracecompass.incubator.git
+	url = https://github.com/eclipse-tracecompass-incubator/org.eclipse.tracecompass.incubator.git
