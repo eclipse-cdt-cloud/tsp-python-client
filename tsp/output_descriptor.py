@@ -145,7 +145,7 @@ class OutputDescriptor:
 
 
     def __repr__(self):
-        return 'OutputDescriptor(id={}, name={}, description={}, type={})'.format(self.id, self.name, self.description, obj.type)
+        return 'OutputDescriptor(id={}, name={}, description={}, type={})'.format(self.id, self.name, self.description, self.type)
 
     def to_json(self):
         return json.dumps(self, cls=OutputDescriptorEncoder, indent=4)
