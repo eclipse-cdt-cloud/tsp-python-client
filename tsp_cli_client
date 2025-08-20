@@ -38,6 +38,7 @@ import requests
 
 from termcolor import colored
 from tree_model import TreeModel
+from table_model import TableModel
 from tsp.tsp_client import TspClient
 
 TRACE_MISSING = "Trace UUID is missing"
@@ -471,8 +472,21 @@ if __name__ == "__main__":
 
                 response = tsp_client.fetch_virtual_table_lines(options.uuid, options.get_virtual_table_lines, parameters)
                 if response.status_code == 200:
-                    model = response.model.model
-                    model.print()
+                    print('Successfully fetched virtual table lines')
+                    print('----------------------------------------')
+
+                    columns_response = tsp_client.fetch_virtual_table_columns(
+                        options.uuid, options.get_virtual_table_lines)
+
+                    headers = {}
+                    if response.status_code == 200:
+                        headers = columns_response.model.model.columns
+
+                    table_model = TableModel(response.model.model, headers)
+                    table_model.print()
+
+                    # model = response.model.model
+                    # model.print()
                     sys.exit(0)
                 else:
                     sys.exit(1)
