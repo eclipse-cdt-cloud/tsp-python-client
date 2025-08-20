@@ -42,11 +42,11 @@ class TreeModel:
             elem = TreeItem(entry)
             id_map[entry.id] = elem
 
-            parent = id_map[entry.parent_id]
-            # pylint: disable=consider-iterating-dictionary
-            if entry.parent_id in id_map.keys() and elem not in parent.get_children():
-                parent.add_child(elem)
-                elem.set_parent(parent)
+            if entry.parent_id in id_map.keys():
+                parent = id_map[entry.parent_id]
+                if elem not in parent.get_children():
+                    parent.add_child(elem)
+                    elem.set_parent(parent)
 
     def print(self):
         """Render this tree model."""
