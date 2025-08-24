@@ -152,6 +152,8 @@ if __name__ == "__main__":
                         help="Get details on the given experiment", metavar="UUID")
     parser.add_argument("--list-experiments", dest="list_experiments",
                         action='store_true',  help="List all open experiments on the server")
+    parser.add_argument("--close-experiment", dest="close_experiment",
+                        help="Close an experiment on the server", metavar="UUID")
     parser.add_argument("--delete-experiment", dest="delete_experiment",
                         help="Delete an experiment on the server", metavar="UUID")
     parser.add_argument("--list-outputs", dest="list_outputs",
@@ -331,6 +333,15 @@ if __name__ == "__main__":
                     print(response.model.to_json())
                 sys.exit(0)
             else:
+                sys.exit(1)
+
+        if options.close_experiment:
+            response = tsp_client.close_experiment(options.close_experiment)
+            if response.status_code == 200:
+                print("Successfully closed experiment")
+                sys.exit(0)
+            else:
+                print("Failed closing experiment with error " + response.status_code)
                 sys.exit(1)
 
         if options.delete_experiment:
