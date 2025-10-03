@@ -66,6 +66,7 @@ usage: tsp_cli_client [-h] [--ip IP] [--port PORT]
                       [--list-experiment UUID] [--list-experiments]
                       [--delete-experiment UUID] [--list-outputs UUID]
                       [--list-output OUTPUT_ID] [--get-tree OUTPUT_ID]
+                      [--get-data OUTPUT_ID]
                       [--get-virtual-table-columns OUTPUT_ID]
                       [--get-virtual-table-lines OUTPUT_ID] 
                       [--table-line-index INDEX] [--table-line-count COUNT]
@@ -118,6 +119,7 @@ optional arguments:
   --list-outputs UUID   Get details on the given trace
   --list-output OUTPUT_ID
                         Get details on the given output of a trace
+  --get-data OUTPUT_ID  Get the data object of an output of type DATA using parameters provided by --parameters
   --get-tree OUTPUT_ID  Get the tree of an output of type DATA_TREE
   --get-virtual-table-columns OUTPUT_ID
                         Get the columns of an output of type DATA_TREE
@@ -164,6 +166,7 @@ optional arguments:
   --config-id CONFIG_ID
                         id of configuration
   --params PARAMS       comma separated key value pairs (key1=val1,key2=val2)
+  --parameters PARAMS   parameters as JSON string '{"key": "value"}'
   --get-health          Get the health status of the server
   --get-identifier      Identify important information regarding the server and the system
   --list-output-configuration-sources OUTPUT_ID
@@ -195,6 +198,7 @@ Examples:
   ./tsp_cli_client --delete-experiment UUID [--do-delete-traces]
   ./tsp_cli_client --list-outputs UUID
   ./tsp_cli_client --list-output OUTPUT_ID --uuid UUID
+  ./tsp_cli_client --get-data OUTPUT_ID --uuid UUID --parameters '{"key1":"value1","key2":2}'
   ./tsp_cli_client --get-tree OUTPUT_ID --uuid UUID
   ./tsp_cli_client --get-virtual-table-columns OUTPUT_ID --uuid UUID
   ./tsp_cli_client --get-virtual-table-lines --table-line-index INDEX --table-line-count COUNT --table-column-ids IDs --table-search-direction DIRECTION --table-search-expression COLUMN_ID EXPRESSION

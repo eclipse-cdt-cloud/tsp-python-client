@@ -158,12 +158,14 @@ if __name__ == "__main__":
                         help="Get details on the given trace", metavar="UUID")
     parser.add_argument("--list-output", dest="list_output",
                         help="Get details on the given output of a trace", metavar="OUTPUT_ID")
+    parser.add_argument("--get-data", dest="get_data",
+                        help="Get the data object of an output of type DATA using parameters provided by --parameters", metavar="OUTPUT_ID")
     parser.add_argument("--get-tree", dest="get_tree",
                         help="Get the tree of an output of type DATA_TREE", metavar="OUTPUT_ID")
     parser.add_argument("--get-virtual-table-columns", dest="get_virtual_table_columns",
-                        help="Get the columns of an output of type DATA_TREE", metavar="OUTPUT_ID")
+                        help="Get the columns of an output of type TABLE", metavar="OUTPUT_ID")
     parser.add_argument("--get-virtual-table-lines", dest="get_virtual_table_lines",
-                        help="Get the tree lines of an output of type DATA_TREE", metavar="OUTPUT_ID")
+                        help="Get the tree lines of an output of type TABLE", metavar="OUTPUT_ID")
     parser.add_argument("--table-line-index", dest="table_line_index",
                         help="The index of the table line to start fetching", metavar="TABLE_LINE_INDEX")
     parser.add_argument("--table-line-count", dest="table_line_count",
@@ -210,6 +212,7 @@ if __name__ == "__main__":
     parser.add_argument("--type-id", dest="type_id", help="id of configuration source type")
     parser.add_argument("--config-id", dest="config_id", help="id of configuration")
     parser.add_argument("--params", dest="params", help="semicolon separated key value pairs (key1=val1;key2=val2)")
+    parser.add_argument("--parameters", dest="parameters", help="parameters as JSON string '{\"key\": \"value\"}'")
     parser.add_argument("--get-health", dest="get_health", action='store_true', help="Get the health status of the server")
     parser.add_argument("--get-identifier", dest="get_identifier", action='store_true', help="Get important information regarding the trace server and the system")
     parser.add_argument("--list-output-configuration-sources", dest="list_output_configuration_sources",
@@ -375,6 +378,28 @@ if __name__ == "__main__":
                     print('Successfully listed output')
                     print('--------------------------')
                     print(output_descriptor.to_json())
+            else:
+                print(TRACE_MISSING)
+                sys.exit(1)
+
+        if options.get_data:
+            if options.uuid is not None:
+
+                params = None
+                if options.parameters is not None:
+                    s = options.parameters
+                    if not s.startswith('{') or not s.endswith('}'):
+                        s = '{' + s + '}'
+                    params = {TspClient.PARAMETERS_KEY: json.loads(s)}
+                response = tsp_client.fetch_data(
+                    options.uuid, options.get_data, params)
+
+                if response.status_code == 200:
+                    model = response.model.model
+                    model.print()
+                    sys.exit(0)
+                else:
+                    sys.exit(1)
             else:
                 print(TRACE_MISSING)
                 sys.exit(1)

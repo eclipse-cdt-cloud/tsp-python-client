@@ -35,6 +35,7 @@ class ModelType(Enum):
     TIME_GRAPH_ARROW = "time_graph_arrow"
     XY_TREE = "xy_tree"
     XY = "xy"
+    DATA = "data"
     DATA_TREE = "data_tree"
     VIRTUAL_TABLE_HEADER = "virtual_table_header"
     VIRTUAL_TABLE = "virtual_table"
