@@ -27,7 +27,7 @@ import json
 KEY_NAME_KEY = "keyName"
 DESCTIPION_KEY = "description"
 DATA_TYPE_KEY = "dataType"
-REQUIRED_KEY = "isRequired"
+REQUIRED_KEY = "required"
 
 # pylint: disable=too-few-public-methods
 class ConfigurationParameterDescriptor:
@@ -60,14 +60,14 @@ class ConfigurationParameterDescriptor:
 
         if REQUIRED_KEY in params:
             # pylint: disable=invalid-name
-            self.is_required = params.get(REQUIRED_KEY)
+            self.required = params.get(REQUIRED_KEY)
             del params[REQUIRED_KEY]
         else:
-            self.is_required = "false"
+            self.required = "false"
 
     def __repr__(self):
-        return 'ConfigurationParameterDescriptor[key_name={}, description={}, data_type={}, is_required={}])'.format(
-            self.key_name,self.description, self.data_type, self.is_required)
+        return 'ConfigurationParameterDescriptor[key_name={}, description={}, data_type={}, required={}])'.format(
+            self.key_name,self.description, self.data_type, self.required)
 
     def to_json(self):
         return (json.dumps(self, cls=ConfigurationParameterDescriptorEncoder, indent=4))
@@ -80,6 +80,6 @@ class ConfigurationParameterDescriptorEncoder(json.JSONEncoder):
                 KEY_NAME_KEY: obj.key_name,
                 DESCTIPION_KEY: obj.description,
                 DATA_TYPE_KEY: obj.data_type,
-                REQUIRED_KEY: obj.is_required
+                REQUIRED_KEY: obj.required
             }
         return super().default(obj)
