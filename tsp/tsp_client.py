@@ -23,6 +23,7 @@
 """TspClient class file."""
 
 import json
+import sys
 import requests
 
 from tsp.trace import Trace
@@ -93,7 +94,7 @@ class TspClient:
             return TspClientResponse(TraceSet(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("get traces failed: {0}".format(response.status_code))
+            print("get traces failed: {0}".format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_trace(self, uuid):
@@ -109,7 +110,7 @@ class TspClient:
             return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:
-            print("get trace failed: {0}".format(response.status_code))
+            print("get trace failed: {0}".format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def open_trace(self, name, path) -> TspClientResponse:
@@ -151,7 +152,7 @@ class TspClient:
             return TspClientResponse(Trace(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("delete trace failed: {0}".format(response.status_code))
+            print("delete trace failed: {0}".format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_experiments(self):
@@ -166,7 +167,7 @@ class TspClient:
             return TspClientResponse(ExperimentSet(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("get experiments failed: {0}".format(response.status_code))
+            print("get experiments failed: {0}".format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_experiment(self, uuid):
@@ -182,7 +183,7 @@ class TspClient:
             return TspClientResponse(Experiment(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:
-            print("get trace failed: {0}".format(response.status_code))
+            print("get trace failed: {0}".format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def delete_experiment(self, uuid):
@@ -198,7 +199,7 @@ class TspClient:
             return TspClientResponse(Experiment(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("delete experiment failed: {0}".format(response.status_code))
+            print("delete experiment failed: {0}".format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def open_experiment(self, name, traces):
@@ -218,7 +219,7 @@ class TspClient:
             return TspClientResponse(Experiment(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("post experiment failed: {0}".format(response.status_code))
+            print("post experiment failed: {0}".format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_experiment_outputs(self, exp_uuid):
@@ -238,7 +239,7 @@ class TspClient:
                 response.status_code, response.text)
         else:  # pragma: no cover
             print("get output descriptors failed: {0}".format(
-                response.status_code))
+                response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_experiment_output(self, exp_uuid, output_id):
@@ -259,7 +260,7 @@ class TspClient:
             return TspClientResponse(OutputDescriptor(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print(GET_TREE_FAILED.format(response.status_code))
+            print(GET_TREE_FAILED.format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_datatree(self, exp_uuid, output_id, parameters=None):
@@ -285,7 +286,7 @@ class TspClient:
                                                      ModelType.DATA_TREE),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print(GET_TREE_FAILED.format(response.status_code))
+            print(GET_TREE_FAILED.format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_virtual_table_columns(self, exp_uuid, output_id):
@@ -306,7 +307,7 @@ class TspClient:
                                                      ModelType.VIRTUAL_TABLE_HEADER),
                                      response.status_code, response.text)
         else:
-            print(GET_TREE_FAILED.format(response.status_code))
+            print(GET_TREE_FAILED.format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_virtual_table_lines(self, exp_uuid, output_id, parameters=None):
@@ -334,7 +335,7 @@ class TspClient:
                                                      ModelType.VIRTUAL_TABLE),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print(GET_TREE_FAILED.format(response.status_code))
+            print(GET_TREE_FAILED.format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_timegraph_tree(self, exp_uuid, output_id, parameters=None) -> TspClientResponse:
@@ -361,7 +362,7 @@ class TspClient:
                                                      ModelType.TIME_GRAPH_TREE),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print(GET_TREE_FAILED.format(response.status_code))
+            print(GET_TREE_FAILED.format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
 
@@ -389,7 +390,7 @@ class TspClient:
                                                      ModelType.TIME_GRAPH_STATE),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print(GET_STATES_FAILED.format(response.status_code))
+            print(GET_STATES_FAILED.format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
 
@@ -417,7 +418,7 @@ class TspClient:
                                                      ModelType.TIME_GRAPH_ARROW),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print(GET_ARROWS_FAILED.format(response.status_code))
+            print(GET_ARROWS_FAILED.format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_xy_tree(self, exp_uuid, output_id, parameters=None):
@@ -445,7 +446,7 @@ class TspClient:
                                                      ModelType.XY_TREE),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print(GET_TREE_FAILED.format(response.status_code))
+            print(GET_TREE_FAILED.format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_xy(self, exp_uuid, output_id, parameters):
@@ -472,7 +473,7 @@ class TspClient:
                                                      ModelType.XY),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("failed to get xy: {0}".format(response.status_code))
+            print("failed to get xy: {0}".format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
 
@@ -491,7 +492,7 @@ class TspClient:
             return TspClientResponse(ConfigurationSourceSet(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print(GET_CONFIG_SOURCE_TYPES.format(response.status_code, response.text))
+            print(GET_CONFIG_SOURCE_TYPES.format(response.status_code, response.text), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_output_configuration_source(self, exp_uuid, output_id, type_id):
@@ -510,7 +511,7 @@ class TspClient:
             return TspClientResponse(ConfigurationSource(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print(GET_CONFIG_SOURCE_TYPES.format(response.status_code, response.text))
+            print(GET_CONFIG_SOURCE_TYPES.format(response.status_code, response.text), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def create_derived_output(self, exp_uuid, output_id, params):
@@ -531,7 +532,7 @@ class TspClient:
             return TspClientResponse(OutputDescriptor(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("failed to create derived output: {} {}".format(response.status_code, response.text))
+            print("failed to create derived output: {} {}".format(response.status_code, response.text), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def delete_derived_output(self, exp_uuid, output_id, derived_output_id):
@@ -552,7 +553,7 @@ class TspClient:
             return TspClientResponse(OutputDescriptor(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("delete derived output failed: {} {}".format(response.status_code, response.text))
+            print("delete derived output failed: {} {}".format(response.status_code, response.text), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_configuration_sources(self):
@@ -567,7 +568,7 @@ class TspClient:
             return TspClientResponse(ConfigurationSourceSet(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("failed to get configuration sources: {0}".format(response.status_code))
+            print("failed to get configuration sources: {0}".format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_configuration_source(self, type_id):
@@ -582,7 +583,7 @@ class TspClient:
             return TspClientResponse(ConfigurationSource(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("failed to get a configuration source: {0}".format(response.status_code))
+            print("failed to get a configuration source: {0}".format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_configurations(self, type_id):
@@ -598,7 +599,7 @@ class TspClient:
             return TspClientResponse(ConfigurationSet(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("failed to get configurations: {0}".format(response.status_code))
+            print("failed to get configurations: {0}".format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_configuration(self, type_id, config_id):
@@ -614,7 +615,7 @@ class TspClient:
             return TspClientResponse(Configuration(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("failed to get configuration: {0}".format(response.status_code))
+            print("failed to get configuration: {0}".format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def post_configuration(self, type_id, params):
@@ -631,7 +632,7 @@ class TspClient:
             return TspClientResponse(Configuration(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("post extension failed: {0}".format(response.status_code))
+            print("post extension failed: {0}".format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def put_configuration(self, type_id, config_id, params):
@@ -648,7 +649,7 @@ class TspClient:
             return TspClientResponse(Configuration(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("put extension failed: {0}".format(response.status_code))
+            print("put extension failed: {0}".format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def delete_configuration(self, type_id, config_id):
@@ -663,7 +664,7 @@ class TspClient:
             return TspClientResponse(Configuration(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("post extension failed: {0}".format(response.status_code))
+            print("post extension failed: {0}".format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_health(self):
@@ -678,7 +679,7 @@ class TspClient:
             return TspClientResponse(Health(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("get health failed: {0}".format(response.status_code))
+            print("get health failed: {0}".format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
     def fetch_identifier(self):
@@ -695,5 +696,5 @@ class TspClient:
             return TspClientResponse(Identifier(json.loads(response.content.decode('utf-8'))),
                                      response.status_code, response.text)
         else:  # pragma: no cover
-            print("get identifiers failed: {0}".format(response.status_code))
+            print("get identifiers failed: {0}".format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
