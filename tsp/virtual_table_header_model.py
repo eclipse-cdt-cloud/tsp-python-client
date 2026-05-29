@@ -22,6 +22,8 @@
 
 """Virtual table header model file."""
 
+import json
+
 COLUMN_ID_KEY = "id"
 COLUMN_NAME_KEY = "name"
 COLUMN_DESCRIPTION_KEY = "description"
@@ -48,6 +50,17 @@ class VirtualTableHeaderModel:
         print("Virtual Table Columns:")
         for column in self.columns:
             column.print()
+
+    def to_json(self):
+        return json.dumps(self, cls=VirtualTableHeaderModelEncoder, indent=4)
+
+class VirtualTableHeaderModelEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, VirtualTableHeaderModel):
+            # result = {}
+            # result['model'] = [ VirtualTableHeaderColumnModelEncoder().default(column) for column in obj.columns ]
+            return [ VirtualTableHeaderColumnModelEncoder().default(column) for column in obj.columns ]
+        return super().default(obj)
 
 class VirtualTableHeaderColumnModel:
     '''
@@ -88,3 +101,17 @@ class VirtualTableHeaderColumnModel:
         print("  description: " + str(self.description))
         print("  type: " + str(self.type))
         print("-" * 50)
+
+    def to_json(self):
+        return json.dumps(self, cls=VirtualTableHeaderColumnModelEncoder, indent=4)
+
+class VirtualTableHeaderColumnModelEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, VirtualTableHeaderColumnModel):
+            result = {}
+            result[COLUMN_ID_KEY] = obj.id
+            result[COLUMN_NAME_KEY] = obj.name
+            result[COLUMN_DESCRIPTION_KEY] = obj.description
+            result[COLUMN_TYPE_KEY] = obj.type
+            return result
+        return super().default(obj)

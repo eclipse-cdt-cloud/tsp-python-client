@@ -178,6 +178,8 @@ optional arguments:
                         The output ID
   --json-file JSON_FILE
                         JSON file with parameter
+  --pretty
+                        Pretty print result (if supported) else plain JSON
 ```
 
 Examples:

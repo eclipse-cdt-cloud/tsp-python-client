@@ -22,6 +22,7 @@
 
 """VirtualTableModel class file."""
 
+import json
 from tsp.virtual_table_tag import VirtualTableTag
 
 SIZE_KEY = "size"
@@ -71,6 +72,9 @@ class VirtualTableModel:
                 self.lines.append(VirtualTableLine(line))
             del params[LINES_KEY]
 
+    def to_json(self):
+        return json.dumps(self, cls=VirtualTableModelEncoder, indent=4)
+
     def print(self):
         print("VirtualTableModel:")
         print(f"  size: {self.size}")
@@ -80,6 +84,17 @@ class VirtualTableModel:
         print("  lines:")
         for i, line in enumerate(self.lines):
             line.print()
+
+class VirtualTableModelEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, VirtualTableModel):
+            result = {}
+            result[SIZE_KEY] = obj.size
+            result[LOW_INDEX_KEY] = obj.low_index
+            result[COLUMN_IDS_KEY] = obj.column_ids
+            result[LINES_KEY] = [ VirtualTableLineEncoder().default(line) for line in obj.lines ]
+            return result
+        return super().default(obj)
 
 class VirtualTableLine:
     '''
@@ -122,6 +137,9 @@ class VirtualTableLine:
     def has_tag(self, tag):
         return bool(self.tags & tag)
 
+    def to_json(self):
+        return json.dumps(self, cls=VirtualTableLineEncoder, indent=4)
+
     def print(self):
 
         print(f"    index: {self.index}")
@@ -137,6 +155,16 @@ class VirtualTableLine:
         for i, cell in enumerate(self.cells):
             cell.print()
         print(f"    {'-' * 30}")
+
+class VirtualTableLineEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, VirtualTableLine):
+            result = {}
+            result[TABLE_LINE_INDEX_KEY] = obj.index
+            result[TAGS_KEY] = obj.tags.value
+            result[TABLE_LINE_CELLS_KEY] = [ VirtualTableLineCellEncoder().default(cell) for cell in obj.cells ]
+            return result
+        return super().default(obj)
 
 class VirtualTableLineCell:
     '''
@@ -181,3 +209,15 @@ class VirtualTableLineCell:
         
         print(f"    \"tags\": \"{tags_str}\"")
         print(f"    {'-' * 10}")
+    
+    def to_json(self):
+        return json.dumps(self, cls=VirtualTableLineCell, indent=4)
+
+class VirtualTableLineCellEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, VirtualTableLineCell):
+            return {
+                TABLE_LINE_CELL_CONTENT_KEY: obj.content,
+                TAGS_KEY: obj.tags.value
+            }
+        return super().default(obj)

@@ -60,12 +60,15 @@ class EntryModel:
 
     def __repr__(self) -> str:
         return 'EntryModel({})'.format(', '.join(str(entry) for entry in self.entries))
+    
+    def to_json(self):
+        return json.dumps(self, cls=EntryModelEncoder, indent=4)
 
 class EntryModelEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, EntryModel):
             return {
-                'headers': [EntryHeaderEncoder().default(header) for header in obj.headers],
-                'entries': [TimeGraphEntryEncoder().default(entry) if isinstance(entry, TimeGraphEntry) else EntryEncoder().default(entry) for entry in obj.entries]
+                HEADER_KEY: [EntryHeaderEncoder().default(header) for header in obj.headers],
+                ENTRIES_KEY: [TimeGraphEntryEncoder().default(entry) if isinstance(entry, TimeGraphEntry) else EntryEncoder().default(entry) for entry in obj.entries]
             }
         return super().default(obj)
