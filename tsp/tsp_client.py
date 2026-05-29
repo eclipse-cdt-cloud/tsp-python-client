@@ -47,6 +47,7 @@ headers = {'content-type': APPLICATION_JSON, 'Accept': APPLICATION_JSON}
 headers_form = {'content-type': 'application/x-www-form-urlencoded',
                 'Accept': APPLICATION_JSON}
 
+GET_DATA_FAILED = "failed to get data: {0} {1}"
 GET_TREE_FAILED = "failed to get tree: {0}"
 GET_STATES_FAILED = "failed to get states: {0}"
 GET_ARROWS_FAILED = "failed to get arrows: {0}"
@@ -263,13 +264,39 @@ class TspClient:
             print(GET_TREE_FAILED.format(response.status_code), file=sys.stderr)
             return TspClientResponse(None, response.status_code, response.text)
 
-    def fetch_datatree(self, exp_uuid, output_id, parameters=None):
+    def fetch_data(self, exp_uuid, output_id, parameters=None):
         '''
-        Fetch Time Graph tree, Model extends TimeGraphEntry
+        Fetch Data, Model extends ObjectModel
         :param exp_uuid: Experiment UUID
         :param output_id: Output ID
         :param parameters: Query object
-        :returns: :class:  `TspClientResponse <GenericResponse>` object Timegraph entries response
+        :returns: :class:  `TspClientResponse <GenericResponse>` object ObjectModel
+        :rtype: TspClientResponse
+        '''
+        api_url = '{0}experiments/{1}/outputs/data/{2}/obj'.format(
+            self.base_url, exp_uuid, output_id)
+
+        params = parameters
+        if parameters is None:
+            params = {}
+
+        response = requests.post(api_url, json=params, headers=headers)
+
+        if response.status_code == 200:
+            return TspClientResponse(GenericResponse(json.loads(response.content.decode('utf-8')),
+                                                     ModelType.DATA),
+                                     response.status_code, response.text)
+        else:  # pragma: no cover
+            print(GET_DATA_FAILED.format(response.status_code, response.text))
+            return TspClientResponse(None, response.status_code, response.text)
+
+    def fetch_datatree(self, exp_uuid, output_id, parameters=None):
+        '''
+        Fetch Data tree, Model extends EntryModel
+        :param exp_uuid: Experiment UUID
+        :param output_id: Output ID
+        :param parameters: Query object
+        :returns: :class: `TspClientResponse <GenericResponse>` object EntryModel
         :rtype: TspClientResponse
         '''
         api_url = '{0}experiments/{1}/outputs/data/{2}/tree'.format(

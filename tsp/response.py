@@ -27,6 +27,7 @@ import json
 from enum import Enum
 
 from tsp.model_type import ModelType
+from tsp.object_model import ObjectModel
 from tsp.output_descriptor import OutputDescriptor
 from tsp.virtual_table_header_model import VirtualTableHeaderModel
 from tsp.virtual_table_model import VirtualTableModel
@@ -96,6 +97,8 @@ class GenericResponse:
                 self.model = EntryModel(params.get(MODEL_KEY))
             elif self.model_type == ModelType.XY:
                 self.model = XYModel(params.get(MODEL_KEY))
+            elif self.model_type == ModelType.DATA:
+                self.model = ObjectModel(params.get(MODEL_KEY))
             elif self.model_type == ModelType.DATA_TREE:
                 self.model = EntryModel(params.get(MODEL_KEY), self.model_type)
             elif self.model_type == ModelType.VIRTUAL_TABLE_HEADER:
